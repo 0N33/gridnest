@@ -728,7 +728,7 @@
       <!-- SEGMENTED TABS: POWER STATION vs TRANSFORMER vs CONSUMER -->
       <div class="panel-tabs-bar">
         <button class="hierarchy-tab" id="tab-power-station" onclick="selectPowerStation()">⚡ Power Station</button>
-        <button class="hierarchy-tab" id="tab-transformer" onclick="selectTransformer('TX_101')">🏢 Transformer</button>
+        <button class="hierarchy-tab" id="tab-transformer" onclick="selectTransformer(currentSelectedTxId || 'TX_101'); zoomToTransformer(currentSelectedTxId || 'TX_101')">🏢 Transformer</button>
         <button class="hierarchy-tab active" id="tab-consumer" onclick="switchInspectorMode('consumer')">🏠 Consumer Meter</button>
       </div>
 
@@ -895,10 +895,10 @@
           
           <!-- TRANSFORMER SWITCHER CHIPS -->
           <div style="display: flex; gap: 6px;">
-            <button class="btn" id="btn-tx-101" style="flex: 1; justify-content: center;" onclick="selectTransformer('TX_101')">
+            <button class="btn" id="btn-tx-101" style="flex: 1; justify-content: center;" onclick="selectTransformer('TX_101'); zoomToTransformer('TX_101');">
               <span>🏢 TX-101 (Zone 1)</span>
             </button>
-            <button class="btn" id="btn-tx-102" style="flex: 1; justify-content: center;" onclick="selectTransformer('TX_102')">
+            <button class="btn" id="btn-tx-102" style="flex: 1; justify-content: center;" onclick="selectTransformer('TX_102'); zoomToTransformer('TX_102');">
               <span>🏡 TX-102 (Zone 2)</span>
             </button>
           </div>
@@ -933,7 +933,10 @@
           <div class="card">
             <div class="card-header">
               <span class="card-title">Substation Telemetry</span>
-              <span style="font-size: 10px; font-family:'JetBrains Mono'; font-weight: 700; color: var(--accent-blue);" id="tx-gateway-id">IOT_GW_TX_101</span>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="font-size: 10px; font-family:'JetBrains Mono'; font-weight: 700; color: var(--accent-blue);" id="tx-gateway-id">IOT_GW_TX_101</span>
+                <button class="btn" style="padding: 2px 7px; font-size: 10px;" onclick="zoomToTransformer(currentSelectedTxId || 'TX_101')" title="Focus camera directly on transformer">🎯 Focus 3D</button>
+              </div>
             </div>
             <div class="data-grid">
               <div class="data-cell">
@@ -1106,6 +1109,7 @@
     let scorePinMeshes = [];
     let mapInfrastructureGroup;
     let selectedConsumerId = "CONS_N_009";
+    let currentSelectedTxId = "TX_101";
     let currentInspectorMode = "consumer"; // "consumer", "transformer", "power_station"
     let isGroundTruthRevealed = true;
     let twinSnapshot = null;
@@ -1249,7 +1253,7 @@
               focusCameraZone('ps');
             } else if (cur.userData.type === 'transformer') {
               selectTransformer(cur.userData.id);
-              focusCameraZone(cur.userData.id === 'TX_101' ? 'zone1' : 'zone2');
+              zoomToTransformer(cur.userData.id);
             } else if (cur.userData.type === 'consumer') {
               selectConsumer(cur.userData.consumerId);
             } else if (cur.userData.type === 'zone') {
@@ -1276,7 +1280,7 @@
         }
       });
 
-      // Double-click to zoom directly to clicked consumer
+      // Double-click to zoom directly to clicked consumer or transformer
       renderer.domElement.addEventListener('dblclick', (e) => {
         const rect = renderer.domElement.getBoundingClientRect();
         mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
@@ -1285,6 +1289,7 @@
 
         const allClickable = [
           ...Object.values(buildingMeshes),
+          ...Object.values(transformerMeshes),
           ...scorePinMeshes
         ];
         const intersects = raycaster.intersectObjects(allClickable, true);
@@ -1293,9 +1298,14 @@
           while (cur && !cur.userData.type && cur.parent && cur.parent !== scene) {
             cur = cur.parent;
           }
-          if (cur && cur.userData && cur.userData.type === 'consumer') {
-            selectConsumer(cur.userData.consumerId);
-            zoomToConsumer(cur.userData.consumerId);
+          if (cur && cur.userData) {
+            if (cur.userData.type === 'consumer') {
+              selectConsumer(cur.userData.consumerId);
+              zoomToConsumer(cur.userData.consumerId);
+            } else if (cur.userData.type === 'transformer') {
+              selectTransformer(cur.userData.id);
+              zoomToTransformer(cur.userData.id);
+            }
           }
         }
       });
@@ -1855,11 +1865,14 @@
         txGroup.add(ring);
 
         txGroup.position.set(t.x, 0, t.z);
+        txGroup.userData = { type: 'transformer', id: t.id };
         tank.userData = { type: 'transformer', id: t.id };
         pad.userData = { type: 'transformer', id: t.id };
+        ant.userData = { type: 'transformer', id: t.id };
+        ring.userData = { type: 'transformer', id: t.id };
 
         mapInfrastructureGroup.add(txGroup);
-        transformerMeshes[t.id] = tank;
+        transformerMeshes[t.id] = txGroup;
       });
 
       // 2. CURBSIDE UTILITY DISTRIBUTION POLES (12 West, 12 East = 24 Total)
@@ -2270,6 +2283,14 @@
         // Zone 0: Central 33kV Generation Hub & Switchyard
         targetLookAt.set(0, 10, 220);
         targetCamPos.set(0, 95, 340);
+      } else if (zone === 'tx101' || zone === 'tx_101' || zone === 'transformer1' || zone === 'tx-101') {
+        // Zone 1 Transformer TX-101 Close-up
+        targetLookAt.set(-140, 5.0, 50);
+        targetCamPos.set(-140, 24.0, 95);
+      } else if (zone === 'tx102' || zone === 'tx_102' || zone === 'transformer2' || zone === 'tx-102') {
+        // Zone 2 Transformer TX-102 Close-up
+        targetLookAt.set(140, 5.0, 50);
+        targetCamPos.set(140, 24.0, 95);
       } else if (zone === 'north' || zone === 'zone1' || zone === 'west') {
         // Entire Zone 1: West Commercial Sector
         targetLookAt.set(-140, 10, -55);
@@ -2324,6 +2345,76 @@
       smoothFlyTo(targetCamPos, targetLookAt, 800);
     }
 
+    // Smooth close-up fly to an individual distribution transformer node
+    function zoomToTransformer(txId) {
+      const isWest = txId === 'TX_101';
+      const targetLookAt = new THREE.Vector3(isWest ? -140 : 140, 5.0, 50);
+      const targetCamPos = new THREE.Vector3(isWest ? -140 : 140, 24.0, 95);
+      smoothFlyTo(targetCamPos, targetLookAt, 800);
+    }
+
+    // Highlight selected transformer foundation with glowing ground reticle brackets & aura
+    function addSelectedMarkerForTransformer(txId) {
+      if (selectedMarkerGroup) {
+        scene.remove(selectedMarkerGroup);
+        selectedMarkerGroup = null;
+        selectedMarkerPulse = null;
+      }
+      const isWest = txId === 'TX_101';
+      const posX = isWest ? -140 : 140;
+      const posZ = 50;
+
+      selectedMarkerGroup = new THREE.Group();
+      selectedMarkerGroup.position.set(posX, 0.35, posZ);
+
+      const innerR = 9.5;
+      const outerR = 12.0;
+      const auraR = 16.0;
+      const bDist = 8.5;
+
+      // 1. Crisp glowing foundation border ring
+      const ringGeo = new THREE.RingGeometry(innerR, outerR, 36);
+      const ringMat = new THREE.MeshBasicMaterial({
+        color: isWest ? 0xef4444 : 0x0284c7,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.95
+      });
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      ring.rotation.x = -Math.PI / 2;
+      selectedMarkerGroup.add(ring);
+
+      // 2. Soft translucent ambient pulse aura on ground
+      const auraGeo = new THREE.RingGeometry(outerR, auraR, 36);
+      const auraMat = new THREE.MeshBasicMaterial({
+        color: isWest ? 0xf87171 : 0x38bdf8,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.35
+      });
+      selectedMarkerPulse = new THREE.Mesh(auraGeo, auraMat);
+      selectedMarkerPulse.rotation.x = -Math.PI / 2;
+      selectedMarkerGroup.add(selectedMarkerPulse);
+
+      // 3. Ground Target Reticle / Corner Brackets at transformer plinth
+      const bracketMat = new THREE.MeshBasicMaterial({ color: isWest ? 0xdc2626 : 0x0369a1 });
+      [
+        [-bDist, -bDist], [bDist, -bDist], [bDist, bDist], [-bDist, bDist]
+      ].forEach(([cx, cz]) => {
+        const b1Geo = new THREE.BoxGeometry(3.5, 0.08, 0.8);
+        const b1 = new THREE.Mesh(b1Geo, bracketMat);
+        b1.position.set(cx, 0.04, cz);
+        selectedMarkerGroup.add(b1);
+
+        const b2Geo = new THREE.BoxGeometry(0.8, 0.08, 3.5);
+        const b2 = new THREE.Mesh(b2Geo, bracketMat);
+        b2.position.set(cx, 0.04, cz);
+        selectedMarkerGroup.add(b2);
+      });
+
+      scene.add(selectedMarkerGroup);
+    }
+
     // =========================================================================
     // INTERACTIVE INSPECTOR PANEL: SWITCHING BETWEEN THE 3 TIERS
     // =========================================================================
@@ -2361,7 +2452,9 @@
 
     // 2. SELECT TRANSFORMER (ZONE 1 TX-101 OR ZONE 2 TX-102)
     function selectTransformer(txId) {
+      currentSelectedTxId = txId;
       switchInspectorMode('transformer');
+      addSelectedMarkerForTransformer(txId);
       document.getElementById('btn-tx-101').className = `btn ${txId === 'TX_101' ? 'primary' : ''}`;
       document.getElementById('btn-tx-102').className = `btn ${txId === 'TX_102' ? 'primary' : ''}`;
 
