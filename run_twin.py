@@ -1,13 +1,13 @@
 """
-Master Execution Script for Smart Grid Digital Twin.
+Master Execution Script for Smart Grid Digital Twin (3-Zone Architecture).
 Runs end-to-end cyber-physical simulation, executes anomaly detection,
-prints energy accounting audits, and exports GIS 3D datasets and investigation reports.
+prints 3-zone energy accounting audits (Inputted vs Meters Added Up),
+and exports GIS 3D datasets, roads, and investigation reports.
 """
 from __future__ import annotations
 import os
 import sys
 import argparse
-import time
 
 # Ensure project root is in sys.path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -18,22 +18,26 @@ from export.report_exporter import ReportExporter
 
 
 def run_digital_twin_demo(ticks: int = 4, export_dir: str = "output"):
-    print("=" * 80)
-    print("      SMART GRID DIGITAL TWIN | CYBER-PHYSICAL SIMULATION ENGINE      ")
-    print("               Problem Statement 2: Advanced Grid Twin               ")
-    print("=" * 80)
+    print("=" * 85)
+    print("      SMART GRID DIGITAL TWIN | 3-ZONE CYBER-PHYSICAL SIMULATION ENGINE       ")
+    print("                 Problem Statement 2: Power Station & City Grid               ")
+    print("=" * 85)
 
     # 1. Initialize Twin
-    print("\n[*] Initializing 2-Zone 3D Grid Topology & Smart Meter Network...")
+    print("\n[*] Initializing 3-Zone 3D Grid Topology & Smart Meter Network...")
     twin = SmartGridDigitalTwin(seed=42)
     twin.initialize(setup_scenarios=True)
 
     summary = twin.topology.get_topology_summary()
-    print(f"    - Substation: {summary['substation']}")
-    print(f"    - Distribution Feeders: {summary['feeders']} (11kV Trunks)")
-    print(f"    - Distribution Transformers: {summary['transformers']} (TX-101 North & TX-102 South)")
-    print(f"    - Utility Poles: {summary['poles']}")
-    print(f"    - Smart Meters / Consumers: {summary['consumers']} across Zones: {summary['zones']}")
+    ps = twin.topology.power_station
+    print(f"    - Zone 0: Power Station Hub: {ps.name if ps else 'None'} ({ps.capacity_mva} MVA, {ps.transmission_voltage_kv}kV)")
+    print(f"    - Zone 1: North City Sector (Commercial / Residential - TX-101)")
+    print(f"    - Zone 2: South City Sector (Suburban Residential - TX-102)")
+    print(f"    - Primary Feeders: {summary['feeders']} (11kV Trunks)")
+    print(f"    - High-Voltage Pylons: {summary['pylons']}")
+    print(f"    - Road Network Segments: {summary['roads']}")
+    print(f"    - Distribution Poles: {summary['poles']}")
+    print(f"    - Smart Meters / Consumers: {summary['consumers']}")
 
     # 2. Run Simulation Steps
     print(f"\n[*] Advancing Discrete Event Simulation ({ticks} intervals of 15-mins)...")
@@ -43,19 +47,19 @@ def run_digital_twin_demo(ticks: int = 4, export_dir: str = "output"):
         grid = snapshot["grid_summary"]
         print(f"    -> Tick #{clock['tick']:02d} [{clock['iso_time']}] | Total Input: {grid['total_grid_input_kw']} kW | Tech Loss: {grid['total_technical_loss_kw']} kW | Unexplained Loss: {grid['total_unexplained_loss_kw']} kW ({grid['grid_unexplained_ntl_pct']}%)")
 
-    # 3. Energy Accounting Report per Transformer
-    print("\n" + "=" * 80)
-    print("               TRANSFORMER-LEVEL ENERGY ACCOUNTING AUDIT               ")
-    print("=" * 80)
-    print(f"{'Transformer':<10} | {'Zone':<14} | {'Intake (kW)':<11} | {'Rep Sum (kW)':<12} | {'Tech Loss':<10} | {'NTL Loss (kW)':<13} | {'NTL %':<7} | {'Status'}")
+    # 3. 3-Zone Energy Accounting Audit (Inputted vs Meters Added Up)
+    print("\n" + "=" * 95)
+    print("          3-ZONE ENERGY RECONCILIATION AUDIT: INPUTTED vs METERS ADDED UP          ")
+    print("=" * 95)
+    print(f"{'Zone':<16} | {'Transformer':<11} | {'Input (kWh)':<11} | {'Meters Sum':<11} | {'Tech Loss':<10} | {'Missing kWh':<12} | {'Loss %':<7} | {'Status'}")
     print("-" * 105)
     for tx_id, r in twin.latest_transformer_reports.items():
-        print(f"{tx_id:<10} | {r.zone_id:<14} | {r.transformer_input_kw:<11.2f} | {r.consumer_reported_load_kw:<12.2f} | {r.technical_losses_kw:<6.2f} kW | {r.unexplained_loss_kw:<7.2f} kW ({r.unexplained_loss_pct:4.1f}%) | {r.unexplained_loss_pct:<5.1f}% | {r.status}")
+        print(f"{r.zone_id:<16} | {tx_id:<11} | {r.cumulative_energy_input_kwh:<11.2f} | {r.cumulative_reported_kwh:<11.2f} | {r.cumulative_tech_loss_kwh:<6.2f} kWh | {r.cumulative_unexplained_kwh:<7.2f} kWh ({r.unexplained_loss_pct:4.1f}%) | {r.unexplained_loss_pct:<5.1f}% | {r.status_label}")
 
     # 4. Multi-Signal Anomaly Detection & Ground Truth Verification
-    print("\n" + "=" * 80)
+    print("\n" + "=" * 95)
     print("            DETECTED CONSUMER ANOMALIES & GROUND TRUTH REVEAL          ")
-    print("=" * 80)
+    print("=" * 95)
     print(f"{'Consumer ID':<12} | {'Meter ID':<10} | {'Reported':<9} | {'Baseline':<9} | {'Dev %':<8} | {'True kW':<8} | {'Score':<6} | {'Risk':<8} | {'Probable Cause':<20} | {'Confidence'}")
     print("-" * 115)
 
@@ -69,18 +73,15 @@ def run_digital_twin_demo(ticks: int = 4, export_dir: str = "output"):
 
     print(f"\n[+] Total Anomalies Flagged: {flagged_count} (High/Critical: {sum(1 for r in twin.latest_anomaly_results.values() if r.risk_level in ['HIGH', 'CRITICAL'])})")
 
-    # 5. Inspection Priority & Drone Flight Route
-    print("\n" + "=" * 80)
-    print("           AUTONOMOUS DRONE FLIGHT PATH & FIELD INSPECTION QUEUE       ")
-    print("=" * 80)
-    flight = twin.latest_drone_flight
-    if flight:
-        print(f"Base Hub: {flight.base_hub_id} | Total Inspection Trajectory: {flight.total_distance_m:.1f} meters | Est Flight Time: {flight.estimated_flight_minutes:.1f} mins")
-        print("Inspection Queue Priority Sequence:")
-        for t in twin.latest_inspection_targets[:5]:
-            print(f"  Rank #{t.rank} -> {t.consumer_id} ({t.consumer_name}) | Score: {t.anomaly_score:.1f} | Cause: {t.probable_cause} | Unreported Loss: {t.unreported_loss_kw:.2f} kW")
+    # 5. Field Inspection Prioritization Queue
+    print("\n" + "=" * 95)
+    print("             FIELD ENFORCEMENT & ON-SITE INSPECTION PRIORITY QUEUE           ")
+    print("=" * 95)
+    print("Target Consumers Prioritized for Field Audit & Enforcement:")
+    for t in twin.latest_inspection_targets[:5]:
+        print(f"  Rank #{t.rank} -> {t.consumer_id} ({t.consumer_name}) | Score: {t.anomaly_score:.1f} | Cause: {t.probable_cause} | Unreported Loss: {t.unreported_loss_kw:.2f} kW")
 
-    # 6. Export 3D GIS Layers and Investigation Reports
+    # 6. Export 3D GIS Layers, Roads, and Investigation Reports
     print(f"\n[*] Exporting GeoJSON 3D files and Investigation Reports to '{export_dir}'...")
     exporter = GeoJSONTwinExporter(twin)
     exporter.export_all_to_files(export_dir)
@@ -88,7 +89,6 @@ def run_digital_twin_demo(ticks: int = 4, export_dir: str = "output"):
     rep_exporter = ReportExporter(twin)
     reports_dir = os.path.join(export_dir, "reports")
 
-    # Generate sample markdown report for top theft target
     top_target = twin.latest_inspection_targets[0] if twin.latest_inspection_targets else None
     if top_target:
         rpt_md_path = os.path.join(reports_dir, f"report_{top_target.consumer_id}.md")
@@ -102,11 +102,12 @@ def run_digital_twin_demo(ticks: int = 4, export_dir: str = "output"):
     rep_exporter.export_grid_summary_csv(csv_path)
     print(f"    - Exported Tabular Grid CSV: {csv_path}")
     print(f"    - Exported 3D GeoJSON: {export_dir}/buildings_3d.geojson")
+    print(f"    - Exported City Roads: {export_dir}/roads.geojson")
     print(f"    - Exported Electrical Lines: {export_dir}/grid_lines.geojson")
 
-    print("\n" + "=" * 80)
+    print("\n" + "=" * 95)
     print("   DIGITAL TWIN SIMULATION COMPLETED SUCCESSFULLY - READY FOR AUDIT   ")
-    print("=" * 80)
+    print("=" * 95)
     return twin
 
 

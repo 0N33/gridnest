@@ -1,6 +1,6 @@
 {
   "type": "FeatureCollection",
-  "name": "Transformer_Stations",
+  "name": "Transformer_Stations_3Zones",
   "features": [
     {
       "type": "Feature",
@@ -8,20 +8,34 @@
         "type": "Point",
         "coordinates": [
           77.209021,
-          28.613939,
-          215.0
+          28.611960492466977,
+          220.0
         ]
       },
       "properties": {
-        "id": "SUB_CENTRAL_01",
-        "type": "primary_substation",
-        "name": "Central 33/11kV Substation",
-        "voltage": "33kV / 11kV",
-        "icon": "substation",
+        "id": "PS_CENTRAL_01",
+        "type": "power_station_hub",
+        "name": "Central Generation & 33kV Primary Switching Station",
+        "zone_id": "Zone_0_PowerStation",
+        "capacity_mva": 5.0,
+        "iot_sensors": {
+          "gateway_id": "IOT_GATEWAY_PS_01",
+          "bus_voltage_kv": 33.15,
+          "grid_frequency_hz": 50.02,
+          "transformer_oil_temp_c": 63.4,
+          "ambient_temp_c": 31.5,
+          "power_factor": 0.98,
+          "total_generation_kw": 241.29,
+          "reactive_power_kvar": 98.4,
+          "switchgear_status": "CLOSED_HEALTHY",
+          "cooling_fan_status": "ACTIVE_STAGE_1",
+          "feeder_1_kw": 127.39,
+          "feeder_2_kw": 105.4
+        },
         "color": [
-          0,
-          255,
-          200,
+          37,
+          99,
+          235,
           255
         ]
       }
@@ -31,24 +45,24 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          77.20922588801282,
-          28.61591750753302,
+          77.20758678391032,
+          28.613489339197038,
           218.0
         ]
       },
       "properties": {
         "id": "TX_101",
         "type": "distribution_transformer",
-        "name": "Distribution Transformer TX-101 (North Sector)",
+        "name": "Distribution Transformer TX-101 (Zone 1 Commercial)",
         "zone_id": "Zone_1_North",
         "capacity_kva": 100.0,
-        "unexplained_loss_pct": 11.6,
-        "status": "SUSPICIOUS_NTL",
+        "unexplained_loss_pct": 15.6,
+        "status": "CRITICAL_THEFT_CLUSTER",
         "connected_consumers": 24,
         "color": [
-          255,
-          170,
-          0,
+          239,
+          68,
+          68,
           255
         ]
       }
@@ -58,24 +72,24 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          77.20881611198719,
-          28.611960492466977,
+          77.2104552160897,
+          28.613489339197038,
           216.0
         ]
       },
       "properties": {
         "id": "TX_102",
         "type": "distribution_transformer",
-        "name": "Distribution Transformer TX-102 (South Sector)",
+        "name": "Distribution Transformer TX-102 (Zone 2 Residential)",
         "zone_id": "Zone_2_South",
         "capacity_kva": 100.0,
-        "unexplained_loss_pct": 8.7,
-        "status": "SUSPICIOUS_NTL",
+        "unexplained_loss_pct": 5.6,
+        "status": "OPTIMAL",
         "connected_consumers": 24,
         "color": [
-          255,
-          170,
-          0,
+          249,
+          115,
+          22,
           255
         ]
       }

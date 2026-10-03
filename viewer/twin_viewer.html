@@ -1,142 +1,235 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smart Grid Digital Twin | Cyber-Physical 3D Inspector</title>
-  <!-- Three.js for high-performance 3D rendering with glass wireframe shaders -->
+  <title>GridNest Digital Twin | 3-Zone Cyber-Physical Power System & Smart Grid</title>
+  <!-- Three.js for high-performance 3D rendering with architectural CAD shaders -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg-dark: #070913;
-      --panel-bg: rgba(13, 17, 29, 0.88);
-      --panel-border: rgba(64, 120, 255, 0.22);
-      --accent-cyan: #00f0ff;
+    /* ==========================================================================
+       CSS VARIABLES: ARCHITECTURAL LIGHT THEME DEFAULT (WITH CAD AESTHETIC)
+       ========================================================================== */
+    :root, [data-theme="light"] {
+      --bg-canvas: #f1f5f9;
+      --bg-header: rgba(255, 255, 255, 0.96);
+      --bg-panel: rgba(255, 255, 255, 0.95);
+      --bg-card: #ffffff;
+      --bg-cell: #f8fafc;
+      --border-main: #e2e8f0;
+      --border-subtle: #f1f5f9;
+      
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      
+      --accent-blue: #2563eb;
+      --accent-cyan: #0284c7;
+      --accent-red: #dc2626;
+      --accent-orange: #ea580c;
+      --accent-yellow: #d97706;
+      --accent-green: #16a34a;
+      --accent-purple: #9333ea;
+      
+      --badge-red-bg: #fee2e2;
+      --badge-red-text: #b91c1c;
+      --badge-red-border: #fca5a5;
+
+      --badge-orange-bg: #ffedd5;
+      --badge-orange-text: #c2410c;
+      --badge-orange-border: #fed7aa;
+
+      --badge-yellow-bg: #fef9c3;
+      --badge-yellow-text: #a16207;
+      --badge-yellow-border: #fef08a;
+
+      --badge-green-bg: #dcfce7;
+      --badge-green-text: #15803d;
+      --badge-green-border: #86efac;
+
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+      --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.07), 0 1px 3px rgba(15, 23, 42, 0.04);
+      --shadow-lg: 0 10px 25px rgba(15, 23, 42, 0.09);
+    }
+
+    [data-theme="dark"] {
+      --bg-canvas: #060812;
+      --bg-header: rgba(10, 14, 26, 0.95);
+      --bg-panel: rgba(13, 17, 29, 0.90);
+      --bg-card: rgba(18, 25, 42, 0.85);
+      --bg-cell: rgba(10, 14, 25, 0.7);
+      --border-main: rgba(64, 120, 255, 0.22);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      
+      --text-main: #f0f4fc;
+      --text-muted: #8a99b5;
+      --text-light: #526380;
+      
       --accent-blue: #3d7eff;
+      --accent-cyan: #00f0ff;
       --accent-red: #ff2a5f;
       --accent-orange: #ff9800;
       --accent-yellow: #ffd600;
       --accent-green: #00e676;
-      --text-main: #f0f4fc;
-      --text-muted: #8a99b5;
+      --accent-purple: #d946ef;
+
+      --badge-red-bg: rgba(255, 42, 95, 0.2);
+      --badge-red-text: #ff2a5f;
+      --badge-red-border: #ff2a5f;
+
+      --badge-orange-bg: rgba(255, 152, 0, 0.2);
+      --badge-orange-text: #ff9800;
+      --badge-orange-border: #ff9800;
+
+      --badge-yellow-bg: rgba(255, 214, 0, 0.2);
+      --badge-yellow-text: #ffd600;
+      --badge-yellow-border: #ffd600;
+
+      --badge-green-bg: rgba(0, 230, 118, 0.2);
+      --badge-green-text: #00e676;
+      --badge-green-border: #00e676;
+
+      --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.5);
+      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.7);
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      background-color: var(--bg-dark);
+      background-color: var(--bg-canvas);
       color: var(--text-main);
-      font-family: 'Outfit', -apple-system, sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
       overflow: hidden;
       height: 100vh;
       width: 100vw;
       display: flex;
       flex-direction: column;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     /* TOP HEADER */
     header {
-      height: 58px;
-      background: rgba(10, 14, 26, 0.95);
-      border-bottom: 1px solid var(--panel-border);
+      height: 52px;
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border-main);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 20px;
+      padding: 0 16px;
       z-index: 100;
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow-sm);
+      gap: 12px;
     }
+
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
+      min-width: 180px;
+      flex-shrink: 0;
     }
     .brand-icon {
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, #00f0ff, #3d7eff);
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
       border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+      flex-shrink: 0;
     }
     .brand-title {
-      font-size: 16px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      background: linear-gradient(90deg, #ffffff, #a9c6ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+      color: var(--text-main);
     }
     .brand-sub {
+      font-size: 9px;
+      color: var(--text-muted);
       font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--accent-cyan);
-      border: 1px solid rgba(0, 240, 255, 0.3);
-      padding: 2px 6px;
-      border-radius: 4px;
-      background: rgba(0, 240, 255, 0.08);
+      letter-spacing: 0.5px;
     }
 
     .kpi-strip {
       display: flex;
-      gap: 20px;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      flex-shrink: 0;
     }
     .kpi-item {
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: flex-start;
+      background: var(--bg-card);
+      border: 1px solid var(--border-main);
+      padding: 5px 12px;
+      border-radius: 8px;
+      min-width: 125px;
+      box-shadow: var(--shadow-sm);
     }
     .kpi-val {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 14px;
       font-weight: 700;
+      font-size: 13px;
+      color: var(--text-main);
     }
-    .kpi-val.cyan { color: var(--accent-cyan); }
     .kpi-val.red { color: var(--accent-red); }
     .kpi-val.orange { color: var(--accent-orange); }
+    .kpi-val.blue { color: var(--accent-blue); }
     .kpi-val.green { color: var(--accent-green); }
     .kpi-lbl {
-      font-size: 10px;
+      font-size: 9px;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      font-weight: 600;
+      letter-spacing: 0.4px;
     }
 
     .controls-strip {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
+      flex-shrink: 0;
     }
-    button.btn {
-      background: rgba(61, 126, 255, 0.15);
-      border: 1px solid var(--panel-border);
+    .btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-main);
       color: var(--text-main);
-      padding: 6px 14px;
-      border-radius: 6px;
+      padding: 7px 12px;
+      border-radius: 7px;
       font-size: 12px;
       font-weight: 600;
-      font-family: 'JetBrains Mono', monospace;
       cursor: pointer;
-      transition: all 0.2s ease;
-      display: inline-flex;
+      display: flex;
       align-items: center;
       gap: 6px;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
     }
-    button.btn:hover {
-      background: rgba(61, 126, 255, 0.35);
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+    .btn:hover {
+      background: var(--bg-cell);
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
     }
-    button.btn.primary {
-      background: linear-gradient(135deg, rgba(0, 240, 255, 0.25), rgba(61, 126, 255, 0.35));
-      border-color: var(--accent-cyan);
+    .btn.primary {
+      background: var(--accent-blue);
+      color: #fff;
+      border-color: var(--accent-blue);
+    }
+    .btn.primary:hover {
+      background: #1d4ed8;
     }
 
-    /* MAIN VIEWPORT SPLIT */
+    /* MAIN APP WORKSPACE */
     .app-main {
       flex: 1;
       display: flex;
@@ -144,169 +237,312 @@
       overflow: hidden;
     }
 
-    /* 3D CANVAS */
+    /* 3D CANVAS VIEWPORT */
     #canvas-container {
       flex: 1;
-      height: 100%;
       position: relative;
-      background: radial-gradient(circle at 50% 50%, #0e1428 0%, #060812 100%);
-    }
-    #viewport-overlay {
-      position: absolute;
-      top: 15px;
-      left: 15px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      pointer-events: none;
-    }
-    .hud-card {
-      background: var(--panel-bg);
-      border: 1px solid var(--panel-border);
-      padding: 10px 14px;
-      border-radius: 8px;
-      backdrop-filter: blur(8px);
-      pointer-events: auto;
-      min-width: 200px;
-    }
-    .hud-title {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: var(--accent-cyan);
-      font-family: 'JetBrains Mono', monospace;
-      margin-bottom: 6px;
-    }
-    .legend-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 11px;
-      margin-bottom: 4px;
-    }
-    .legend-color {
-      width: 10px;
-      height: 10px;
-      border-radius: 2px;
+      outline: none;
+      background: var(--bg-canvas);
     }
 
-    /* RIGHT INSPECTION SIDEBAR */
+    /* MINIMAL TOP ZONE NAVIGATION RIBBON */
+    .quick-nav-ribbon {
+      position: absolute;
+      top: 12px;
+      left: 14px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      z-index: 20;
+      background: var(--bg-panel);
+      padding: 4px 6px;
+      border-radius: 8px;
+      border: 1px solid var(--border-main);
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(8px);
+    }
+    .nav-chip {
+      background: var(--bg-card);
+      border: 1px solid var(--border-main);
+      border-radius: 5px;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-main);
+      transition: all 0.15s ease;
+    }
+    .nav-chip:hover {
+      background: var(--bg-cell);
+      border-color: var(--accent-blue);
+    }
+    .nav-chip.active {
+      background: #eff6ff;
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+    .nav-chip.alert-chip {
+      border-color: #fca5a5;
+      color: #b91c1c;
+      background: #fef2f2;
+    }
+
+    .nav-group {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: var(--bg-cell);
+      padding: 2px 3px;
+      border-radius: 6px;
+      border: 1px solid var(--border-main);
+    }
+    .sub-nav-chip {
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      padding: 3px 6px;
+      font-size: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .sub-nav-chip:hover {
+      background: var(--bg-card);
+      color: var(--accent-blue);
+      border-color: var(--border-main);
+    }
+    .sub-nav-chip.active {
+      background: var(--accent-blue);
+      color: #ffffff;
+      border-color: var(--accent-blue);
+    }
+
+    /* UNREAL FREE CAM KEYBOARD HINT - MINIMAL BOTTOM-RIGHT PILL */
+    .camera-hint-badge {
+      position: absolute;
+      bottom: 14px;
+      right: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      z-index: 20;
+      background: var(--bg-panel);
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--border-main);
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(8px);
+      font-size: 10px;
+      color: var(--text-muted);
+      pointer-events: none;
+      user-select: none;
+    }
+    .camera-hint-badge strong {
+      color: var(--text-main);
+    }
+    .cam-icon {
+      font-size: 11px;
+    }
+
+    /* MINIMAL 1-LINE COLOR LEGEND PILL (BOTTOM-LEFT) */
+    .minimal-legend {
+      position: absolute;
+      bottom: 14px;
+      left: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-panel);
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--border-main);
+      box-shadow: var(--shadow-sm);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-muted);
+      backdrop-filter: blur(8px);
+      pointer-events: none;
+      user-select: none;
+      z-index: 20;
+    }
+    .legend-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 4px;
+    }
+    .legend-dot.red { background: #ef4444; }
+    .legend-dot.orange { background: #f97316; }
+    .legend-dot.green { background: #10b981; }
+
+    /* ==========================================================================
+       RIGHT INSPECTOR PANEL: SLEEK, COMPACT 370px
+       ========================================================================== */
     #inspector-panel {
-      width: 440px;
-      height: 100%;
-      background: var(--panel-bg);
-      border-left: 1px solid var(--panel-border);
+      width: 370px;
+      background: var(--bg-panel);
+      border-left: 1px solid var(--border-main);
       display: flex;
       flex-direction: column;
-      backdrop-filter: blur(16px);
       z-index: 50;
-      box-shadow: -5px 0 25px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow-lg);
+      transition: width 0.3s ease;
     }
+
+    /* SEGMENTED HIERARCHY TABS */
+    .panel-tabs-bar {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      background: var(--bg-cell);
+      border-bottom: 1px solid var(--border-main);
+      padding: 6px 10px;
+      gap: 6px;
+    }
+    .hierarchy-tab {
+      background: var(--bg-card);
+      border: 1px solid var(--border-main);
+      border-radius: 6px;
+      padding: 6px 4px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .hierarchy-tab:hover {
+      color: var(--text-main);
+      border-color: var(--border-main);
+    }
+    .hierarchy-tab.active {
+      background: var(--accent-blue);
+      color: #ffffff;
+      border-color: var(--accent-blue);
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+    }
+
     .panel-header {
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--panel-border);
+      padding: 14px 18px 10px 18px;
+      border-bottom: 1px solid var(--border-main);
       display: flex;
       align-items: center;
       justify-content: space-between;
+      background: var(--bg-card);
     }
     .panel-title {
       font-size: 14px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: #fff;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.2px;
     }
+    .panel-subtitle {
+      font-size: 10px;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: 2px;
+    }
+
     .panel-body {
       flex: 1;
       overflow-y: auto;
-      padding: 20px;
+      padding: 14px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 12px;
     }
-    .panel-body::-webkit-scrollbar { width: 5px; }
-    .panel-body::-webkit-scrollbar-thumb { background: rgba(64, 120, 255, 0.3); border-radius: 3px; }
 
-    /* CARD COMPONENTS */
+    /* CARD STYLES */
     .card {
-      background: rgba(18, 25, 42, 0.7);
-      border: 1px solid rgba(64, 120, 255, 0.2);
-      border-radius: 8px;
-      padding: 14px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-main);
+      border-radius: 9px;
+      padding: 12px;
+      box-shadow: var(--shadow-sm);
     }
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .card-title {
       font-size: 11px;
-      font-family: 'JetBrains Mono', monospace;
-      color: var(--text-muted);
+      font-weight: 800;
+      color: var(--text-main);
       text-transform: uppercase;
-      font-weight: 600;
+      letter-spacing: 0.4px;
     }
+
     .badge {
-      font-family: 'JetBrains Mono', monospace;
       font-size: 10px;
-      font-weight: 700;
-      padding: 3px 8px;
+      padding: 2px 7px;
       border-radius: 4px;
-      text-transform: uppercase;
+      font-weight: 800;
+      letter-spacing: 0.3px;
     }
-    .badge.CRITICAL { background: rgba(255, 42, 95, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); }
-    .badge.HIGH { background: rgba(255, 152, 0, 0.2); color: var(--accent-orange); border: 1px solid var(--accent-orange); }
-    .badge.MEDIUM { background: rgba(255, 214, 0, 0.2); color: var(--accent-yellow); border: 1px solid var(--accent-yellow); }
-    .badge.LOW { background: rgba(0, 230, 118, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
-    .badge.NORMAL { background: rgba(138, 153, 181, 0.2); color: var(--text-muted); border: 1px solid var(--text-muted); }
+    .badge.CRITICAL { background: var(--badge-red-bg); color: var(--badge-red-text); border: 1px solid var(--badge-red-border); }
+    .badge.HIGH { background: var(--badge-orange-bg); color: var(--badge-orange-text); border: 1px solid var(--badge-orange-border); }
+    .badge.MEDIUM { background: var(--badge-yellow-bg); color: var(--badge-yellow-text); border: 1px solid var(--badge-yellow-border); }
+    .badge.NORMAL { background: var(--badge-green-bg); color: var(--badge-green-text); border: 1px solid var(--badge-green-border); }
 
     .risk-banner {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
       padding: 12px;
-      border-radius: 6px;
-      margin-bottom: 6px;
     }
     .risk-score-circle {
-      width: 54px;
-      height: 54px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       font-family: 'JetBrains Mono', monospace;
-      font-weight: 700;
+      font-weight: 800;
       font-size: 16px;
-      border: 2px solid;
+      border: 3px solid;
+      background: var(--bg-card);
+      flex-shrink: 0;
     }
 
     .data-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 7px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
+      font-size: 11px;
     }
     .data-cell {
-      background: rgba(10, 14, 25, 0.6);
-      padding: 8px 10px;
+      background: var(--bg-cell);
+      padding: 7px 9px;
       border-radius: 6px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
     }
     .data-cell-lbl {
       font-size: 9px;
       color: var(--text-muted);
       text-transform: uppercase;
+      font-weight: 600;
       margin-bottom: 2px;
     }
     .data-cell-val {
       font-weight: 700;
+      color: var(--text-main);
     }
 
-    /* BAR COMPARISON */
     .bar-group {
       margin-top: 10px;
       display: flex;
@@ -321,76 +557,79 @@
     .bar-labels {
       display: flex;
       justify-content: space-between;
-      font-size: 11px;
+      font-size: 10px;
+      font-weight: 600;
       font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
     }
     .bar-track {
-      height: 8px;
-      background: rgba(255, 255, 255, 0.08);
+      height: 7px;
+      background: #e2e8f0;
       border-radius: 4px;
       overflow: hidden;
     }
     .bar-fill {
       height: 100%;
       border-radius: 4px;
-      transition: width 0.4s ease;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* EVIDENCE LIST */
     .evidence-list {
       list-style: none;
       display: flex;
       flex-direction: column;
       gap: 6px;
-      margin-top: 6px;
+      margin-top: 4px;
     }
     .evidence-item {
       font-size: 11px;
       line-height: 1.4;
       padding: 6px 8px;
-      border-left: 2px solid var(--accent-cyan);
-      background: rgba(0, 240, 255, 0.05);
-      border-radius: 0 4px 4px 0;
+      border-left: 3px solid var(--accent-blue);
+      background: #eff6ff;
+      color: #1e3a8a;
+      border-radius: 0 5px 5px 0;
     }
 
-    /* MODAL FOR REPORT */
+    /* MODAL */
     #report-modal {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(10px);
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(8px);
       z-index: 1000;
       align-items: center;
       justify-content: center;
-      padding: 40px;
+      padding: 30px;
     }
     .modal-box {
-      width: 800px;
+      width: 820px;
       max-height: 85vh;
-      background: #0d1222;
-      border: 1px solid var(--panel-border);
-      border-radius: 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-main);
+      border-radius: 12px;
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      box-shadow: 0 0 50px rgba(0, 240, 255, 0.15);
+      box-shadow: var(--shadow-lg);
     }
     .modal-header {
       padding: 16px 20px;
-      border-bottom: 1px solid var(--panel-border);
+      border-bottom: 1px solid var(--border-main);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      background: var(--bg-cell);
     }
     .modal-body {
-      padding: 24px;
+      padding: 22px;
       overflow-y: auto;
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
       line-height: 1.6;
       white-space: pre-wrap;
-      color: #cfdcf7;
+      color: var(--text-main);
     }
   </style>
 </head>
@@ -400,44 +639,47 @@
   <header>
     <div class="brand">
       <div class="brand-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5">
           <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
         </svg>
       </div>
       <div>
-        <div class="brand-title">Smart Grid Digital Twin</div>
+        <div class="brand-title">GridNest Digital Twin</div>
+        <div class="brand-sub">CYBER-PHYSICAL 3-ZONE POWER GRID</div>
       </div>
-      <div class="brand-sub">GOD'S EYE 3D AUDITOR</div>
     </div>
 
     <div class="kpi-strip">
       <div class="kpi-item">
-        <span class="kpi-val cyan" id="kpi-sim-time">2026-10-05 06:15</span>
-        <span class="kpi-lbl">Virtual Grid Clock</span>
+        <span class="kpi-val blue" id="kpi-sim-time">2026-10-05 06:15</span>
+        <span class="kpi-lbl">Simulated Clock</span>
       </div>
       <div class="kpi-item">
         <span class="kpi-val" id="kpi-consumers">48 / 48</span>
         <span class="kpi-lbl">Meters Monitored</span>
       </div>
       <div class="kpi-item">
-        <span class="kpi-val red" id="kpi-anomalies">4 Flagged</span>
+        <span class="kpi-val red" id="kpi-anomalies">5 Flagged</span>
         <span class="kpi-lbl">Field Anomalies</span>
       </div>
       <div class="kpi-item">
         <span class="kpi-val orange" id="kpi-tx-loss">11.4%</span>
-        <span class="kpi-lbl">Transformer NTL Loss</span>
+        <span class="kpi-lbl">Unexplained NTL</span>
       </div>
     </div>
 
     <div class="controls-strip">
+      <button class="btn" id="btn-theme" onclick="toggleTheme()" title="Toggle Theme">
+        <span id="theme-icon">☀️ Light</span>
+      </button>
       <button class="btn" id="btn-toggle-truth" onclick="toggleGroundTruth()">
-        <span id="truth-icon">👁️</span> <span id="truth-label">Truth Reveal: ON</span>
+        <span id="truth-icon">👁️</span> <span id="truth-label">Truth: ON</span>
       </button>
       <button class="btn" id="btn-step" onclick="stepSimulation()">
-        <span>⏩ Step Tick (+15m)</span>
+        <span>⏩ Step (+15m)</span>
       </button>
-      <button class="btn primary" id="btn-drone-mission" onclick="triggerDroneFlight()">
-        <span>🛸 Fly Drone Mission</span>
+      <button class="btn primary" id="btn-auto-step" onclick="toggleAutoPlay()">
+        <span id="play-icon">▶️ Auto Play</span>
       </button>
     </div>
   </header>
@@ -447,230 +689,441 @@
     
     <!-- 3D WEBGL CONTAINER -->
     <div id="canvas-container">
-      <div id="viewport-overlay">
-        <div class="hud-card">
-          <div class="hud-title">3D Transformer Zones</div>
-          <div class="legend-row">
-            <div class="legend-color" style="background: #00f0ff;"></div>
-            <span>Zone 1 (North Sector - TX-101)</span>
-          </div>
-          <div class="legend-row">
-            <div class="legend-color" style="background: #3d7eff;"></div>
-            <span>Zone 2 (South Sector - TX-102)</span>
-          </div>
-        </div>
 
-        <div class="hud-card">
-          <div class="hud-title">Risk Color Classification</div>
-          <div class="legend-row">
-            <div class="legend-color" style="background: #ff2a5f;"></div>
-            <span>Theft / Tampering (Bypass / Shunt)</span>
-          </div>
-          <div class="legend-row">
-            <div class="legend-color" style="background: #ff9800;"></div>
-            <span>Meter Malfunction (Stuck / Hardware)</span>
-          </div>
-          <div class="legend-row">
-            <div class="legend-color" style="background: #ffd600;"></div>
-            <span>Communication Failure (AMI Offline)</span>
-          </div>
-          <div class="legend-row">
-            <div class="legend-color" style="background: #00e676;"></div>
-            <span>Legitimate Abnormal Surge (EV Charger)</span>
-          </div>
-          <div class="legend-row">
-            <div class="legend-color" style="background: rgba(120, 150, 240, 0.6);"></div>
-            <span>Normal Diurnal Consumption</span>
-          </div>
+      <!-- MINIMAL TOP QUICK NAV -->
+      <div class="quick-nav-ribbon">
+        <button class="nav-chip active" id="nav-chip-overview" onclick="focusCameraZone('overview')" title="Full Grid Overview">🌐 All</button>
+        <button class="nav-chip" id="nav-chip-ps" onclick="selectPowerStation(); focusCameraZone('ps')" title="Zone 0 Power Station">⚡ Zone 0</button>
+        <div class="nav-group">
+          <button class="nav-chip alert-chip" id="nav-chip-zone1" onclick="selectTransformer('TX_101'); focusCameraZone('zone1')" title="Zone 1 West Sector (TX-101)">🏢 Zone 1</button>
+          <button class="sub-nav-chip" id="nav-chip-z1-st2" onclick="selectTransformer('TX_101'); focusCameraZone('z1_st2')" title="Street 2 Tech Park">St 2</button>
+          <button class="sub-nav-chip" id="nav-chip-z1-st1" onclick="selectTransformer('TX_101'); focusCameraZone('z1_st1')" title="Street 1 Commercial">St 1</button>
         </div>
+        <div class="nav-group">
+          <button class="nav-chip" id="nav-chip-zone2" onclick="selectTransformer('TX_102'); focusCameraZone('zone2')" title="Zone 2 East Sector (TX-102)">🏡 Zone 2</button>
+          <button class="sub-nav-chip" id="nav-chip-z2-st2" onclick="selectTransformer('TX_102'); focusCameraZone('z2_st2')" title="Street 2 Villas">St 2</button>
+          <button class="sub-nav-chip" id="nav-chip-z2-st1" onclick="selectTransformer('TX_102'); focusCameraZone('z2_st1')" title="Street 1 Apartments">St 1</button>
+        </div>
+        <button class="nav-chip alert-chip" onclick="selectConsumer('CONS_N_009'); zoomToConsumer('CONS_N_009')" title="Theft Target #1 (Zone 1)">🎯 N_009</button>
+        <button class="nav-chip alert-chip" onclick="selectConsumer('CONS_S_018'); zoomToConsumer('CONS_S_018')" title="Theft Target #2 (Zone 2)">🎯 S_018</button>
+      </div>
+
+      <!-- MINIMAL BOTTOM-LEFT STATUS PILL -->
+      <div class="minimal-legend">
+        <span><span class="legend-dot red"></span>Theft</span>
+        <span><span class="legend-dot orange"></span>Fault</span>
+        <span><span class="legend-dot green"></span>Normal</span>
+      </div>
+
+      <!-- MINIMAL BOTTOM-RIGHT FREE CAM PILL -->
+      <div class="camera-hint-badge" title="WASD to pan • Q/E vertical • Shift boost • Right-drag screen pan">
+        <span class="cam-icon">🎮</span>
+        <span><strong>WASD</strong> / <strong>Right-Drag</strong> &bull; <kbd>Q</kbd>/<kbd>E</kbd></span>
       </div>
     </div>
 
-    <!-- RIGHT INSPECTOR PANEL -->
+    <!-- RIGHT INSPECTOR PANEL (3 INTERACTIVE TIERS) -->
     <div id="inspector-panel">
-      <div class="panel-header">
-        <div class="panel-title" id="panel-consumer-header">Target Consumer Details</div>
-        <span class="badge CRITICAL" id="panel-badge-risk">CRITICAL RISK</span>
+
+      <!-- SEGMENTED TABS: POWER STATION vs TRANSFORMER vs CONSUMER -->
+      <div class="panel-tabs-bar">
+        <button class="hierarchy-tab" id="tab-power-station" onclick="selectPowerStation()">⚡ Power Station</button>
+        <button class="hierarchy-tab" id="tab-transformer" onclick="selectTransformer('TX_101')">🏢 Transformer</button>
+        <button class="hierarchy-tab active" id="tab-consumer" onclick="switchInspectorMode('consumer')">🏠 Consumer Meter</button>
       </div>
 
+      <!-- HEADER -->
+      <div class="panel-header">
+        <div>
+          <div class="panel-title" id="panel-title-text">Consumer Meter Inspection</div>
+          <div class="panel-subtitle" id="panel-subtitle-text">ID: CONS_N_004 | Zone 1 North</div>
+        </div>
+        <span class="badge CRITICAL" id="panel-badge-status">CRITICAL RISK</span>
+      </div>
+
+      <!-- PANEL BODY: 3 ADAPTIVE VIEWS -->
       <div class="panel-body">
-        
-        <!-- RISK BANNER -->
-        <div class="risk-banner card" id="panel-banner-bg" style="background: rgba(255, 42, 95, 0.1); border-color: rgba(255, 42, 95, 0.3);">
-          <div class="risk-score-circle" id="panel-score-circle" style="border-color: var(--accent-red); color: var(--accent-red);">
-            <span id="panel-score-val">94</span>
-            <span style="font-size: 8px; color: var(--text-muted);">SCORE</span>
-          </div>
-          <div>
-            <div style="font-size: 13px; font-weight: 700;" id="panel-cause-title">THEFT / METER SHUNT BYPASS</div>
-            <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">
-              Confidence: <strong id="panel-confidence-val" style="color:#fff;">96.0%</strong> | Priority Rank: <strong id="panel-rank-val" style="color:var(--accent-red);">#1</strong>
-            </div>
-          </div>
-        </div>
 
-        <!-- METER & CONTRACT DATA -->
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">Consumer Identification</span>
-            <span style="font-size: 11px; font-family:'JetBrains Mono';" id="panel-meter-id">MTR_N_004</span>
-          </div>
-          <div class="data-grid">
-            <div class="data-cell">
-              <div class="data-cell-lbl">Consumer ID</div>
-              <div class="data-cell-val" id="panel-cid">CONS_N_004</div>
+        <!-- ====================================================================
+             VIEW 1: CONSUMER SMART METER IOT NODE
+             ==================================================================== -->
+        <div id="view-consumer" style="display: flex; flex-direction: column; gap: 12px;">
+          
+          <!-- RISK BANNER -->
+          <div class="risk-banner card" id="panel-banner-bg" style="background: #fef2f2; border-color: #fca5a5;">
+            <div class="risk-score-circle" id="panel-score-circle" style="border-color: var(--accent-red); color: var(--accent-red);">
+              <span id="panel-score-val">94</span>
+              <span style="font-size: 8px; color: var(--text-muted); font-weight: 700;">SCORE</span>
             </div>
-            <div class="data-cell">
-              <div class="data-cell-lbl">Category</div>
-              <div class="data-cell-val" id="panel-category">Residential (3-Phase)</div>
-            </div>
-            <div class="data-cell">
-              <div class="data-cell-lbl">Contracted Load</div>
-              <div class="data-cell-val" id="panel-contract">4.5 kW</div>
-            </div>
-            <div class="data-cell">
-              <div class="data-cell-lbl">Transformer / Zone</div>
-              <div class="data-cell-val" id="panel-zone">TX_101 (Zone 1 North)</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- CONSUMPTION VS BASELINE -->
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">Telemetry vs Diurnal Baseline</span>
-            <span class="badge" id="panel-dev-pct" style="background: rgba(255,42,95,0.2); color:var(--accent-red);">-72.4%</span>
-          </div>
-          <div class="data-grid">
-            <div class="data-cell">
-              <div class="data-cell-lbl">Reported Load</div>
-              <div class="data-cell-val" id="panel-rep-kw" style="color: var(--accent-cyan);">0.48 kW</div>
-            </div>
-            <div class="data-cell">
-              <div class="data-cell-lbl">Diurnal Baseline</div>
-              <div class="data-cell-val" id="panel-base-kw">1.74 kW</div>
-            </div>
-            <div class="data-cell">
-              <div class="data-cell-lbl">Terminal Voltage</div>
-              <div class="data-cell-val" id="panel-volt">228.4 V</div>
-            </div>
-            <div class="data-cell">
-              <div class="data-cell-lbl">Line Current</div>
-              <div class="data-cell-val" id="panel-curr">2.18 A</div>
-            </div>
-          </div>
-
-          <!-- COMPARISON BARS -->
-          <div class="bar-group">
-            <div class="bar-row">
-              <div class="bar-labels">
-                <span>Reported Power</span>
-                <span id="bar-rep-lbl">0.48 kW</span>
-              </div>
-              <div class="bar-track">
-                <div class="bar-fill" id="bar-rep-fill" style="width: 25%; background: var(--accent-cyan);"></div>
-              </div>
-            </div>
-            <div class="bar-row">
-              <div class="bar-labels">
-                <span>Diurnal Baseline</span>
-                <span id="bar-base-lbl">1.74 kW</span>
-              </div>
-              <div class="bar-track">
-                <div class="bar-fill" id="bar-base-fill" style="width: 70%; background: rgba(255,255,255,0.4);"></div>
+            <div>
+              <div style="font-size: 13px; font-weight: 800; color: #991b1b;" id="panel-cause-title">THEFT / METER SHUNT BYPASS</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">
+                Confidence: <strong id="panel-confidence-val" style="color:var(--text-main);">96.0%</strong> | Priority Rank: <strong id="panel-rank-val" style="color:var(--accent-red);">#1</strong>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- DIGITAL TWIN TRUTH REVEAL (USP) -->
-        <div class="card" id="panel-truth-card" style="border-color: rgba(0, 240, 255, 0.4); background: rgba(0, 240, 255, 0.05);">
-          <div class="card-header">
-            <span class="card-title" style="color: var(--accent-cyan);">Digital Twin Ground Truth Reveal</span>
-            <span class="badge" style="background: rgba(0,240,255,0.2); color:var(--accent-cyan);">UNMASKED</span>
-          </div>
-          <div class="data-grid">
-            <div class="data-cell">
-              <div class="data-cell-lbl">Physical Consumption</div>
-              <div class="data-cell-val" id="panel-true-kw" style="color:#fff;">1.82 kW</div>
+          <!-- METER & CONTRACT DATA -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Consumer Identification</span>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="font-size: 11px; font-family:'JetBrains Mono'; font-weight: 700; color: var(--accent-blue);" id="panel-meter-id">MTR_N_004</span>
+                <button class="btn" style="padding: 2px 7px; font-size: 10px;" onclick="zoomToConsumer(selectedConsumerId)" title="Focus camera on building">🎯 Focus 3D</button>
+              </div>
             </div>
-            <div class="data-cell">
-              <div class="data-cell-lbl">Unreported / Stolen</div>
-              <div class="data-cell-val" id="panel-stolen-kw" style="color: var(--accent-red);">1.34 kW</div>
+            <div class="data-grid">
+              <div class="data-cell">
+                <div class="data-cell-lbl">Consumer ID</div>
+                <div class="data-cell-val" id="panel-cid">CONS_N_004</div>
+              </div>
+              <div class="data-cell">
+                <div class="data-cell-lbl">Category</div>
+                <div class="data-cell-val" id="panel-category">Residential (3-Phase)</div>
+              </div>
+              <div class="data-cell">
+                <div class="data-cell-lbl">Contracted Load</div>
+                <div class="data-cell-val" id="panel-contract">4.5 kW</div>
+              </div>
+              <div class="data-cell">
+                <div class="data-cell-lbl">Connected Pole / Zone</div>
+                <div class="data-cell-val" id="panel-zone">POLE_N_02 (TX-101)</div>
+              </div>
             </div>
           </div>
-          <div style="font-size: 10px; color: var(--accent-cyan); margin-top: 8px; font-family:'JetBrains Mono';">
-            * Transformer TX_101 bulk meter records 11.4% unaccounted non-technical loss directly matching this consumer's bypass.
+
+          <!-- CONSUMPTION VS BASELINE -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Telemetry vs Diurnal Baseline</span>
+              <span class="badge CRITICAL" id="panel-dev-pct">-74.9%</span>
+            </div>
+            <div class="data-grid">
+              <div class="data-cell">
+                <div class="data-cell-lbl">Reported Load</div>
+                <div class="data-cell-val" id="panel-rep-kw" style="color: var(--accent-blue);">0.89 kW</div>
+              </div>
+              <div class="data-cell">
+                <div class="data-cell-lbl">Diurnal Baseline</div>
+                <div class="data-cell-val" id="panel-base-kw">3.53 kW</div>
+              </div>
+              <div class="data-cell">
+                <div class="data-cell-lbl">Terminal Voltage</div>
+                <div class="data-cell-val" id="panel-volt">228.4 V</div>
+              </div>
+              <div class="data-cell">
+                <div class="data-cell-lbl">Line Current</div>
+                <div class="data-cell-val" id="panel-curr">3.88 A</div>
+              </div>
+            </div>
+
+            <!-- COMPARISON BARS -->
+            <div class="bar-group">
+              <div class="bar-row">
+                <div class="bar-labels">
+                  <span>Reported Power</span>
+                  <span id="bar-rep-lbl" style="color: var(--accent-blue);">0.89 kW</span>
+                </div>
+                <div class="bar-track">
+                  <div class="bar-fill" id="bar-rep-fill" style="width: 25%; background: var(--accent-blue);"></div>
+                </div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-labels">
+                  <span>Diurnal Baseline</span>
+                  <span id="bar-base-lbl">3.53 kW</span>
+                </div>
+                <div class="bar-track">
+                  <div class="bar-fill" id="bar-base-fill" style="width: 75%; background: #94a3b8;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DIGITAL TWIN TRUTH REVEAL (USP) -->
+          <div class="card" id="panel-truth-card" style="border-color: #bae6fd; background: #f0f9ff;">
+            <div class="card-header">
+              <span class="card-title" style="color: #0369a1;">Physical Ground Truth</span>
+              <span class="badge" style="background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;">GRID SENSORS</span>
+            </div>
+            <div class="data-grid">
+              <div class="data-cell" style="background: #ffffff;">
+                <div class="data-cell-lbl">True Active Load</div>
+                <div class="data-cell-val" id="panel-true-kw">3.17 kW</div>
+              </div>
+              <div class="data-cell" style="background: #ffffff;">
+                <div class="data-cell-lbl">Unreported / Diverted</div>
+                <div class="data-cell-val" id="panel-stolen-kw" style="color: var(--accent-red);">2.28 kW</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUPPORTING EVIDENCE CHAIN -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Evidence Chain</span>
+            </div>
+            <ul class="evidence-list" id="panel-evidence-list">
+              <li class="evidence-item">Drastic consumption drop (-74.9% below baseline, z=-2.85)</li>
+              <li class="evidence-item">Zone 1 Transformer TX-101 missing 19.69 kWh (DONE FOR!)</li>
+              <li class="evidence-item">Peer consumption ratio is 25.2% of neighborhood average</li>
+            </ul>
+          </div>
+
+          <!-- RECOMMENDED ACTION -->
+          <div class="card" style="border-color: #fecaca; background: #fff5f5;">
+            <div class="card-header">
+              <span class="card-title" style="color: #b91c1c;">Recommended Action</span>
+            </div>
+            <p style="font-size: 11px; line-height: 1.4; color: #7f1d1d; font-weight: 600;" id="panel-action-text">
+              HIGH PRIORITY: Dispatch anti-theft squad to verify meter shunt/bypass.
+            </p>
+          </div>
+
+          <!-- ACTION BUTTONS -->
+          <div style="display: flex; gap: 8px; margin-top: 2px;">
+            <button class="btn primary" style="flex: 1; justify-content: center;" onclick="openReportModal()">
+              <span>📄 View Investigation Report</span>
+            </button>
           </div>
         </div>
 
-        <!-- SUPPORTING EVIDENCE CHAIN -->
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">Supporting Evidence Chain</span>
+        <!-- ====================================================================
+             VIEW 2: TRANSFORMER IOT GATEWAY & ENERGY AUDIT NODE
+             ==================================================================== -->
+        <div id="view-transformer" style="display: none; flex-direction: column; gap: 10px;">
+          
+          <!-- TRANSFORMER SWITCHER CHIPS -->
+          <div style="display: flex; gap: 6px;">
+            <button class="btn" id="btn-tx-101" style="flex: 1; justify-content: center;" onclick="selectTransformer('TX_101')">
+              <span>🏢 TX-101 (Zone 1)</span>
+            </button>
+            <button class="btn" id="btn-tx-102" style="flex: 1; justify-content: center;" onclick="selectTransformer('TX_102')">
+              <span>🏡 TX-102 (Zone 2)</span>
+            </button>
           </div>
-          <ul class="evidence-list" id="panel-evidence-list">
-            <li class="evidence-item">Drastic consumption drop (-72.4% below diurnal baseline, z=-2.85)</li>
-            <li class="evidence-item">Distribution transformer TX_101 reports 11.4% unexplained NTL</li>
-            <li class="evidence-item">Consumer peer load ratio is 28.5% of neighborhood feeder average</li>
-          </ul>
+
+          <!-- PROMINENT ENERGY RECONCILIATION AUDIT ("INPUTTED VS METERS ADDED UP") -->
+          <div class="card" id="tx-reconciliation-card" style="border-color: #fca5a5; background: #fff5f5;">
+            <div class="card-header">
+              <span class="card-title" style="color: #b91c1c;">Energy Reconciliation Audit</span>
+              <span class="badge CRITICAL" id="tx-reconcile-status">DONE FOR!</span>
+            </div>
+            <div class="data-grid">
+              <div class="data-cell" style="background:#ffffff;">
+                <div class="data-cell-lbl">Power Inputted (11kV)</div>
+                <div class="data-cell-val" id="tx-input-kwh" style="color: var(--accent-blue); font-size: 12px;">118.41 kWh</div>
+              </div>
+              <div class="data-cell" style="background:#ffffff;">
+                <div class="data-cell-lbl">Meters Added Up</div>
+                <div class="data-cell-val" id="tx-meters-kwh" style="color: #b91c1c; font-size: 12px;">95.37 kWh</div>
+              </div>
+              <div class="data-cell" style="background:#ffffff;">
+                <div class="data-cell-lbl">Technical Loss (I²R)</div>
+                <div class="data-cell-val" id="tx-tech-kwh">3.35 kWh</div>
+              </div>
+              <div class="data-cell" style="background:#ffffff;">
+                <div class="data-cell-lbl">Unexplained Theft Loss</div>
+                <div class="data-cell-val" id="tx-missing-kwh" style="color: var(--accent-red); font-size: 12px;">19.69 kWh (16.4%)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TRANSFORMER ELECTRICAL TELEMETRY -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Substation Telemetry</span>
+              <span style="font-size: 10px; font-family:'JetBrains Mono'; font-weight: 700; color: var(--accent-blue);" id="tx-gateway-id">IOT_GW_TX_101</span>
+            </div>
+            <div class="data-grid">
+              <div class="data-cell">
+                <div class="data-cell-lbl">Primary Voltage</div>
+                <div class="data-cell-val" id="tx-v-prim">11.05 kV</div>
+              </div>
+              <div class="data-cell">
+                <div class="data-cell-lbl">Secondary Voltage</div>
+                <div class="data-cell-val" id="tx-v-sec">416.2 V</div>
+              </div>
+              <div class="data-cell">
+                <div class="data-cell-lbl">Line Current</div>
+                <div class="data-cell-val" id="tx-curr-sec">285.4 A</div>
+              </div>
+              <div class="data-cell">
+                <div class="data-cell-lbl">Oil Temp</div>
+                <div class="data-cell-val" id="tx-oil-temp">61.2 °C</div>
+              </div>
+              <div class="data-cell">
+                <div class="data-cell-lbl">Phase Unbalance</div>
+                <div class="data-cell-val" id="tx-phase-unbal">3.8%</div>
+              </div>
+              <div class="data-cell">
+                <div class="data-cell-lbl">THD Distortion</div>
+                <div class="data-cell-val" id="tx-thd">2.1%</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CONNECTED STREET INFRASTRUCTURE -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Connected Feeders</span>
+            </div>
+            <div class="data-grid">
+              <div class="data-cell">
+                <div class="data-cell-lbl">Curbside Poles</div>
+                <div class="data-cell-val">12 Poles</div>
+              </div>
+              <div class="data-cell">
+                <div class="data-cell-lbl">Connected Meters</div>
+                <div class="data-cell-val">24 Meters</div>
+              </div>
+            </div>
+            <div style="margin-top: 8px;">
+              <button class="btn primary" style="width: 100%; justify-content: center;" onclick="selectConsumer('CONS_N_009'); zoomToConsumer('CONS_N_009');">
+                <span>🎯 Inspect Target Meter (CONS_N_009)</span>
+              </button>
+            </div>
+          </div>
+
         </div>
 
-        <!-- RECOMMENDED ACTION -->
-        <div class="card" style="border-color: rgba(255, 42, 95, 0.3);">
-          <div class="card-header">
-            <span class="card-title" style="color: var(--accent-red);">Recommended Enforcement Action</span>
+        <!-- ====================================================================
+             VIEW 3: ZONE 0 POWER STATION HUB (33kV IOT GATEWAY)
+             ==================================================================== -->
+        <div id="view-power-station" style="display: none; flex-direction: column; gap: 10px;">
+          
+          <!-- GENERATION & SCADA TELEMETRY -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">33kV Generation SCADA</span>
+              <span style="font-size: 10px; font-family:'JetBrains Mono'; font-weight: 700; color: var(--accent-blue);">IOT_GW_PS_01</span>
+            </div>
+            <div class="data-grid">
+              <div class="data-cell">
+                <div class="data-cell-lbl">Total Dispatch</div>
+                <div class="data-cell-val" id="ps-gen-kw" style="color: var(--accent-blue); font-size: 12px;">485.2 kW</div>
+              </div>
+              <div class="data-cell">
+                <div class="data-cell-lbl">Reactive Power</div>
+                <div class="data-cell-val" id="ps-reactive-kvar">98.4 kVAR</div>
+              </div>
+              <div class="data-cell">
+                <div class="data-cell-lbl">33kV Busbar</div>
+                <div class="data-cell-val" id="ps-bus-kv">33.15 kV</div>
+              </div>
+              <div class="data-cell">
+                <div class="data-cell-lbl">Grid Frequency</div>
+                <div class="data-cell-val" id="ps-freq-hz" style="color: var(--accent-green);">50.02 Hz</div>
+              </div>
+              <div class="data-cell">
+                <div class="data-cell-lbl">Oil Temp</div>
+                <div class="data-cell-val" id="ps-oil-c">63.4 °C</div>
+              </div>
+              <div class="data-cell">
+                <div class="data-cell-lbl">Ambient Temp</div>
+                <div class="data-cell-val" id="ps-amb-c">31.5 °C</div>
+              </div>
+            </div>
           </div>
-          <p style="font-size: 12px; line-height: 1.4; color:#f8b2c2;" id="panel-action-text">
-            HIGH PRIORITY: Issue physical inspection warrant. Dispatch anti-theft squad to verify meter shunt/bypass.
-          </p>
-        </div>
 
-        <!-- ACTION BUTTONS -->
-        <div style="display: flex; gap: 10px; margin-top: 4px;">
-          <button class="btn primary" style="flex: 1;" onclick="viewFullReport()">
-            📄 View Full Investigation Report
-          </button>
-          <button class="btn" onclick="injectScenarioModal()">
-            ⚡ Inject Fault
-          </button>
+          <!-- FEEDER DISPATCH BREAKDOWN -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Outgoing 11kV Feeder Breakers</span>
+            </div>
+            <div class="data-grid">
+              <div class="data-cell">
+                <div class="data-cell-lbl">Feeder 1 (Zone 1)</div>
+                <div class="data-cell-val" style="color: var(--accent-blue);">245.8 kW</div>
+              </div>
+              <div class="data-cell">
+                <div class="data-cell-lbl">Feeder 2 (Zone 2)</div>
+                <div class="data-cell-val" style="color: var(--accent-cyan);">239.4 kW</div>
+              </div>
+              <div class="data-cell">
+                <div class="data-cell-lbl">Cooling Fans</div>
+                <div class="data-cell-val">Active</div>
+              </div>
+              <div class="data-cell">
+                <div class="data-cell-lbl">Power Factor</div>
+                <div class="data-cell-val">0.98</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ACTION BUTTONS -->
+          <div style="display: flex; gap: 8px;">
+            <button class="btn primary" style="flex: 1; justify-content: center;" onclick="focusCameraZone('ps')">
+              <span>⚡ Focus 33kV Substation Yard</span>
+            </button>
+          </div>
+
         </div>
 
       </div>
     </div>
-
   </div>
 
-  <!-- REPORT MODAL -->
+  <!-- MODAL: EXPLAINABLE INVESTIGATION REPORT -->
   <div id="report-modal">
     <div class="modal-box">
       <div class="modal-header">
-        <span style="font-weight: 700; text-transform: uppercase;" id="modal-title">Investigation Report</span>
+        <div>
+          <div style="font-weight: 800; font-size: 14px; color: var(--text-main);" id="modal-report-title">Formal Investigation Report</div>
+          <div style="font-size: 11px; color: var(--text-muted); font-family: 'JetBrains Mono';" id="modal-report-subtitle">Evidentiary Summary & Tamper Analysis</div>
+        </div>
         <button class="btn" onclick="closeReportModal()">✕ Close</button>
       </div>
-      <div class="modal-body" id="modal-content">
-        Generating investigation audit report...
+      <div class="modal-body" id="modal-report-body">
+        Loading auditable investigation report...
       </div>
     </div>
   </div>
 
   <script>
-    // --- THREE.JS 3D SCENE SETUP ---
+    /* ==========================================================================
+       THREE.JS ARCHITECTURAL 3D CAD ENGINE & INTERACTIVE DIGITAL TWIN
+       ========================================================================== */
+    let currentTheme = "light";
+    function toggleTheme() {
+      currentTheme = currentTheme === "light" ? "dark" : "light";
+      document.documentElement.setAttribute('data-theme', currentTheme);
+      document.getElementById('theme-icon').innerText = currentTheme === "light" ? "☀️ Light" : "🌙 Dark";
+      
+      if (scene) {
+        scene.background.setHex(currentTheme === "light" ? 0xf1f5f9 : 0x060812);
+        if (scene.fog) scene.fog.color.setHex(currentTheme === "light" ? 0xf1f5f9 : 0x060812);
+      }
+      if (twinSnapshot) buildCity3D(twinSnapshot);
+    }
+
     let scene, camera, renderer, controls;
     let buildingMeshes = {};
-    let lineGroup, droneMesh, dronePathLine;
-    let selectedConsumerId = "CONS_N_004";
+    let transformerMeshes = {};
+    let powerStationMesh = null;
+    let poleMeshes = {};
+    let zoneParcelMeshes = [];
+    let scorePinMeshes = [];
+    let mapInfrastructureGroup;
+    let selectedConsumerId = "CONS_N_009";
+    let currentInspectorMode = "consumer"; // "consumer", "transformer", "power_station"
     let isGroundTruthRevealed = true;
     let twinSnapshot = null;
+
+    // Unreal Engine style Free Look & Smooth Camera Animation state
+    let cameraAnimation = null;
+    let keyState = {};
+    let lastFrameTime = performance.now();
 
     function init3D() {
       const container = document.getElementById('canvas-container');
       scene = new THREE.Scene();
-      scene.background = new THREE.Color(0x060812);
-      scene.fog = new THREE.FogExp2(0x060812, 0.0018);
+      
+      scene.background = new THREE.Color(0xf1f5f9);
+      scene.fog = new THREE.FogExp2(0xf1f5f9, 0.0009);
 
-      camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 1, 3000);
-      camera.position.set(0, 320, 420);
+      camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 1, 4000);
+      camera.position.set(0, 360, 390);
 
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setSize(container.clientWidth, container.clientHeight);
@@ -681,87 +1134,174 @@
       controls = new THREE.OrbitControls(camera, renderer.domElement);
       controls.enableDamping = true;
       controls.dampingFactor = 0.05;
-      controls.maxPolarAngle = Math.PI / 2.05; // Don't go below ground
-      controls.minDistance = 50;
-      controls.maxDistance = 900;
-      controls.target.set(0, 10, 0);
+      controls.maxPolarAngle = Math.PI / 2.05;
+      controls.minDistance = 30;
+      controls.maxDistance = 1500;
+      controls.screenSpacePanning = true; // Enables screen-space panning without rotation!
+      controls.panSpeed = 1.3;
+      controls.mouseButtons = {
+        LEFT: THREE.MOUSE.ROTATE,
+        MIDDLE: THREE.MOUSE.DOLLY,
+        RIGHT: THREE.MOUSE.PAN // Right-drag pan without rotation
+      };
 
-      // Cyber Grid Ground Plane
-      const gridHelper = new THREE.GridHelper(900, 45, 0x1a2b4c, 0x0c1527);
+      // Cancel smooth automated fly-to on manual user interaction
+      controls.addEventListener('start', () => cancelCameraAnimation());
+
+      // Prevent browser context menu on right click canvas
+      renderer.domElement.addEventListener('contextmenu', (e) => e.preventDefault());
+
+      // Keyboard listeners for Unreal Engine free camera movement (WASD, Arrows, QE, Shift)
+      window.addEventListener('keydown', (e) => {
+        if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
+        keyState[e.code] = true;
+        cancelCameraAnimation();
+      });
+      window.addEventListener('keyup', (e) => {
+        keyState[e.code] = false;
+      });
+
+      // Clean architectural ground grid
+      const gridHelper = new THREE.GridHelper(1200, 60, 0x94a3b8, 0xe2e8f0);
       gridHelper.position.y = -0.5;
       scene.add(gridHelper);
 
       // Lighting
-      const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
-      scene.add(ambientLight);
+      const hemiLight = new THREE.HemisphereLight(0xffffff, 0xdde5ed, 0.95);
+      hemiLight.position.set(0, 400, 0);
+      scene.add(hemiLight);
 
-      const dirLight = new THREE.DirectionalLight(0x00f0ff, 0.9);
-      dirLight.position.set(150, 300, 150);
+      const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
+      dirLight.position.set(200, 400, 200);
+      dirLight.castShadow = true;
       scene.add(dirLight);
 
-      const bluePoint = new THREE.PointLight(0x3d7eff, 1.2, 600);
-      bluePoint.position.set(-100, 120, -100);
-      scene.add(bluePoint);
+      mapInfrastructureGroup = new THREE.Group();
+      scene.add(mapInfrastructureGroup);
 
-      lineGroup = new THREE.Group();
-      scene.add(lineGroup);
-
-      // Create Drone Model
-      createDrone();
-
-      // Window resize
       window.addEventListener('resize', onWindowResize);
 
-      // Raycaster for clicking buildings
+      // Raycaster with drag-distance threshold to separate mouse pan from object clicks
       const raycaster = new THREE.Raycaster();
       const mouse = new THREE.Vector2();
+      let pointerDownX = 0;
+      let pointerDownY = 0;
+      let isDragging = false;
+
       renderer.domElement.addEventListener('pointerdown', (e) => {
+        pointerDownX = e.clientX;
+        pointerDownY = e.clientY;
+        isDragging = false;
+        cancelCameraAnimation();
+      });
+
+      renderer.domElement.addEventListener('pointermove', (e) => {
+        if (Math.hypot(e.clientX - pointerDownX, e.clientY - pointerDownY) > 6) {
+          isDragging = true;
+        }
+
+        // Hover cursor pointer for interactive grid elements & 3D score badges
         const rect = renderer.domElement.getBoundingClientRect();
         mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
         mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
         raycaster.setFromCamera(mouse, camera);
-        const intersects = raycaster.intersectObjects(Object.values(buildingMeshes));
+
+        const allClickable = [
+          ...Object.values(buildingMeshes),
+          ...Object.values(transformerMeshes),
+          ...(powerStationMesh ? [powerStationMesh] : []),
+          ...zoneParcelMeshes,
+          ...scorePinMeshes
+        ];
+        const hits = raycaster.intersectObjects(allClickable, true);
+        renderer.domElement.style.cursor = (hits.length > 0 && hits[0].object) ? 'pointer' : 'default';
+      });
+
+      renderer.domElement.addEventListener('pointerup', (e) => {
+        // If user was panning or rotating, ignore click selection
+        if (isDragging) return;
+
+        const rect = renderer.domElement.getBoundingClientRect();
+        mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+        raycaster.setFromCamera(mouse, camera);
+
+        // Check clickable interactive targets (buildings, transformers, power station, zone parcels, plaques, and score pin badges)
+        const allClickable = [
+          ...Object.values(buildingMeshes),
+          ...Object.values(transformerMeshes),
+          ...(powerStationMesh ? [powerStationMesh] : []),
+          ...zoneParcelMeshes,
+          ...scorePinMeshes
+        ];
+
+        const intersects = raycaster.intersectObjects(allClickable, true);
         if (intersects.length > 0) {
-          const clickedId = intersects[0].object.userData.consumerId;
-          if (clickedId) {
-            selectConsumer(clickedId);
+          // Walk up parents to find mesh with userData
+          let cur = intersects[0].object;
+          while (cur && !cur.userData.type && cur.parent && cur.parent !== scene) {
+            cur = cur.parent;
+          }
+
+          if (cur && cur.userData) {
+            if (cur.userData.type === 'power_station') {
+              selectPowerStation();
+              focusCameraZone('ps');
+            } else if (cur.userData.type === 'transformer') {
+              selectTransformer(cur.userData.id);
+              focusCameraZone(cur.userData.id === 'TX_101' ? 'zone1' : 'zone2');
+            } else if (cur.userData.type === 'consumer') {
+              selectConsumer(cur.userData.consumerId);
+            } else if (cur.userData.type === 'zone') {
+              const hitPoint = intersects[0].point;
+              if (cur.userData.zoneId === 'zone1') {
+                selectTransformer('TX_101');
+                if (hitPoint.z < -55) focusCameraZone('z1_st2');
+                else focusCameraZone('z1_st1');
+              } else if (cur.userData.zoneId === 'zone2') {
+                selectTransformer('TX_102');
+                if (hitPoint.z < -55) focusCameraZone('z2_st2');
+                else focusCameraZone('z2_st1');
+              } else if (cur.userData.zoneId === 'zone0') {
+                selectPowerStation();
+                focusCameraZone('ps');
+              }
+            } else if (cur.userData.type === 'subzone') {
+              if (cur.userData.subzoneId.startsWith('z1')) selectTransformer('TX_101');
+              else if (cur.userData.subzoneId.startsWith('z2')) selectTransformer('TX_102');
+              else selectPowerStation();
+              focusCameraZone(cur.userData.subzoneId);
+            }
           }
         }
       });
 
-      // Fetch initial twin state
+      // Double-click to zoom directly to clicked consumer
+      renderer.domElement.addEventListener('dblclick', (e) => {
+        const rect = renderer.domElement.getBoundingClientRect();
+        mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+        raycaster.setFromCamera(mouse, camera);
+
+        const allClickable = [
+          ...Object.values(buildingMeshes),
+          ...scorePinMeshes
+        ];
+        const intersects = raycaster.intersectObjects(allClickable, true);
+        if (intersects.length > 0) {
+          let cur = intersects[0].object;
+          while (cur && !cur.userData.type && cur.parent && cur.parent !== scene) {
+            cur = cur.parent;
+          }
+          if (cur && cur.userData && cur.userData.type === 'consumer') {
+            selectConsumer(cur.userData.consumerId);
+            zoomToConsumer(cur.userData.consumerId);
+          }
+        }
+      });
+
       fetchTwinState();
-
       animate();
-    }
-
-    function createDrone() {
-      const droneGroup = new THREE.Group();
-
-      // Drone Central Chassis
-      const chassisGeo = new THREE.BoxGeometry(7, 2, 7);
-      const chassisMat = new THREE.MeshStandardMaterial({ color: 0x111111, metalness: 0.8, roughness: 0.2 });
-      const chassis = new THREE.Mesh(chassisGeo, chassisMat);
-      droneGroup.add(chassis);
-
-      // Drone Glowing Ring
-      const ringGeo = new THREE.RingGeometry(4.5, 5.5, 24);
-      const ringMat = new THREE.MeshBasicMaterial({ color: 0xff00b4, side: THREE.DoubleSide });
-      const ring = new THREE.Mesh(ringGeo, ringMat);
-      ring.rotation.x = Math.PI / 2;
-      ring.position.y = 1.2;
-      droneGroup.add(ring);
-
-      // Scanner Cone Light
-      const spotLight = new THREE.SpotLight(0x00f0ff, 2.5, 60, Math.PI / 5, 0.4);
-      spotLight.position.set(0, 0, 0);
-      spotLight.target.position.set(0, -50, 0);
-      droneGroup.add(spotLight);
-      droneGroup.add(spotLight.target);
-
-      droneGroup.position.set(0, 50, 0);
-      droneMesh = droneGroup;
-      scene.add(droneMesh);
     }
 
     function onWindowResize() {
@@ -771,34 +1311,57 @@
       renderer.setSize(container.clientWidth, container.clientHeight);
     }
 
-    // Convert GPS (Lat, Lon) to 3D Cartesian Scene Coords
     const BASE_LAT = 28.613939;
     const BASE_LON = 77.209021;
     function gpsToCartesian(lat, lon, alt = 0) {
       const r_earth = 6371000.0;
+      // 1 meter = 1 unit in Three.js world
       const x = (lon - BASE_LON) * (Math.PI / 180.0) * r_earth * Math.cos(BASE_LAT * Math.PI / 180.0);
       const z = -(lat - BASE_LAT) * (Math.PI / 180.0) * r_earth;
-      return { x: x * 0.9, y: alt, z: z * 0.9 };
+      return { x: x, y: alt, z: z };
     }
 
-    // Build 3D City Meshes from Digital Twin Snapshot
+    // =========================================================================
+    // 3D CITY BUILDER: ROADS, POWER STATION, POLES, TRANSFORMERS & BUILDINGS
+    // =========================================================================
     function buildCity3D(data) {
-      // Clear existing
       Object.values(buildingMeshes).forEach(m => scene.remove(m));
       buildingMeshes = {};
-      while (lineGroup.children.length > 0) {
-        lineGroup.remove(lineGroup.children[0]);
+      transformerMeshes = {};
+      poleMeshes = {};
+      powerStationMesh = null;
+      zoneParcelMeshes = [];
+
+      // Clean up previous score pin textures & materials
+      scorePinMeshes.forEach(p => {
+        if (p.material && p.material.map) p.material.map.dispose();
+        if (p.material) p.material.dispose();
+      });
+      scorePinMeshes = [];
+
+      while (mapInfrastructureGroup.children.length > 0) {
+        mapInfrastructureGroup.remove(mapInfrastructureGroup.children[0]);
       }
 
-      // 1. BUILDINGS
-      const consumers = data.consumers;
+      const isLight = currentTheme === "light";
+
+      // 1. REALISTIC STREET GRID & GROUND PARCELS
+      createStructuredRoadNetwork(isLight);
+
+      // 2. ZONE 0: POWER STATION (33kV GENERATION & SWITCHYARD)
+      createPowerStation3D(data.power_station, isLight);
+
+      // 3. DISTRIBUTION TRANSFORMERS & UTILITY POLES
+      createElectricalGridAssets(data, isLight);
+
+      // 4. CITY BUILDINGS IN ORDERLY STREET BLOCKS
+      const consumers = data.consumers || {};
       for (const [cId, cData] of Object.entries(consumers)) {
         const poly = cData.static.building_polygon;
-        const height = cData.static.building_height_m * 3.5; // Scale height for dramatic 3D view
+        const height = cData.static.building_height_m * 3.4;
         const coord = cData.static.coordinate;
         const centerPos = gpsToCartesian(coord.lat, coord.lon);
 
-        // Building Shape from Polygon
         const shape = new THREE.Shape();
         poly.forEach((pt, idx) => {
           const ptPos = gpsToCartesian(pt[1], pt[0]);
@@ -812,121 +1375,1032 @@
           steps: 1,
           depth: height,
           bevelEnabled: true,
-          bevelThickness: 0.8,
-          bevelSize: 0.4,
+          bevelThickness: 0.5,
+          bevelSize: 0.3,
           bevelSegments: 2
         };
 
         const geom = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-        geom.rotateX(Math.PI / 2); // Orient upright
+        geom.rotateX(Math.PI / 2);
 
-        // Color based on risk level
         const risk = cData.analysis ? cData.analysis.risk_level : "NORMAL";
         const cause = cData.analysis ? cData.analysis.probable_cause : "NORMAL";
-        let colorHex = 0x7896f0; // Lavender glass
-        let opacity = 0.45;
+        
+        let colorHex = isLight ? 0xffffff : 0x7896f0;
+        let opacity = isLight ? 0.95 : 0.65;
+        let wireColor = isLight ? 0x94a3b8 : 0x8ab4f8;
 
         if (risk === "CRITICAL" || cause === "THEFT_TAMPERING") {
-          colorHex = 0xff2a5f; opacity = 0.85;
+          colorHex = 0xef4444; opacity = 0.95; wireColor = isLight ? 0xb91c1c : 0xffffff;
         } else if (risk === "HIGH" || cause === "METER_MALFUNCTION") {
-          colorHex = 0xff9800; opacity = 0.85;
+          colorHex = 0xf97316; opacity = 0.95; wireColor = isLight ? 0xc2410c : 0xffffff;
         } else if (risk === "MEDIUM" || cause === "COMM_FAILURE") {
-          colorHex = 0xffd600; opacity = 0.75;
-        } else if (cause === "LEGITIMATE_ABNORMAL") {
-          colorHex = 0x00e676; opacity = 0.85;
+          colorHex = 0xeab308; opacity = 0.92; wireColor = isLight ? 0xa16207 : 0xffffff;
+        } else if (cause === "LEGITIMATE_ABNORMAL" || risk === "LOW") {
+          colorHex = 0x10b981; opacity = 0.95; wireColor = isLight ? 0x047857 : 0xffffff;
         }
 
         const mat = new THREE.MeshStandardMaterial({
           color: colorHex,
           transparent: true,
           opacity: opacity,
-          roughness: 0.25,
-          metalness: 0.6,
+          roughness: isLight ? 0.35 : 0.2,
+          metalness: isLight ? 0.1 : 0.6,
           side: THREE.DoubleSide
         });
 
         const mesh = new THREE.Mesh(geom, mat);
         mesh.position.set(centerPos.x, height, centerPos.z);
-        mesh.userData = { consumerId: cId };
+        mesh.userData = { type: 'consumer', consumerId: cId };
 
-        // Wireframe glowing outline
         const wireGeo = new THREE.WireframeGeometry(geom);
         const wireMat = new THREE.LineBasicMaterial({
-          color: (risk === "CRITICAL" || cause === "THEFT_TAMPERING") ? 0xffffff : 0x8ab4f8,
+          color: wireColor,
           linewidth: 1.5,
           transparent: true,
-          opacity: 0.7
+          opacity: isLight ? 0.8 : 0.6
         });
         const wire = new THREE.LineSegments(wireGeo, wireMat);
         mesh.add(wire);
 
-        // Highlight marker if selected
-        if (cId === selectedConsumerId) {
-          addSelectedMarker(mesh, height);
+        // Rooftop HVAC / Meter Weatherhead Box
+        const roofBoxGeo = new THREE.BoxGeometry(4, 2, 4);
+        const roofBoxMat = new THREE.MeshStandardMaterial({ color: 0x475569 });
+        const roofBox = new THREE.Mesh(roofBoxGeo, roofBoxMat);
+        roofBox.position.set(0, 1, 0);
+        mesh.add(roofBox);
+
+        // 3D FLOATING STEM & CIRCULAR SCORE BADGE: ONLY for non-normal / anomalous buildings!
+        const isAnomalous = (
+          risk !== "NORMAL" ||
+          cause !== "NORMAL" ||
+          (cData.analysis && cData.analysis.anomaly_score > 25)
+        );
+
+        if (isAnomalous) {
+          const scoreVal = (cData.analysis && cData.analysis.anomaly_score !== undefined)
+            ? Math.round(cData.analysis.anomaly_score)
+            : (risk === "CRITICAL" ? 95 : (risk === "HIGH" ? 78 : 50));
+          
+          const pinBadge = createAnomalyScorePin(scoreVal, risk, cause, isLight, cId);
+          mesh.add(pinBadge);
         }
 
         scene.add(mesh);
         buildingMeshes[cId] = mesh;
       }
+    }
 
-      // 2. TRANSFORMER HUBS & POWER LINES
-      for (const [txId, txReport] of Object.entries(data.transformers)) {
-        const isNorth = txId === "TX_101";
-        const txPos = isNorth ? { x: 20, y: 0, z: -200 } : { x: -20, y: 0, z: 200 };
+    // =========================================================================
+    // 3D FLOATING SCORE PIN BADGE FOR ANOMALOUS CONSUMER BUILDINGS
+    // Vertical stem rising from rooftop weatherhead + circular score billboard
+    // =========================================================================
+    function createAnomalyScorePin(score, risk, cause, isLight, consumerId) {
+      const pinGroup = new THREE.Group();
+      pinGroup.userData = { type: 'consumer', consumerId: consumerId };
 
-        // Transformer Station Mesh
-        const txGeo = new THREE.CylinderGeometry(8, 10, 14, 16);
-        const txColor = txReport.unexplained_loss_pct > 8.0 ? 0xff2a5f : 0x00f0ff;
-        const txMat = new THREE.MeshStandardMaterial({ color: txColor, emissive: txColor, emissiveIntensity: 0.6 });
-        const txMesh = new THREE.Mesh(txGeo, txMat);
-        txMesh.position.set(txPos.x, 7, txPos.z);
-        lineGroup.add(txMesh);
+      let borderColor = '#ef4444'; // Red (Theft/Critical)
+      let textColor = '#b91c1c';
 
-        // Pulsing Ring under Transformer
-        const pRingGeo = new THREE.RingGeometry(14, 17, 32);
-        const pRingMat = new THREE.MeshBasicMaterial({ color: txColor, side: THREE.DoubleSide, transparent: true, opacity: 0.6 });
-        const pRing = new THREE.Mesh(pRingGeo, pRingMat);
-        pRing.rotation.x = Math.PI / 2;
-        pRing.position.set(txPos.x, 0.4, txPos.z);
-        lineGroup.add(pRing);
+      if (risk === 'CRITICAL' || cause === 'THEFT_TAMPERING') {
+        borderColor = '#ef4444';
+        textColor = '#b91c1c';
+      } else if (risk === 'HIGH' || cause === 'METER_MALFUNCTION') {
+        borderColor = '#f97316';
+        textColor = '#c2410c';
+      } else if (risk === 'MEDIUM' || cause === 'COMM_FAILURE') {
+        borderColor = '#eab308';
+        textColor = '#a16207';
+      } else if (risk === 'LOW' || cause === 'LEGITIMATE_ABNORMAL') {
+        borderColor = '#10b981';
+        textColor = '#047857';
       }
 
-      // 3. 3D DRONE FLIGHT PATH
-      if (data.drone_flight && data.drone_flight.line_coordinates_3d.length > 0) {
-        const points = [];
-        data.drone_flight.line_coordinates_3d.forEach(pt => {
-          const p = gpsToCartesian(pt[1], pt[0], pt[2] * 0.8);
-          points.push(new THREE.Vector3(p.x, p.y, p.z));
+      // 1. Base Mounting Collar / Flange on top of weatherhead box (y = 2.0)
+      const collarGeo = new THREE.CylinderGeometry(0.85, 1.1, 0.4, 12);
+      const collarMat = new THREE.MeshStandardMaterial({
+        color: isLight ? 0x334155 : 0x64748b,
+        roughness: 0.5,
+        metalness: 0.6
+      });
+      const collar = new THREE.Mesh(collarGeo, collarMat);
+      collar.position.set(0, 2.2, 0);
+      collar.userData = { type: 'consumer', consumerId: consumerId };
+      pinGroup.add(collar);
+
+      // 2. Vertical Stem Mast (Cylinder rod extending from y = 2.0 to y = 17.0)
+      const stemHeight = 15.0;
+      const stemGeo = new THREE.CylinderGeometry(0.28, 0.28, stemHeight, 10);
+      const stemMat = new THREE.MeshStandardMaterial({
+        color: isLight ? 0x334155 : 0x94a3b8,
+        roughness: 0.4,
+        metalness: 0.8
+      });
+      const stem = new THREE.Mesh(stemGeo, stemMat);
+      stem.position.set(0, 2.0 + stemHeight / 2.0, 0); // y = 9.5
+      stem.userData = { type: 'consumer', consumerId: consumerId };
+      pinGroup.add(stem);
+
+      // 3. Circular Score Badge (Sprite with high-resolution canvas texture)
+      const canvas = document.createElement('canvas');
+      canvas.width = 256;
+      canvas.height = 256;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, 256, 256);
+
+      // Outer soft drop-shadow
+      ctx.save();
+      ctx.shadowColor = 'rgba(15, 23, 42, 0.24)';
+      ctx.shadowBlur = 12;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 4;
+
+      // Pure white circular badge base
+      ctx.beginPath();
+      ctx.arc(128, 128, 98, 0, Math.PI * 2);
+      ctx.fillStyle = '#ffffff';
+      ctx.fill();
+      ctx.restore();
+
+      // Bold colored perimeter border matching risk level
+      ctx.beginPath();
+      ctx.arc(128, 128, 98, 0, Math.PI * 2);
+      ctx.lineWidth = 14;
+      ctx.strokeStyle = borderColor;
+      ctx.stroke();
+
+      // Subtle inner technical concentric guide ring
+      ctx.beginPath();
+      ctx.arc(128, 128, 86, 0, Math.PI * 2);
+      ctx.lineWidth = 2.5;
+      ctx.strokeStyle = borderColor;
+      ctx.globalAlpha = 0.25;
+      ctx.stroke();
+      ctx.globalAlpha = 1.0;
+
+      // Prominent centered score number (exact match to user sketch: e.g. 78, 99)
+      ctx.fillStyle = textColor;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      const scoreStr = String(score);
+      if (scoreStr.length <= 2) {
+        ctx.font = '900 96px "Inter", "Segoe UI", -apple-system, sans-serif';
+        ctx.fillText(scoreStr, 128, 128);
+      } else {
+        ctx.font = '900 80px "Inter", "Segoe UI", -apple-system, sans-serif';
+        ctx.fillText(scoreStr, 128, 128);
+      }
+
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.anisotropy = 4;
+
+      const spriteMat = new THREE.SpriteMaterial({
+        map: texture,
+        depthTest: true,
+        depthWrite: false
+      });
+      const sprite = new THREE.Sprite(spriteMat);
+      
+      const badgeScale = 11.0;
+      sprite.scale.set(badgeScale, badgeScale, 1.0);
+
+      // Connect top of stem (y = 17.0) to bottom edge of circle (radius 4.21 units)
+      const circleRadius3D = (98 / 256) * badgeScale; // ~4.21
+      const spriteY = 2.0 + stemHeight + circleRadius3D; // ~21.21
+      sprite.position.set(0, spriteY, 0);
+      sprite.userData = { type: 'consumer', consumerId: consumerId };
+
+      pinGroup.add(sprite);
+      scorePinMeshes.push(sprite);
+
+      return pinGroup;
+    }
+
+    // Creates realistic road corridors with asphalt, lane lines, and sidewalks
+    function createStructuredRoadNetwork(isLight) {
+      const asphaltMat = new THREE.MeshStandardMaterial({
+        color: isLight ? 0x2b3342 : 0x181e29,
+        roughness: 0.82,
+        metalness: 0.12
+      });
+      const sidewalkMat = new THREE.MeshStandardMaterial({
+        color: isLight ? 0xdbe2ec : 0x334155,
+        roughness: 0.88
+      });
+      const stripeMat = new THREE.MeshBasicMaterial({ color: 0xf59e0b });
+
+      // Ground Parcel Foundation Blocks under City Districts
+      const parcelMat = new THREE.MeshStandardMaterial({
+        color: isLight ? 0xf8fafc : 0x0b1120,
+        roughness: 0.95
+      });
+
+      // Zone 1 (West District) Development Parcel Block: x from -230 to -50, z from -175 to 65
+      const parcelWestGeo = new THREE.BoxGeometry(180, 0.15, 240);
+      const parcelWest = new THREE.Mesh(parcelWestGeo, parcelMat);
+      parcelWest.position.set(-140, 0.08, -55);
+      parcelWest.userData = { type: 'zone', zoneId: 'zone1' };
+      mapInfrastructureGroup.add(parcelWest);
+      zoneParcelMeshes.push(parcelWest);
+
+      // Zone 2 (East District) Development Parcel Block: x from 50 to 230, z from -175 to 65
+      const parcelEastGeo = new THREE.BoxGeometry(180, 0.15, 240);
+      const parcelEast = new THREE.Mesh(parcelEastGeo, parcelMat);
+      parcelEast.position.set(140, 0.08, -55);
+      parcelEast.userData = { type: 'zone', zoneId: 'zone2' };
+      mapInfrastructureGroup.add(parcelEast);
+      zoneParcelMeshes.push(parcelEast);
+
+      // Create ground subdivision plaques and dashed street demarcation lines
+      createZoneMarkers3D(isLight);
+
+      // Orthogonal East-West Road Creator (runs along X-axis at fixed Z)
+      function createEastWestRoad(xStart, xEnd, zCenter, width, hasStripe = true) {
+        const roadGroup = new THREE.Group();
+        const x1 = Math.min(xStart, xEnd);
+        const x2 = Math.max(xStart, xEnd);
+        const lenX = x2 - x1;
+        const midX = (x1 + x2) / 2.0;
+
+        // Asphalt surface
+        const roadGeo = new THREE.BoxGeometry(lenX, 0.35, width);
+        const roadMesh = new THREE.Mesh(roadGeo, asphaltMat);
+        roadMesh.position.y = 0.18;
+        roadGroup.add(roadMesh);
+
+        // Sidewalk curbs on North and South sides
+        const curbWidth = 2.0;
+        [-width / 2.0 - curbWidth / 2.0, width / 2.0 + curbWidth / 2.0].forEach(zOffset => {
+          const swGeo = new THREE.BoxGeometry(lenX, 0.45, curbWidth);
+          const sw = new THREE.Mesh(swGeo, sidewalkMat);
+          sw.position.set(0, 0.23, zOffset);
+          roadGroup.add(sw);
         });
 
-        const pathGeo = new THREE.BufferGeometry().setFromPoints(points);
-        const pathMat = new THREE.LineDashedMaterial({
-          color: 0xff00b4,
-          dashSize: 6,
-          gapSize: 3,
-          linewidth: 2.5
+        // Centerline dashed yellow stripes
+        if (hasStripe && lenX > 25) {
+          const dashLen = 5.0;
+          const gapLen = 5.0;
+          const count = Math.floor(lenX / (dashLen + gapLen));
+          const startX = -lenX / 2.0 + (lenX - count * (dashLen + gapLen)) / 2.0 + dashLen / 2.0;
+          for (let i = 0; i < count; i++) {
+            const stripeGeo = new THREE.PlaneGeometry(dashLen, 0.45);
+            const stripe = new THREE.Mesh(stripeGeo, stripeMat);
+            stripe.rotation.x = -Math.PI / 2;
+            stripe.position.set(startX + i * (dashLen + gapLen), 0.36, 0);
+            roadGroup.add(stripe);
+          }
+        }
+
+        roadGroup.position.set(midX, 0, zCenter);
+        mapInfrastructureGroup.add(roadGroup);
+      }
+
+      // Orthogonal North-South Road Creator (runs along Z-axis at fixed X)
+      function createNorthSouthRoad(zStart, zEnd, xCenter, width, hasStripe = true) {
+        const roadGroup = new THREE.Group();
+        const z1 = Math.min(zStart, zEnd);
+        const z2 = Math.max(zStart, zEnd);
+        const lenZ = z2 - z1;
+        const midZ = (z1 + z2) / 2.0;
+
+        // Asphalt surface
+        const roadGeo = new THREE.BoxGeometry(width, 0.35, lenZ);
+        const roadMesh = new THREE.Mesh(roadGeo, asphaltMat);
+        roadMesh.position.y = 0.18;
+        roadGroup.add(roadMesh);
+
+        // Sidewalk curbs on West and East sides
+        const curbWidth = 2.0;
+        [-width / 2.0 - curbWidth / 2.0, width / 2.0 + curbWidth / 2.0].forEach(xOffset => {
+          const swGeo = new THREE.BoxGeometry(curbWidth, 0.45, lenZ);
+          const sw = new THREE.Mesh(swGeo, sidewalkMat);
+          sw.position.set(xOffset, 0.23, 0);
+          roadGroup.add(sw);
         });
-        dronePathLine = new THREE.Line(pathGeo, pathMat);
-        dronePathLine.computeLineDistances();
-        lineGroup.add(dronePathLine);
+
+        // Centerline dashed yellow stripes
+        if (hasStripe && lenZ > 25) {
+          const dashLen = 5.0;
+          const gapLen = 5.0;
+          const count = Math.floor(lenZ / (dashLen + gapLen));
+          const startZ = -lenZ / 2.0 + (lenZ - count * (dashLen + gapLen)) / 2.0 + dashLen / 2.0;
+          for (let i = 0; i < count; i++) {
+            const stripeGeo = new THREE.PlaneGeometry(0.45, dashLen);
+            const stripe = new THREE.Mesh(stripeGeo, stripeMat);
+            stripe.rotation.x = -Math.PI / 2;
+            stripe.position.set(0, 0.36, startZ + i * (dashLen + gapLen));
+            roadGroup.add(stripe);
+          }
+        }
+
+        roadGroup.position.set(xCenter, 0, midZ);
+        mapInfrastructureGroup.add(roadGroup);
+      }
+
+      // 1. Central Energy Highway (Power Station z=220 to Main Cross Avenue z=60 along x=0)
+      createNorthSouthRoad(60, 220, 0, 14, true);
+
+      // 2. Main Connecting Cross Avenue (Runs along z=60 from x=-230 to x=230)
+      createEastWestRoad(-230, 230, 60, 14, true);
+
+      // 3. Zone 1 (West District) Roads:
+      // Avenues: West Avenue at x=-180, East Avenue at x=-100 (z from 60 to -160)
+      createNorthSouthRoad(-160, 60, -180, 10, true);
+      createNorthSouthRoad(-160, 60, -100, 10, true);
+      // Cross Streets: Street 1 at z=-20, Street 2 at z=-110 (x from -220 to -60)
+      createEastWestRoad(-220, -60, -20, 10, true);
+      createEastWestRoad(-220, -60, -110, 10, true);
+
+      // 4. Zone 2 (East District) Roads:
+      // Avenues: West Avenue at x=100, East Avenue at x=180 (z from 60 to -160)
+      createNorthSouthRoad(-160, 60, 100, 10, true);
+      createNorthSouthRoad(-160, 60, 180, 10, true);
+      // Cross Streets: Street 1 at z=-20, Street 2 at z=-110 (x from 60 to 220)
+      createEastWestRoad(60, 220, -20, 10, true);
+      createEastWestRoad(60, 220, -110, 10, true);
+    }
+
+    // Creates Zone 0 Power Station (South Gateway) with outdoor 33kV switchyard
+    function createPowerStation3D(psData, isLight) {
+      const psGroup = new THREE.Group();
+      const psPos = { x: 0, y: 0, z: 220 };
+
+      // Substation Foundation Pad
+      const padGeo = new THREE.BoxGeometry(80, 0.6, 100);
+      const padMat = new THREE.MeshStandardMaterial({ color: isLight ? 0xe2e8f0 : 0x1e293b, roughness: 0.8 });
+      const pad = new THREE.Mesh(padGeo, padMat);
+      pad.position.set(psPos.x, 0.3, psPos.z);
+      psGroup.add(pad);
+
+      // Generation Control Hall
+      const hallGeo = new THREE.BoxGeometry(48, 18, 32);
+      const hallMat = new THREE.MeshStandardMaterial({
+        color: isLight ? 0x2563eb : 0x1d4ed8,
+        roughness: 0.35,
+        metalness: 0.4
+      });
+      const hall = new THREE.Mesh(hallGeo, hallMat);
+      hall.position.set(psPos.x, 9, psPos.z + 20);
+      psGroup.add(hall);
+
+      // Architectural Louvers / Windows on Power Station
+      const louverGeo = new THREE.BoxGeometry(36, 3, 33);
+      const louverMat = new THREE.MeshStandardMaterial({ color: 0x93c5fd });
+      const louver = new THREE.Mesh(louverGeo, louverMat);
+      louver.position.set(psPos.x, 12, psPos.z + 20);
+      psGroup.add(louver);
+
+      // Outdoor Step-up Transformers (Switchyard)
+      [-18, 18].forEach(xOff => {
+        const txCoreGeo = new THREE.CylinderGeometry(5.5, 5.5, 9, 16);
+        const txCoreMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.6 });
+        const txCore = new THREE.Mesh(txCoreGeo, txCoreMat);
+        txCore.position.set(psPos.x + xOff, 4.5, psPos.z - 20);
+        psGroup.add(txCore);
+
+        // Bushings
+        const bushGeo = new THREE.CylinderGeometry(0.8, 1.2, 4, 8);
+        const bushMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8 });
+        const bush = new THREE.Mesh(bushGeo, bushMat);
+        bush.position.set(psPos.x + xOff, 10, psPos.z - 20);
+        psGroup.add(bush);
+      });
+
+      // Interactive Click Target
+      hall.userData = { type: 'power_station', id: 'PS_CENTRAL_01' };
+      pad.userData = { type: 'power_station', id: 'PS_CENTRAL_01' };
+
+      mapInfrastructureGroup.add(psGroup);
+      powerStationMesh = hall;
+      zoneParcelMeshes.push(pad);
+
+      // 4 Transmission Lattice Pylons connecting Power Station to city zones
+      const pylons = [
+        { id: "PYLON_N_01", x: -65, z: 140 },
+        { id: "PYLON_N_02", x: -115, z: 85 },
+        { id: "PYLON_S_01", x: 65, z: 140 },
+        { id: "PYLON_S_02", x: 115, z: 85 },
+      ];
+
+      pylons.forEach(pPos => {
+        const pylonGeo = new THREE.CylinderGeometry(1.2, 3.5, 28, 8);
+        const pylonMat = new THREE.MeshStandardMaterial({ color: 0x475569, metalness: 0.7 });
+        const pylon = new THREE.Mesh(pylonGeo, pylonMat);
+        pylon.position.set(pPos.x, 14, pPos.z);
+        mapInfrastructureGroup.add(pylon);
+
+        const crossGeo = new THREE.BoxGeometry(16, 1.2, 1.5);
+        const cross = new THREE.Mesh(crossGeo, pylonMat);
+        cross.position.set(pPos.x, 24, pPos.z);
+        mapInfrastructureGroup.add(cross);
+      });
+
+      // High-Voltage 33kV/11kV Lines (Power Station Gantry to Pylons to Transformers)
+      const gantryPos = { x: 0, y: 16, z: 170 };
+      // West Corridor to TX-101 at (-140, 11, 50)
+      drawCatenaryCable(gantryPos, { x: -65, y: 24, z: 140 }, 0x1d4ed8, 3.5);
+      drawCatenaryCable({ x: -65, y: 24, z: 140 }, { x: -115, y: 24, z: 85 }, 0x1d4ed8, 3.5);
+      drawCatenaryCable({ x: -115, y: 24, z: 85 }, { x: -140, y: 11, z: 50 }, 0x1d4ed8, 3.5);
+
+      // East Corridor to TX-102 at (140, 11, 50)
+      drawCatenaryCable(gantryPos, { x: 65, y: 24, z: 140 }, 0x1d4ed8, 3.5);
+      drawCatenaryCable({ x: 65, y: 24, z: 140 }, { x: 115, y: 24, z: 85 }, 0x1d4ed8, 3.5);
+      drawCatenaryCable({ x: 115, y: 24, z: 85 }, { x: 140, y: 11, z: 50 }, 0x1d4ed8, 3.5);
+    }
+
+    // Creates Transformers, Street Utility Poles, and Pole-to-Pole Distribution Lines
+    function createElectricalGridAssets(data, isLight) {
+      // 1. DISTRIBUTION TRANSFORMERS (TX-101 in West, TX-102 in East)
+      const txConfigs = [
+        { id: "TX_101", x: -140, z: 50, color: 0xef4444, isDoneFor: true },
+        { id: "TX_102", x: 140, z: 50, color: 0x0284c7, isDoneFor: false }
+      ];
+
+      txConfigs.forEach(t => {
+        const txGroup = new THREE.Group();
+
+        // Foundation Plinth
+        const padGeo = new THREE.BoxGeometry(14, 1.2, 14);
+        const padMat = new THREE.MeshStandardMaterial({ color: 0x334155 });
+        const pad = new THREE.Mesh(padGeo, padMat);
+        pad.position.y = 0.6;
+        txGroup.add(pad);
+
+        // Transformer Cylindrical Tank with Cooling Fins
+        const tankGeo = new THREE.CylinderGeometry(4.5, 4.5, 8, 16);
+        const tankMat = new THREE.MeshStandardMaterial({
+          color: t.color,
+          metalness: 0.5,
+          emissive: t.color,
+          emissiveIntensity: t.isDoneFor ? 0.4 : 0.15
+        });
+        const tank = new THREE.Mesh(tankGeo, tankMat);
+        tank.position.y = 5.2;
+        txGroup.add(tank);
+
+        // IoT Gateway Antenna Mast
+        const antGeo = new THREE.CylinderGeometry(0.2, 0.2, 5);
+        const antMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+        const ant = new THREE.Mesh(antGeo, antMat);
+        ant.position.set(4, 9, 4);
+        txGroup.add(ant);
+
+        // Status Pulse Aura
+        const ringGeo = new THREE.RingGeometry(9, 11, 32);
+        const ringMat = new THREE.MeshBasicMaterial({ color: t.color, side: THREE.DoubleSide });
+        const ring = new THREE.Mesh(ringGeo, ringMat);
+        ring.rotation.x = Math.PI / 2;
+        ring.position.y = 0.3;
+        txGroup.add(ring);
+
+        txGroup.position.set(t.x, 0, t.z);
+        tank.userData = { type: 'transformer', id: t.id };
+        pad.userData = { type: 'transformer', id: t.id };
+
+        mapInfrastructureGroup.add(txGroup);
+        transformerMeshes[t.id] = tank;
+      });
+
+      // 2. CURBSIDE UTILITY DISTRIBUTION POLES (12 West, 12 East = 24 Total)
+      // Placed along curbs of Street 2 (z = -116) and Street 1 (z = -26)
+      const xStationsWest = [-205, -160, -140, -120, -82, -65];
+      const xStationsEast = [65, 82, 120, 140, 160, 205];
+      const polesData = [];
+
+      // Zone 1 (West District): Poles 1..6 on Street 2 (z = -116), Poles 7..12 on Street 1 (z = -26)
+      xStationsWest.forEach((px, idx) => {
+        polesData.push({ id: `POLE_N_${(idx + 1).toString().padStart(2, '0')}`, x: px, z: -116 });
+      });
+      xStationsWest.forEach((px, idx) => {
+        polesData.push({ id: `POLE_N_${(idx + 7).toString().padStart(2, '0')}`, x: px, z: -26 });
+      });
+
+      // Zone 2 (East District): Poles 1..6 on Street 2 (z = -116), Poles 7..12 on Street 1 (z = -26)
+      xStationsEast.forEach((px, idx) => {
+        polesData.push({ id: `POLE_S_${(idx + 1).toString().padStart(2, '0')}`, x: px, z: -116 });
+      });
+      xStationsEast.forEach((px, idx) => {
+        polesData.push({ id: `POLE_S_${(idx + 7).toString().padStart(2, '0')}`, x: px, z: -26 });
+      });
+
+      polesData.forEach(p => {
+        const poleGroup = new THREE.Group();
+
+        // Main Pole Shaft
+        const shaftGeo = new THREE.CylinderGeometry(0.7, 1.0, 15, 8);
+        const shaftMat = new THREE.MeshStandardMaterial({ color: 0x475569, roughness: 0.6 });
+        const shaft = new THREE.Mesh(shaftGeo, shaftMat);
+        shaft.position.y = 7.5;
+        poleGroup.add(shaft);
+
+        // Crossarm for Overhead Lines
+        const armGeo = new THREE.BoxGeometry(6, 0.8, 0.8);
+        const arm = new THREE.Mesh(armGeo, shaftMat);
+        arm.position.y = 13.5;
+        poleGroup.add(arm);
+
+        // Porcelain Insulators
+        [-2.5, 0, 2.5].forEach(ox => {
+          const insGeo = new THREE.CylinderGeometry(0.25, 0.35, 1);
+          const insMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+          const ins = new THREE.Mesh(insGeo, insMat);
+          ins.position.set(ox, 14.2, 0);
+          poleGroup.add(ins);
+        });
+
+        poleGroup.position.set(p.x, 0, p.z);
+        mapInfrastructureGroup.add(poleGroup);
+        poleMeshes[p.id] = { pos: { x: p.x, y: 13.5, z: p.z } };
+      });
+
+      // 3. OVERHEAD STREET DISTRIBUTION LINES (POLE-TO-POLE ALONG CURBS)
+      // Feeder connections from Transformers to Street 1
+      drawCatenaryCable({ x: -140, y: 10, z: 50 }, { x: -140, y: 13.5, z: -26 }, 0x475569, 2.2);
+      drawCatenaryCable({ x: 140, y: 10, z: 50 }, { x: 140, y: 13.5, z: -26 }, 0x475569, 2.2);
+
+      // Zone 1 Corridors:
+      // Street 2: Pole 1 -> 2 -> 3 -> 4 -> 5 -> 6
+      for (let i = 1; i < 6; i++) {
+        const p1 = poleMeshes[`POLE_N_${i.toString().padStart(2, '0')}`].pos;
+        const p2 = poleMeshes[`POLE_N_${(i + 1).toString().padStart(2, '0')}`].pos;
+        drawCatenaryCable(p1, p2, 0x475569, 2.0);
+      }
+      // Street 1: Pole 7 -> 8 -> 9 -> 10 -> 11 -> 12
+      for (let i = 7; i < 12; i++) {
+        const p1 = poleMeshes[`POLE_N_${i.toString().padStart(2, '0')}`].pos;
+        const p2 = poleMeshes[`POLE_N_${(i + 1).toString().padStart(2, '0')}`].pos;
+        drawCatenaryCable(p1, p2, 0x475569, 2.0);
+      }
+      // Avenue Cross-Ties (Pole 2 to 8 at x = -160; Pole 5 to 11 at x = -82)
+      drawCatenaryCable(poleMeshes["POLE_N_02"].pos, poleMeshes["POLE_N_08"].pos, 0x475569, 2.0);
+      drawCatenaryCable(poleMeshes["POLE_N_05"].pos, poleMeshes["POLE_N_11"].pos, 0x475569, 2.0);
+
+      // Zone 2 Corridors:
+      // Street 2: Pole 1 -> 2 -> 3 -> 4 -> 5 -> 6
+      for (let i = 1; i < 6; i++) {
+        const p1 = poleMeshes[`POLE_S_${i.toString().padStart(2, '0')}`].pos;
+        const p2 = poleMeshes[`POLE_S_${(i + 1).toString().padStart(2, '0')}`].pos;
+        drawCatenaryCable(p1, p2, 0x475569, 2.0);
+      }
+      // Street 1: Pole 7 -> 8 -> 9 -> 10 -> 11 -> 12
+      for (let i = 7; i < 12; i++) {
+        const p1 = poleMeshes[`POLE_S_${i.toString().padStart(2, '0')}`].pos;
+        const p2 = poleMeshes[`POLE_S_${(i + 1).toString().padStart(2, '0')}`].pos;
+        drawCatenaryCable(p1, p2, 0x475569, 2.0);
+      }
+      // Avenue Cross-Ties (Pole 2 to 8 at x = 82; Pole 5 to 11 at x = 160)
+      drawCatenaryCable(poleMeshes["POLE_S_02"].pos, poleMeshes["POLE_S_08"].pos, 0x475569, 2.0);
+      drawCatenaryCable(poleMeshes["POLE_S_05"].pos, poleMeshes["POLE_S_11"].pos, 0x475569, 2.0);
+
+      // 4. SHORT SERVICE DROPS (POLES DIRECTLY INTO ROOFTOP WEATHERHEADS)
+      const consumers = data.consumers || {};
+      for (const [cId, cData] of Object.entries(consumers)) {
+        const coord = cData.static.coordinate;
+        const bPos = gpsToCartesian(coord.lat, coord.lon);
+        const height = cData.static.building_height_m * 3.4;
+
+        // Find assigned pole or nearest pole
+        let pId = cData.static.connected_pole_id;
+        let poleInfo = pId && poleMeshes[pId] ? poleMeshes[pId] : null;
+
+        if (!poleInfo) {
+          let bestDist = 99999;
+          for (const [candId, cand] of Object.entries(poleMeshes)) {
+            const d = Math.hypot(bPos.x - cand.pos.x, bPos.z - cand.pos.z);
+            if (d < bestDist) {
+              bestDist = d;
+              poleInfo = cand;
+            }
+          }
+        }
+
+        if (poleInfo) {
+          const risk = cData.analysis ? cData.analysis.risk_level : "NORMAL";
+          const cause = cData.analysis ? cData.analysis.probable_cause : "NORMAL";
+          const dropColor = (risk === "CRITICAL" || cause === "THEFT_TAMPERING") ? 0xef4444 : 0x64748b;
+          
+          drawCatenaryCable(
+            poleInfo.pos,
+            { x: bPos.x, y: height + 1.2, z: bPos.z },
+            dropColor,
+            1.5
+          );
+        }
       }
     }
 
-    let selectedMarkerMesh = null;
+
+    // Helper to draw realistic overhead cables with catenary sag
+    function drawCatenaryCable(p1, p2, colorHex, thickness = 2.0) {
+      const midX = (p1.x + p2.x) / 2.0;
+      const midY = Math.min(p1.y, p2.y) - 1.4; // Cable sag under gravity
+      const midZ = (p1.z + p2.z) / 2.0;
+
+      const curve = new THREE.QuadraticBezierCurve3(
+        new THREE.Vector3(p1.x, p1.y, p1.z),
+        new THREE.Vector3(midX, midY, midZ),
+        new THREE.Vector3(p2.x, p2.y, p2.z)
+      );
+
+      const points = curve.getPoints(14);
+      const geom = new THREE.BufferGeometry().setFromPoints(points);
+      const mat = new THREE.LineBasicMaterial({
+        color: colorHex,
+        linewidth: thickness,
+        transparent: true,
+        opacity: 0.85
+      });
+      const line = new THREE.Line(geom, mat);
+      mapInfrastructureGroup.add(line);
+    }
+
+    // Helper to create crisp, high-contrast 3D ground plaques for zone subdivisions
+    function createGroundPlaque(text, width, height, isLight, subzoneId) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 512;
+      canvas.height = 128;
+      const ctx = canvas.getContext('2d');
+
+      ctx.fillStyle = isLight ? 'rgba(255, 255, 255, 0.92)' : 'rgba(15, 23, 42, 0.92)';
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(8, 8, 496, 112, 16);
+      else ctx.rect(8, 8, 496, 112);
+      ctx.fill();
+
+      ctx.lineWidth = 5;
+      ctx.strokeStyle = isLight ? '#94a3b8' : '#334155';
+      ctx.stroke();
+
+      ctx.font = 'bold 28px "Inter", "Segoe UI", sans-serif';
+      ctx.fillStyle = isLight ? '#0f172a' : '#f8fafc';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, 256, 64);
+
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.anisotropy = 4;
+      const mat = new THREE.MeshBasicMaterial({
+        map: tex,
+        transparent: true,
+        opacity: 0.95,
+        side: THREE.DoubleSide
+      });
+      const geo = new THREE.PlaneGeometry(width, height);
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.rotation.x = -Math.PI / 2;
+      mesh.userData = { type: 'subzone', subzoneId: subzoneId };
+      return mesh;
+    }
+
+    function createZoneMarkers3D(isLight) {
+      // Zone 1 Street 2 (North block / Tech park)
+      const p1 = createGroundPlaque("ZONE 1 · BLOCK A (ST 2 · TECH PARK)", 55, 14, isLight, 'z1_st2');
+      p1.position.set(-140, 0.22, -150);
+      mapInfrastructureGroup.add(p1);
+      zoneParcelMeshes.push(p1);
+
+      // Zone 1 Street 1 (South block / Commercial high street)
+      const p2 = createGroundPlaque("ZONE 1 · BLOCK B (ST 1 · COMMERCIAL)", 55, 14, isLight, 'z1_st1');
+      p2.position.set(-140, 0.22, 38);
+      mapInfrastructureGroup.add(p2);
+      zoneParcelMeshes.push(p2);
+
+      // Zone 2 Street 2 (North block / Upper Villas)
+      const p3 = createGroundPlaque("ZONE 2 · BLOCK A (ST 2 · VILLAS)", 55, 14, isLight, 'z2_st2');
+      p3.position.set(140, 0.22, -150);
+      mapInfrastructureGroup.add(p3);
+      zoneParcelMeshes.push(p3);
+
+      // Zone 2 Street 1 (South block / Lower Apartments)
+      const p4 = createGroundPlaque("ZONE 2 · BLOCK B (ST 1 · APARTMENTS)", 55, 14, isLight, 'z2_st1');
+      p4.position.set(140, 0.22, 38);
+      mapInfrastructureGroup.add(p4);
+      zoneParcelMeshes.push(p4);
+
+      // Zone 0 Power Station
+      const p0 = createGroundPlaque("ZONE 0 · 33kV GENERATION HUB", 70, 16, isLight, 'ps');
+      p0.position.set(0, 0.28, 162);
+      mapInfrastructureGroup.add(p0);
+      zoneParcelMeshes.push(p0);
+
+      // Sub-zone demarcation dashed lines along z = -55 for West & East districts
+      const lineMat = new THREE.LineDashedMaterial({
+        color: isLight ? 0x94a3b8 : 0x475569,
+        linewidth: 1.5,
+        scale: 1,
+        dashSize: 4,
+        gapSize: 3,
+        transparent: true,
+        opacity: 0.7
+      });
+
+      // West block divider
+      const wPoints = [new THREE.Vector3(-225, 0.22, -55), new THREE.Vector3(-55, 0.22, -55)];
+      const wGeo = new THREE.BufferGeometry().setFromPoints(wPoints);
+      const wLine = new THREE.Line(wGeo, lineMat);
+      wLine.computeLineDistances();
+      mapInfrastructureGroup.add(wLine);
+
+      // East block divider
+      const ePoints = [new THREE.Vector3(55, 0.22, -55), new THREE.Vector3(225, 0.22, -55)];
+      const eGeo = new THREE.BufferGeometry().setFromPoints(ePoints);
+      const eLine = new THREE.Line(eGeo, lineMat);
+      eLine.computeLineDistances();
+      mapInfrastructureGroup.add(eLine);
+    }
+
+    // Selection Beacon Marker: Ground foundation highlight with glowing aura & brackets
+    let selectedMarkerGroup = null;
+    let selectedMarkerPulse = null;
+
     function addSelectedMarker(mesh, height) {
-      if (selectedMarkerMesh) scene.remove(selectedMarkerMesh);
-      const ringGeo = new THREE.RingGeometry(12, 14, 32);
-      const ringMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, side: THREE.DoubleSide });
-      selectedMarkerMesh = new THREE.Mesh(ringGeo, ringMat);
-      selectedMarkerMesh.rotation.x = Math.PI / 2;
-      selectedMarkerMesh.position.set(mesh.position.x, 0.8, mesh.position.z);
-      scene.add(selectedMarkerMesh);
+      if (selectedMarkerGroup) {
+        scene.remove(selectedMarkerGroup);
+        selectedMarkerGroup = null;
+      }
+
+      selectedMarkerGroup = new THREE.Group();
+      // Anchored flat on the ground foundation (y = 0.35) directly hugging building base
+      selectedMarkerGroup.position.set(mesh.position.x, 0.35, mesh.position.z);
+
+      // Compute bounding footprint to snug-fit residential vs commercial buildings
+      mesh.geometry.computeBoundingBox();
+      const bb = mesh.geometry.boundingBox;
+      const sizeX = bb ? Math.abs(bb.max.x - bb.min.x) : 14.0;
+      const sizeZ = bb ? Math.abs(bb.max.z - bb.min.z) : 14.0;
+      const innerR = Math.max(sizeX, sizeZ) * 0.68 + 0.8;
+      const outerR = innerR + 2.2;
+      const auraR = outerR + 4.5;
+      const bDist = innerR * 0.92;
+
+      // 1. Crisp glowing foundation border ring
+      const ringGeo = new THREE.RingGeometry(innerR, outerR, 36);
+      const ringMat = new THREE.MeshBasicMaterial({
+        color: 0x2563eb,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.95
+      });
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      ring.rotation.x = -Math.PI / 2;
+      selectedMarkerGroup.add(ring);
+
+      // 2. Soft translucent ambient pulse aura on ground
+      const auraGeo = new THREE.RingGeometry(outerR, auraR, 36);
+      const auraMat = new THREE.MeshBasicMaterial({
+        color: 0x60a5fa,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.35
+      });
+      selectedMarkerPulse = new THREE.Mesh(auraGeo, auraMat);
+      selectedMarkerPulse.rotation.x = -Math.PI / 2;
+      selectedMarkerGroup.add(selectedMarkerPulse);
+
+      // 3. Ground Target Reticle / Corner Brackets at building foundation
+      const bracketMat = new THREE.MeshBasicMaterial({ color: 0x1d4ed8 });
+      [
+        [-bDist, -bDist], [bDist, -bDist], [bDist, bDist], [-bDist, bDist]
+      ].forEach(([cx, cz]) => {
+        const b1Geo = new THREE.BoxGeometry(3.5, 0.08, 0.8);
+        const b1 = new THREE.Mesh(b1Geo, bracketMat);
+        b1.position.set(cx, 0.04, cz);
+        selectedMarkerGroup.add(b1);
+
+        const b2Geo = new THREE.BoxGeometry(0.8, 0.08, 3.5);
+        const b2 = new THREE.Mesh(b2Geo, bracketMat);
+        b2.position.set(cx, 0.04, cz);
+        selectedMarkerGroup.add(b2);
+      });
+
+      // 4. Subtle ground crosshair marks
+      const crossMat = new THREE.MeshBasicMaterial({
+        color: 0x3b82f6,
+        transparent: true,
+        opacity: 0.3,
+        side: THREE.DoubleSide
+      });
+      const chLen = (auraR + 2) * 2;
+      [
+        { w: chLen, d: 0.5 },
+        { w: 0.5, d: chLen }
+      ].forEach(ch => {
+        const chGeo = new THREE.PlaneGeometry(ch.w, ch.d);
+        const chMesh = new THREE.Mesh(chGeo, crossMat);
+        chMesh.rotation.x = -Math.PI / 2;
+        chMesh.position.y = 0.02;
+        selectedMarkerGroup.add(chMesh);
+      });
+
+      scene.add(selectedMarkerGroup);
     }
 
-    // Select Consumer and populate Right Inspector Panel
+    // =========================================================================
+    // CAMERA CONTROLLER: SMOOTH FLY-TO & UNREAL ENGINE FREE LOOK TRANSLATION
+    // =========================================================================
+
+    function smoothFlyTo(targetCamPos, targetLookAt, duration = 850) {
+      cameraAnimation = {
+        startCam: camera.position.clone(),
+        targetCam: targetCamPos.clone(),
+        startLook: controls.target.clone(),
+        targetLook: targetLookAt.clone(),
+        startTime: performance.now(),
+        duration: duration,
+        active: true
+      };
+    }
+
+    function cancelCameraAnimation() {
+      if (cameraAnimation) {
+        cameraAnimation.active = false;
+        cameraAnimation = null;
+      }
+    }
+
+    // Unreal Engine style Free Look: WASD / Arrows / QE / Shift translate WITHOUT ROTATION
+    function updateFreeCameraMovement() {
+      const now = performance.now();
+      const dt = Math.min((now - lastFrameTime) / 1000.0, 0.1);
+      lastFrameTime = now;
+
+      const moveKeys = ['KeyW', 'KeyS', 'KeyA', 'KeyD', 'KeyQ', 'KeyE',
+                        'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+      const isMoving = moveKeys.some(k => keyState[k]);
+      if (!isMoving) return;
+
+      cancelCameraAnimation();
+
+      const isShift = keyState['ShiftLeft'] || keyState['ShiftRight'];
+      const baseSpeed = 160.0; // Three.js units per second
+      const speed = (isShift ? baseSpeed * 2.8 : baseSpeed) * dt;
+
+      // Planar forward direction (projected on X-Z plane so view angle/pitch does not rotate)
+      const forward = new THREE.Vector3();
+      camera.getWorldDirection(forward);
+      forward.y = 0;
+      if (forward.lengthSq() > 0.0001) forward.normalize();
+      else forward.set(0, 0, -1);
+
+      // Strafe right vector (perpendicular to forward and global Up)
+      const right = new THREE.Vector3();
+      right.crossVectors(forward, new THREE.Vector3(0, 1, 0)).normalize();
+
+      const delta = new THREE.Vector3(0, 0, 0);
+
+      if (keyState['KeyW'] || keyState['ArrowUp']) delta.addScaledVector(forward, speed);
+      if (keyState['KeyS'] || keyState['ArrowDown']) delta.addScaledVector(forward, -speed);
+      if (keyState['KeyD'] || keyState['ArrowRight']) delta.addScaledVector(right, speed);
+      if (keyState['KeyA'] || keyState['ArrowLeft']) delta.addScaledVector(right, -speed);
+      if (keyState['KeyE']) delta.y += speed; // Elevate vertically UP
+      if (keyState['KeyQ']) delta.y -= speed; // Elevate vertically DOWN
+
+      // Apply identical delta to BOTH camera.position AND controls.target -> GUARANTEES ZERO ROTATION!
+      camera.position.add(delta);
+      controls.target.add(delta);
+    }
+
+    // Camera Focus Helper supporting all primary zones and granular street sub-zones
+    function focusCameraZone(zone, immediate = false) {
+      let targetLookAt = new THREE.Vector3(0, 0, -20);
+      let targetCamPos = new THREE.Vector3(0, 360, 390);
+
+      if (zone === 'ps' || zone === 'zone0' || zone === 'power_station') {
+        // Zone 0: Central 33kV Generation Hub & Switchyard
+        targetLookAt.set(0, 10, 220);
+        targetCamPos.set(0, 95, 340);
+      } else if (zone === 'north' || zone === 'zone1' || zone === 'west') {
+        // Entire Zone 1: West Commercial Sector
+        targetLookAt.set(-140, 10, -55);
+        targetCamPos.set(-140, 150, 95);
+      } else if (zone === 'z1_st2' || zone === 'zone1_street2' || zone === 'zone1_north') {
+        // Sub-zone 1A: Street 2 North Block (Commercial Tech Park)
+        targetLookAt.set(-140, 10, -110);
+        targetCamPos.set(-140, 90, -20);
+      } else if (zone === 'z1_st1' || zone === 'zone1_street1' || zone === 'zone1_south') {
+        // Sub-zone 1B: Street 1 South Block (Commercial High Street & Dining)
+        targetLookAt.set(-140, 10, -20);
+        targetCamPos.set(-140, 90, 70);
+      } else if (zone === 'south' || zone === 'zone2' || zone === 'east') {
+        // Entire Zone 2: East Residential Sector
+        targetLookAt.set(140, 10, -55);
+        targetCamPos.set(140, 150, 95);
+      } else if (zone === 'z2_st2' || zone === 'zone2_street2' || zone === 'zone2_north') {
+        // Sub-zone 2A: Street 2 North Block (Upper Residential Villas)
+        targetLookAt.set(140, 10, -110);
+        targetCamPos.set(140, 90, -20);
+      } else if (zone === 'z2_st1' || zone === 'zone2_street1' || zone === 'zone2_south') {
+        // Sub-zone 2B: Street 1 South Block (Lower Residential Apartments)
+        targetLookAt.set(140, 10, -20);
+        targetCamPos.set(140, 90, 70);
+      } else if (zone === 'overview' || zone === 'all' || zone === 'grid') {
+        // High-altitude God's eye overview of entire city grid
+        targetLookAt.set(0, 0, -20);
+        targetCamPos.set(0, 360, 390);
+      }
+
+      // Update active nav-chip styling
+      document.querySelectorAll('.nav-chip, .sub-nav-chip').forEach(c => c.classList.remove('active'));
+      const activeChip = document.getElementById(`nav-chip-${zone}`);
+      if (activeChip) activeChip.classList.add('active');
+
+      if (immediate) {
+        cancelCameraAnimation();
+        controls.target.copy(targetLookAt);
+        camera.position.copy(targetCamPos);
+      } else {
+        smoothFlyTo(targetCamPos, targetLookAt, 850);
+      }
+    }
+
+    // Smooth fly to an individual consumer smart meter
+    function zoomToConsumer(cId) {
+      if (!buildingMeshes[cId]) return;
+      const mesh = buildingMeshes[cId];
+      const bPos = mesh.position;
+      const targetLookAt = new THREE.Vector3(bPos.x, mesh.position.y * 0.5, bPos.z);
+      const targetCamPos = new THREE.Vector3(bPos.x, bPos.y + 40, bPos.z + 60);
+      smoothFlyTo(targetCamPos, targetLookAt, 800);
+    }
+
+    // =========================================================================
+    // INTERACTIVE INSPECTOR PANEL: SWITCHING BETWEEN THE 3 TIERS
+    // =========================================================================
+    function switchInspectorMode(mode) {
+      currentInspectorMode = mode;
+      
+      document.getElementById('tab-consumer').className = `hierarchy-tab ${mode === 'consumer' ? 'active' : ''}`;
+      document.getElementById('tab-transformer').className = `hierarchy-tab ${mode === 'transformer' ? 'active' : ''}`;
+      document.getElementById('tab-power-station').className = `hierarchy-tab ${mode === 'power_station' ? 'active' : ''}`;
+
+      document.getElementById('view-consumer').style.display = mode === 'consumer' ? 'flex' : 'none';
+      document.getElementById('view-transformer').style.display = mode === 'transformer' ? 'flex' : 'none';
+      document.getElementById('view-power-station').style.display = mode === 'power_station' ? 'flex' : 'none';
+    }
+
+    // 1. SELECT POWER STATION (ZONE 0)
+    function selectPowerStation() {
+      switchInspectorMode('power_station');
+      document.getElementById('panel-title-text').innerText = "Zone 0: Power Station Hub";
+      document.getElementById('panel-subtitle-text').innerText = "IOT_GATEWAY_PS_01 | 33kV Central Generation";
+      document.getElementById('panel-badge-status').className = "badge NORMAL";
+      document.getElementById('panel-badge-status').innerText = "ONLINE (50.02 Hz)";
+
+      if (twinSnapshot && twinSnapshot.power_station) {
+        const ps = twinSnapshot.power_station;
+        const iot = ps.iot_sensors || {};
+        document.getElementById('ps-gen-kw').innerText = `${iot.total_generation_kw || 485.2} kW`;
+        document.getElementById('ps-reactive-kvar').innerText = `${iot.reactive_power_kvar || 98.4} kVAR`;
+        document.getElementById('ps-bus-kv').innerText = `${iot.bus_voltage_kv || 33.15} kV`;
+        document.getElementById('ps-freq-hz').innerText = `${iot.grid_frequency_hz || 50.02} Hz`;
+        document.getElementById('ps-oil-c').innerText = `${iot.transformer_oil_temp_c || 63.4} °C`;
+        document.getElementById('ps-amb-c').innerText = `${iot.ambient_temp_c || 31.5} °C`;
+      }
+    }
+
+    // 2. SELECT TRANSFORMER (ZONE 1 TX-101 OR ZONE 2 TX-102)
+    function selectTransformer(txId) {
+      switchInspectorMode('transformer');
+      document.getElementById('btn-tx-101').className = `btn ${txId === 'TX_101' ? 'primary' : ''}`;
+      document.getElementById('btn-tx-102').className = `btn ${txId === 'TX_102' ? 'primary' : ''}`;
+
+      const isWest = txId === 'TX_101';
+      document.getElementById('panel-title-text').innerText = isWest ? "Transformer TX-101 (Zone 1 West Commercial)" : "Transformer TX-102 (Zone 2 East Residential)";
+      document.getElementById('panel-subtitle-text').innerText = `Distribution IoT Gateway (${isWest ? 'IOT_GW_TX_101' : 'IOT_GW_TX_102'})`;
+
+      if (twinSnapshot && twinSnapshot.transformers && twinSnapshot.transformers[txId]) {
+        const tx = twinSnapshot.transformers[txId];
+        const acc = tx.accounting || {};
+        const iot = tx.iot_sensors || {};
+
+        const isDoneFor = acc.is_done_for !== undefined ? acc.is_done_for : isWest;
+        document.getElementById('panel-badge-status').className = `badge ${isDoneFor ? 'CRITICAL' : 'NORMAL'}`;
+        document.getElementById('panel-badge-status').innerText = isDoneFor ? "DONE FOR! (CRITICAL NTL)" : "BALANCED & VERIFIED";
+
+        document.getElementById('tx-reconcile-status').className = `badge ${isDoneFor ? 'CRITICAL' : 'NORMAL'}`;
+        document.getElementById('tx-reconcile-status').innerText = isDoneFor ? "DONE FOR!" : "BALANCED";
+
+        document.getElementById('tx-input-kwh').innerText = `${acc.power_inputted_kwh || (isWest ? 118.41 : 113.32)} kWh`;
+        document.getElementById('tx-meters-kwh').innerText = `${acc.meters_added_kwh || (isWest ? 95.37 : 105.42)} kWh`;
+        document.getElementById('tx-tech-kwh').innerText = `${acc.cumulative_tech_loss_kwh || (isWest ? 3.35 : 2.69)} kWh`;
+        document.getElementById('tx-missing-kwh').innerText = `${acc.cumulative_unexplained_kwh || (isWest ? 19.69 : 5.20)} kWh (${acc.unexplained_loss_pct || (isWest ? 16.4 : 4.4)}%)`;
+
+        document.getElementById('tx-gateway-id').innerText = iot.gateway_id || (isWest ? 'IOT_GW_TX_101' : 'IOT_GW_TX_102');
+        document.getElementById('tx-v-prim').innerText = `${iot.primary_voltage_kv || (isWest ? 11.05 : 11.02)} kV`;
+        document.getElementById('tx-v-sec').innerText = `${iot.secondary_voltage_v || (isWest ? 416.2 : 415.8)} V`;
+        document.getElementById('tx-curr-sec').innerText = `${iot.secondary_current_a || (isWest ? 285.4 : 262.1)} A`;
+        document.getElementById('tx-oil-temp').innerText = `${iot.oil_temperature_c || (isWest ? 61.2 : 56.4)} °C`;
+        document.getElementById('tx-phase-unbal').innerText = `${iot.phase_unbalance_pct || (isWest ? 3.8 : 1.9)}%`;
+        document.getElementById('tx-thd').innerText = `${iot.thd_voltage_pct || (isWest ? 2.1 : 1.8)}%`;
+      }
+    }
+
+    // 3. SELECT CONSUMER SMART METER
     function selectConsumer(cId) {
       selectedConsumerId = cId;
-      if (!twinSnapshot) return;
+      switchInspectorMode('consumer');
+      if (!twinSnapshot || !twinSnapshot.consumers) return;
       const cData = twinSnapshot.consumers[cId];
       if (!cData) return;
 
@@ -934,23 +2408,24 @@
       const telemetry = cData.telemetry;
       const analysis = cData.analysis;
 
-      document.getElementById('panel-consumer-header').innerText = `${cId} - Inspection Audit`;
+      document.getElementById('panel-title-text').innerText = `${cId} - Smart Meter Audit`;
+      document.getElementById('panel-subtitle-text').innerText = `${staticInfo.meter_id} | ${staticInfo.zone_id.replace('Zone_', 'Z')}`;
+      
       document.getElementById('panel-cid').innerText = cId;
       document.getElementById('panel-meter-id').innerText = staticInfo.meter_id;
       document.getElementById('panel-category').innerText = staticInfo.category;
       document.getElementById('panel-contract').innerText = `${staticInfo.contracted_load_kw} kW`;
-      document.getElementById('panel-zone').innerText = `${staticInfo.transformer_id} (${staticInfo.zone_id})`;
+      document.getElementById('panel-zone').innerText = `${staticInfo.connected_pole_id || 'POLE'} (${staticInfo.transformer_id})`;
 
       if (analysis) {
         const score = Math.round(analysis.anomaly_score);
         document.getElementById('panel-score-val').innerText = score;
-        document.getElementById('panel-badge-risk').className = `badge ${analysis.risk_level}`;
-        document.getElementById('panel-badge-risk').innerText = `${analysis.risk_level} RISK`;
-        document.getElementById('panel-cause-title').innerText = analysis.probable_cause.replace('_', ' ');
+        document.getElementById('panel-badge-status').className = `badge ${analysis.risk_level}`;
+        document.getElementById('panel-badge-status').innerText = `${analysis.risk_level} RISK`;
+        document.getElementById('panel-cause-title').innerText = analysis.probable_cause.replace(/_/g, ' ');
         document.getElementById('panel-confidence-val').innerText = `${analysis.confidence_pct}%`;
         document.getElementById('panel-action-text').innerText = analysis.recommended_action;
 
-        // Evidence
         const evList = document.getElementById('panel-evidence-list');
         evList.innerHTML = '';
         analysis.contributing_factors.forEach(f => {
@@ -960,12 +2435,10 @@
           evList.appendChild(li);
         });
 
-        // Telemetry values
         document.getElementById('panel-rep-kw').innerText = `${analysis.reported_kw} kW`;
         document.getElementById('panel-base-kw').innerText = `${analysis.baseline_mean_kw} kW`;
         document.getElementById('panel-dev-pct').innerText = `${analysis.deviation_pct > 0 ? '+' : ''}${analysis.deviation_pct}%`;
 
-        // Bar comparison
         const maxKw = Math.max(analysis.reported_kw, analysis.baseline_mean_kw, 3.0);
         document.getElementById('bar-rep-lbl').innerText = `${analysis.reported_kw} kW`;
         document.getElementById('bar-rep-fill').style.width = `${Math.min(100, (analysis.reported_kw / maxKw) * 100)}%`;
@@ -981,26 +2454,22 @@
         document.getElementById('panel-curr').innerText = '0.00 A';
       }
 
-      // Truth reveal card
       if (telemetry) {
         document.getElementById('panel-true-kw').innerText = `${telemetry.ground_truth.active_power_kw} kW`;
         document.getElementById('panel-stolen-kw').innerText = `${telemetry.unreported_stolen_kw} kW`;
       }
 
-      // Reposition selected marker
       if (buildingMeshes[cId]) {
-        addSelectedMarker(buildingMeshes[cId], staticInfo.building_height_m * 3.5);
+        addSelectedMarker(buildingMeshes[cId], staticInfo.building_height_m * 3.4);
       }
     }
 
-    // Toggle Ground Truth reveal mode
     function toggleGroundTruth() {
       isGroundTruthRevealed = !isGroundTruthRevealed;
-      document.getElementById('truth-label').innerText = `Truth Reveal: ${isGroundTruthRevealed ? 'ON' : 'OFF'}`;
+      document.getElementById('truth-label').innerText = `Truth: ${isGroundTruthRevealed ? 'ON' : 'OFF'}`;
       document.getElementById('panel-truth-card').style.display = isGroundTruthRevealed ? 'block' : 'none';
     }
 
-    // Step Simulation Clock
     async function stepSimulation() {
       try {
         const res = await fetch('/api/step', { method: 'POST' });
@@ -1009,21 +2478,22 @@
           updateDashboard(snapshot);
         }
       } catch (e) {
-        console.log("Running local offline tick simulation...");
         fetchTwinState();
       }
     }
 
-    // Drone flight animation
-    let isDroneFlying = false;
-    let droneProgress = 0;
-    function triggerDroneFlight() {
-      if (!dronePathLine) return;
-      isDroneFlying = true;
-      droneProgress = 0;
+    let isAutoPlaying = false;
+    let autoPlayInterval = null;
+    function toggleAutoPlay() {
+      isAutoPlaying = !isAutoPlaying;
+      document.getElementById('play-icon').innerText = isAutoPlaying ? "⏸️ Pause" : "▶️ Auto Play";
+      if (isAutoPlaying) {
+        autoPlayInterval = setInterval(stepSimulation, 2500);
+      } else {
+        clearInterval(autoPlayInterval);
+      }
     }
 
-    // Fetch snapshot from Backend API
     async function fetchTwinState() {
       try {
         const res = await fetch('/api/snapshot');
@@ -1032,8 +2502,6 @@
           updateDashboard(twinSnapshot);
         }
       } catch (err) {
-        // Generate client-side mockup if backend is not currently connected
-        console.warn("FastAPI backend not detected at /api/snapshot. Generating internal simulation snapshot...");
         generateClientMockup();
       }
     }
@@ -1046,92 +2514,133 @@
       document.getElementById('kpi-tx-loss').innerText = `${snapshot.grid_summary.grid_unexplained_ntl_pct}%`;
 
       buildCity3D(snapshot);
-      selectConsumer(selectedConsumerId);
+      if (currentInspectorMode === 'consumer') selectConsumer(selectedConsumerId);
+      else if (currentInspectorMode === 'transformer') selectTransformer('TX_101');
+      else selectPowerStation();
     }
 
-    // Self-contained internal mock generator for offline standalone preview
+    // Client fallback mockup if running standalone offline file:///
     function generateClientMockup() {
       const mockSnapshot = {
         clock: { iso_time: "2026-10-05T08:30:00", tick: 1 },
         grid_summary: { total_consumers: 48, anomalous_consumers_count: 5, grid_unexplained_ntl_pct: 12.8 },
-        transformers: {
-          "TX_101": { unexplained_loss_pct: 14.2, status: "CRITICAL_THEFT_CLUSTER" },
-          "TX_102": { unexplained_loss_pct: 2.1, status: "OPTIMAL" }
+        power_station: {
+          id: "PS_CENTRAL_01",
+          name: "Central 33kV Power Station",
+          iot_sensors: { total_generation_kw: 485.2, bus_voltage_kv: 33.15, grid_frequency_hz: 50.02, transformer_oil_temp_c: 63.4, ambient_temp_c: 31.5 }
         },
-        consumers: {},
-        drone_flight: { line_coordinates_3d: [] }
+        zone_accounting: {
+          Zone_0_PowerStation: { dispatched_kw: 485.2 },
+          Zone_1_North: {
+            metrics: {
+              power_inputted_kwh: 118.41,
+              meters_added_kwh: 95.37,
+              cumulative_tech_loss_kwh: 3.35,
+              cumulative_unexplained_kwh: 19.69,
+              unexplained_loss_pct: 16.4,
+              is_done_for: true
+            }
+          },
+          Zone_2_South: {
+            metrics: {
+              power_inputted_kwh: 113.32,
+              meters_added_kwh: 105.42,
+              cumulative_tech_loss_kwh: 2.69,
+              cumulative_unexplained_kwh: 5.20,
+              unexplained_loss_pct: 4.4,
+              is_done_for: false
+            }
+          }
+        },
+        transformers: {
+          "TX_101": {
+            id: "TX_101",
+            name: "Distribution Transformer TX-101",
+            accounting: { power_inputted_kwh: 118.41, meters_added_kwh: 95.37, cumulative_tech_loss_kwh: 3.35, cumulative_unexplained_kwh: 19.69, unexplained_loss_pct: 16.4, is_done_for: true },
+            iot_sensors: { gateway_id: "IOT_GW_TX_101", primary_voltage_kv: 11.05, secondary_voltage_v: 416.2, secondary_current_a: 285.4, oil_temperature_c: 61.2, phase_unbalance_pct: 3.8, thd_voltage_pct: 2.1 }
+          },
+          "TX_102": {
+            id: "TX_102",
+            name: "Distribution Transformer TX-102",
+            accounting: { power_inputted_kwh: 113.32, meters_added_kwh: 105.42, cumulative_tech_loss_kwh: 2.69, cumulative_unexplained_kwh: 5.20, unexplained_loss_pct: 4.4, is_done_for: false },
+            iot_sensors: { gateway_id: "IOT_GW_TX_102", primary_voltage_kv: 11.02, secondary_voltage_v: 415.8, secondary_current_a: 262.1, oil_temperature_c: 56.4, phase_unbalance_pct: 1.9, thd_voltage_pct: 1.8 }
+          }
+        },
+        consumers: {}
       };
 
-      // Generate 48 mock houses across 2 zones
-      for (let i = 1; i <= 48; i++) {
-        const isNorth = i <= 24;
-        const prefix = isNorth ? "N" : "S";
-        const numStr = String(i <= 24 ? i : i - 24).padStart(3, '0');
-        const cId = `CONS_${prefix}_${numStr}`;
+      // Generate 48 mock consumers matching the authentic district blocks & 24 poles
+      const xStationsWest = [-205.0, -160.0, -140.0, -120.0, -82.0, -65.0];
+      const xStationsEast = [65.0, 82.0, 120.0, 140.0, 160.0, 205.0];
+      const r_earth = 6371000.0;
 
-        const col = (i % 6) - 3;
-        const row = Math.floor((i % 24) / 6) - 2;
-        const lat = BASE_LAT + (isNorth ? 0.0020 : -0.0020) + row * 0.0006;
-        const lon = BASE_LON + col * 0.0007;
+      for (let i = 0; i < 48; i++) {
+        const isWest = i < 24;
+        const prefix = isWest ? "N" : "S";
+        const idxInSector = i % 24; // 0..23
+        const isSt2 = idxInSector < 12; // first 12 along Street 2, next 12 along Street 1
+        const poleIdxInStreet = Math.floor((idxInSector % 12) / 2); // 0..5
+        const poleNum = isSt2 ? (poleIdxInStreet + 1) : (poleIdxInStreet + 7);
+        const connectedPoleId = `POLE_${prefix}_${poleNum.toString().padStart(2, '0')}`;
 
-        let risk = "NORMAL", cause = "NORMAL", score = 12.0, rep_kw = 1.6, true_kw = 1.6;
-        let factors = ["Consumption conforms to diurnal residential curve"];
-        let action = "Continue Routine Smart Meter Monitoring";
+        const xList = isWest ? xStationsWest : xStationsEast;
+        const bx = xList[poleIdxInStreet];
+        const bSlot = idxInSector % 2; // 0: North lot, 1: South lot
 
-        if (cId === "CONS_N_004") {
-          risk = "CRITICAL"; cause = "THEFT_TAMPERING"; score = 94.0; rep_kw = 0.48; true_kw = 1.82;
-          factors = ["Drastic consumption drop (-72.4% below diurnal baseline)", "Transformer TX_101 reports 14.2% unexplained NTL loss", "Consumer peer load ratio is 28.5% of neighborhood average"];
-          action = "HIGH PRIORITY: Dispatch anti-theft squad to inspect meter shunt/bypass";
-        } else if (cId === "CONS_N_009") {
-          risk = "CRITICAL"; cause = "THEFT_TAMPERING"; score = 91.0; rep_kw = 0.52; true_kw = 1.95;
-          factors = ["Magnetic tamper sensor tripped (high external magnetic field)", "Unexplained feeder loss"];
-          action = "Inspect physical meter enclosure; confiscate tampering magnet";
-        } else if (cId === "CONS_N_015") {
-          risk = "HIGH"; cause = "METER_MALFUNCTION"; score = 86.0; rep_kw = 0.35; true_kw = 1.40;
-          factors = ["Hardware fault bitmask active in smart meter register", "Persistent static reading unresponsive to diurnal baseline"];
-          action = "Replace defective transducer unit; re-flash meter firmware";
-        } else if (cId === "CONS_N_021") {
-          risk = "MEDIUM"; cause = "COMM_FAILURE"; score = 68.0; rep_kw = 0.0; true_kw = 1.20;
-          factors = ["Meter communication offline: missed scheduled AMI interval telemetry", "Last recorded ping timed out across headend gateway"];
-          action = "Dispatch AMI field technician to check cellular/RF antenna";
-        } else if (cId === "CONS_S_003") {
-          risk = "LOW"; cause = "LEGITIMATE_ABNORMAL"; score = 32.0; rep_kw = 8.5; true_kw = 8.5;
-          factors = ["Sharp consumption increase (+280%) matching Level-2 EV Charging", "Zone transformer has 0% non-technical loss; power factor compliant (0.97)"];
-          action = "Verified legitimate EV charging demand; no enforcement action required";
-        }
+        // Frontages: Street 2 (dy=110): dy=135 & dy=85; Street 1 (dy=20): dy=45 & dy=-5
+        const by = isSt2 ? (bSlot === 0 ? 135.0 : 85.0) : (bSlot === 0 ? 45.0 : -5.0);
+
+        const bLat = BASE_LAT + (by / r_earth) * (180.0 / Math.PI);
+        const bLon = BASE_LON + (bx / (r_earth * Math.cos(BASE_LAT * Math.PI / 180.0))) * (180.0 / Math.PI);
+        const cId = `CONS_${prefix}_${(idxInSector + 1).toString().padStart(3, '0')}`;
+
+        const isTamper = cId === "CONS_N_009" || cId === "CONS_N_004";
+        const isFault = cId === "CONS_N_015" || cId === "CONS_S_011";
+        const isCommFail = cId === "CONS_S_018";
+        const isLegit = cId === "CONS_N_021";
+
+        const cat = (idxInSector % 2 === 0) ? "Residential" : "Commercial";
+        const heightM = cat === "Commercial" ? 14.0 : 7.5;
+        const halfSize = cat === "Commercial" ? 0.00009 : 0.000065;
 
         mockSnapshot.consumers[cId] = {
           static: {
             id: cId,
-            meter_id: `MTR_${prefix}_${numStr}`,
-            category: i % 5 === 0 ? "Commercial" : "Residential",
-            contracted_load_kw: 4.5,
-            coordinate: { lat: lat, lon: lon },
-            building_height_m: 8.0 + (i % 4) * 3.0,
-            zone_id: isNorth ? "Zone_1_North" : "Zone_2_South",
-            transformer_id: isNorth ? "TX_101" : "TX_102",
+            meter_id: `MTR_${prefix}_${(idxInSector + 1).toString().padStart(3, '0')}`,
+            category: cat,
+            contracted_load_kw: cat === "Commercial" ? 12.0 : 4.5,
+            coordinate: { lat: bLat, lon: bLon },
             building_polygon: [
-              [lon - 0.0001, lat - 0.0001],
-              [lon + 0.0001, lat - 0.0001],
-              [lon + 0.0001, lat + 0.0001],
-              [lon - 0.0001, lat + 0.0001]
-            ]
+              [bLon - halfSize, bLat - halfSize],
+              [bLon + halfSize, bLat - halfSize],
+              [bLon + halfSize, bLat + halfSize],
+              [bLon - halfSize, bLat + halfSize],
+              [bLon - halfSize, bLat - halfSize],
+            ],
+            building_height_m: heightM,
+            zone_id: isWest ? "Zone_1_North" : "Zone_2_South",
+            transformer_id: isWest ? "TX_101" : "TX_102",
+            connected_pole_id: connectedPoleId
           },
           telemetry: {
-            ground_truth: { active_power_kw: true_kw },
-            reported: { active_power_kw: rep_kw, voltage_v: 228.4, current_a: +(rep_kw * 1000 / (228.4 * 0.95)).toFixed(2) },
-            unreported_stolen_kw: +(true_kw - rep_kw).toFixed(2)
+            reported: { active_power_kw: isTamper ? 0.89 : 2.85, voltage_v: 228.4, current_a: 3.88 },
+            ground_truth: { active_power_kw: isTamper ? 3.58 : 2.85 },
+            unreported_stolen_kw: isTamper ? 2.69 : 0.0
           },
           analysis: {
-            anomaly_score: score,
-            risk_level: risk,
-            probable_cause: cause,
-            confidence_pct: 95.0,
-            reported_kw: rep_kw,
-            baseline_mean_kw: 1.74,
-            deviation_pct: +(((rep_kw - 1.74) / 1.74) * 100).toFixed(1),
-            contributing_factors: factors,
-            recommended_action: action
+            anomaly_score: isTamper ? 98.5 : (isFault ? 82.0 : (isCommFail ? 65.0 : (isLegit ? 42.0 : 8.2))),
+            risk_level: isTamper ? "CRITICAL" : (isFault ? "HIGH" : (isCommFail ? "MEDIUM" : "NORMAL")),
+            probable_cause: isTamper ? "THEFT_TAMPERING" : (isFault ? "METER_MALFUNCTION" : (isCommFail ? "COMM_FAILURE" : (isLegit ? "LEGITIMATE_ABNORMAL" : "NORMAL"))),
+            confidence_pct: isTamper ? 94.2 : 91.0,
+            reported_kw: isTamper ? 0.89 : 2.85,
+            baseline_mean_kw: 3.56,
+            deviation_pct: isTamper ? -74.9 : 0.0,
+            contributing_factors: isTamper ? [
+              "Drastic consumption drop (-74.9% below diurnal baseline, z=-2.85)",
+              "Zone 1 Transformer TX-101 missing 19.69 kWh (Zone marked DONE FOR!)",
+              "Consumer peer load ratio is 25.2% of neighborhood feeder average"
+            ] : (isFault ? ["Stuck zero telemetry readings with abnormal meter hardware diagnostics register."] : ["Telemetry verified within expected diurnal parameters."]),
+            recommended_action: isTamper ? "HIGH PRIORITY: Issue physical inspection warrant. Dispatch anti-theft squad to verify meter shunt/bypass." : (isFault ? "Schedule meter replacement and recalibration." : "Routine periodic automated meter reading cycle.")
           }
         };
       }
@@ -1139,95 +2648,101 @@
       updateDashboard(mockSnapshot);
     }
 
-    // Modal Report Viewer
-    async function viewFullReport() {
+    // Investigation Report Modal
+    async function openReportModal() {
       const modal = document.getElementById('report-modal');
-      const content = document.getElementById('modal-content');
       modal.style.display = 'flex';
-      content.innerText = 'Generating comprehensive explainable report...';
+      document.getElementById('modal-report-title').innerText = `Formal Investigation Audit Report: ${selectedConsumerId}`;
+      document.getElementById('modal-report-body').innerText = `Fetching auditable evidence log for ${selectedConsumerId}...`;
 
       try {
         const res = await fetch(`/api/report/${selectedConsumerId}`);
         if (res.ok) {
           const report = await res.json();
-          content.innerText = report.markdown;
+          document.getElementById('modal-report-body').innerText = report.markdown;
         } else {
-          fallbackReportText();
+          showFallbackReport(selectedConsumerId);
         }
       } catch (e) {
-        fallbackReportText();
+        showFallbackReport(selectedConsumerId);
       }
     }
 
-    function fallbackReportText() {
-      const c = twinSnapshot.consumers[selectedConsumerId];
-      document.getElementById('modal-content').innerText = 
-`# SMART GRID DIGITAL TWIN | AUDIT INVESTIGATION REPORT
-Report ID: RPT-Z1-004-98AF23 | Timestamp: 2026-10-05T08:30:00
+    function showFallbackReport(cId) {
+      const cData = twinSnapshot && twinSnapshot.consumers ? twinSnapshot.consumers[cId] : null;
+      const an = cData ? cData.analysis : null;
+      document.getElementById('modal-report-body').innerText = 
+`# SMART GRID CYBER-PHYSICAL THEFT INVESTIGATION REPORT
+================================================================================
+CASE FILE: AGY-INV-${cId}-2026-10
+TARGET CONSUMER ID: ${cId}
+SMATER METER ID: MTR_${cId.substring(5)}
+TRANSFORMER ZONE: Zone 1 North (TX-101) - STATUS: CRITICAL LEAKAGE (DONE FOR!)
+DETECTED ANOMALY SCORE: ${an ? an.anomaly_score : 98.5} / 100 [CRITICAL RISK]
+PROBABLE CAUSE: ${an ? an.probable_cause : 'THEFT_TAMPERING (METER SHUNT BYPASS)'}
+CONFIDENCE LEVEL: ${an ? an.confidence_pct : 94.2}%
 
 --------------------------------------------------------------------------------
-1. CONSUMER SUMMARY:
-- Target ID: ${selectedConsumerId} (Meter: ${c.static.meter_id})
-- Category: ${c.static.category} | Contracted Load: ${c.static.contracted_load_kw} kW
-- Grid Parent: Transformer ${c.static.transformer_id} (${c.static.zone_id})
+1. EXECUTIVE SUMMARY & EVIDENCE CHAIN
+--------------------------------------------------------------------------------
+- Telemetry reported sudden persistent reduction (-74.9% below baseline).
+- Distribution Transformer TX-101 energy reconciliation recorded 19.69 kWh missing power.
+  Inputted power (118.41 kWh) did not add up to customer meters (95.37 kWh).
+- Peer comparison indicates consumer load dropped to 25.2% of neighboring street buildings.
+- Hardware Diagnostic Register indicates mechanical enclosure tamper switch activation.
 
-2. CLASSIFICATION & RISK SCORING:
-- Anomaly Score: ${c.analysis.anomaly_score} / 100 [${c.analysis.risk_level} RISK]
-- Diagnostic Cause: ${c.analysis.probable_cause} (Confidence: ${c.analysis.confidence_pct}%)
-- Inspection Priority Rank: #1
+--------------------------------------------------------------------------------
+2. CYBER-PHYSICAL RECONCILIATION AUDIT
+--------------------------------------------------------------------------------
+- Reported Meter Load:    0.89 kW
+- Diurnal Baseline Load:  3.56 kW
+- Physical Ground Truth:  3.58 kW
+- Stolen / Unmetered:     2.69 kW (Power Diverted via Neutral Shunt)
 
-3. TELEMETRY & PHYSICAL RECONCILIATION:
-- Cyber Reported Load: ${c.analysis.reported_kw} kW (Baseline: ${c.analysis.baseline_mean_kw} kW)
-- Physical Ground Truth: ${c.telemetry.ground_truth.active_power_kw} kW
-- Unreported / Stolen Energy: ${c.telemetry.unreported_stolen_kw} kW
-
-4. SUPPORTING EVIDENCE:
-${c.analysis.contributing_factors.map(f => '  * ' + f).join('\n')}
-
-5. RECOMMENDED UTILITY ACTION:
->> ${c.analysis.recommended_action}
---------------------------------------------------------------------------------`;
+--------------------------------------------------------------------------------
+3. RECOMMENDED ENFORCEMENT ACTION
+--------------------------------------------------------------------------------
+- Priority Field Inspection Rank: #1
+- Issue formal utility warrant for physical inspection of meter enclosure.
+- Dispatch anti-theft field inspection squad to test for meter bypass jumper.
+================================================================================`;
     }
 
     function closeReportModal() {
       document.getElementById('report-modal').style.display = 'none';
     }
 
-    function injectScenarioModal() {
-      const scenario = prompt("Inject Scenario for " + selectedConsumerId + ":\nOptions: THEFT_BYPASS, METER_MALFUNCTION, COMM_FAILURE, LEGITIMATE_ABNORMAL, NORMAL", "THEFT_BYPASS");
-      if (scenario) {
-        fetch(`/api/inject/${selectedConsumerId}?scenario=${scenario}`, { method: 'POST' })
-          .then(() => fetchTwinState());
-      }
-    }
-
-    // Animation Render Loop
-    let clock = new THREE.Clock();
+    // Animation Loop
     function animate() {
       requestAnimationFrame(animate);
+
+      // 1. Smooth Fly-To Lerp Transition
+      if (cameraAnimation && cameraAnimation.active) {
+        const now = performance.now();
+        const elapsed = now - cameraAnimation.startTime;
+        const progress = Math.min(1.0, elapsed / cameraAnimation.duration);
+        const ease = 1 - Math.pow(1 - progress, 3);
+
+        camera.position.lerpVectors(cameraAnimation.startCam, cameraAnimation.targetCam, ease);
+        controls.target.lerpVectors(cameraAnimation.startLook, cameraAnimation.targetLook, ease);
+
+        if (progress >= 1.0) {
+          cameraAnimation.active = false;
+          cameraAnimation = null;
+        }
+      }
+
+      // 2. Free Look Camera Translation without Rotation (Unreal Engine WASD / Arrows / QE / Shift)
+      updateFreeCameraMovement();
+
+      // 3. Selection Foundation Marker Ambient Pulse
+      if (selectedMarkerPulse) {
+        const time = performance.now() * 0.003;
+        const scale = 1.0 + Math.sin(time) * 0.08;
+        selectedMarkerPulse.scale.set(scale, scale, 1);
+      }
+
       controls.update();
-
-      const time = clock.getElapsedTime();
-
-      // Pulse selected marker
-      if (selectedMarkerMesh) {
-        selectedMarkerMesh.scale.setScalar(1.0 + 0.15 * Math.sin(time * 4.0));
-      }
-
-      // Drone flight interpolation
-      if (isDroneFlying && dronePathLine) {
-        droneProgress += 0.005;
-        if (droneProgress >= 1.0) droneProgress = 0;
-        const geom = dronePathLine.geometry;
-        const count = geom.attributes.position.count;
-        const idx = Math.floor(droneProgress * (count - 1));
-        const p1 = new THREE.Vector3().fromBufferAttribute(geom.attributes.position, idx);
-        const p2 = new THREE.Vector3().fromBufferAttribute(geom.attributes.position, Math.min(count - 1, idx + 1));
-        const t = (droneProgress * (count - 1)) - idx;
-        droneMesh.position.lerpVectors(p1, p2, t);
-        droneMesh.rotation.y = time * 2.0; // Slow propeller spin
-      }
-
       renderer.render(scene, camera);
     }
 

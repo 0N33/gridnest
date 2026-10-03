@@ -1,6 +1,6 @@
 {
   "type": "FeatureCollection",
-  "name": "SmartGrid_3D_Buildings",
+  "name": "SmartGrid_3D_Buildings_3Zones",
   "features": [
     {
       "type": "Feature",
@@ -9,24 +9,85 @@
         "coordinates": [
           [
             [
-              77.207936,
-              28.6154116
+              77.2087751,
+              28.6118166
             ],
             [
-              77.2080626,
-              28.6154414
+              77.2092669,
+              28.6118166
             ],
             [
-              77.2080271,
-              28.6155575
+              77.2092669,
+              28.6121044
             ],
             [
-              77.2079005,
-              28.6155277
+              77.2087751,
+              28.6121044
             ],
             [
-              77.207936,
-              28.6154116
+              77.2087751,
+              28.6118166
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "PS_CENTRAL_01",
+        "meter_id": "STATION_BULK_MTR_01",
+        "name": "Central Generation & 33kV Primary Switching Station",
+        "category": "PowerGenerationSubstation",
+        "contracted_load_kw": 5000.0,
+        "height": 16.0,
+        "elevation": 220.0,
+        "zone_id": "Zone_0_PowerStation",
+        "transformer_id": "PRIMARY_33KV_STATION",
+        "feeder_id": "GRID_INTERCONNECT",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 0.0,
+        "reported_kw": 241.29,
+        "true_kw": 241.29,
+        "fill_color": [
+          37,
+          99,
+          235,
+          220
+        ],
+        "wireframe_color": [
+          29,
+          78,
+          216,
+          255
+        ],
+        "is_power_station": true,
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2068594,
+              28.6150991
+            ],
+            [
+              77.2069824,
+              28.6150991
+            ],
+            [
+              77.2069824,
+              28.615207
+            ],
+            [
+              77.2068594,
+              28.615207
+            ],
+            [
+              77.2068594,
+              28.6150991
             ]
           ]
         ]
@@ -34,31 +95,32 @@
       "properties": {
         "id": "CONS_N_001",
         "meter_id": "MTR_N_001",
-        "name": "Residential Consumer #1 (Zone_1_North)",
+        "name": "Residential #1 (Z1_North)",
         "category": "Residential",
-        "contracted_load_kw": 3.0,
-        "height": 3.2,
-        "elevation": 221.2,
+        "contracted_load_kw": 6.0,
+        "height": 7.0,
+        "elevation": 225.0,
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 20.7,
-        "reported_kw": 2.4,
-        "true_kw": 2.4,
+        "anomaly_score": 18.1,
+        "reported_kw": 4.801,
+        "true_kw": 4.801,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -69,24 +131,24 @@
         "coordinates": [
           [
             [
-              77.2083345,
-              28.6154371
+              77.2068492,
+              28.6146405
             ],
             [
-              77.2084485,
-              28.6154103
+              77.2069926,
+              28.6146405
             ],
             [
-              77.2084841,
-              28.615527
+              77.2069926,
+              28.6147664
             ],
             [
-              77.2083701,
-              28.6155538
+              77.2068492,
+              28.6147664
             ],
             [
-              77.2083345,
-              28.6154371
+              77.2068492,
+              28.6146405
             ]
           ]
         ]
@@ -94,31 +156,32 @@
       "properties": {
         "id": "CONS_N_002",
         "meter_id": "MTR_N_002",
-        "name": "Residential Consumer #2 (Zone_1_North)",
-        "category": "Residential",
-        "contracted_load_kw": 3.0,
-        "height": 3.2,
-        "elevation": 221.2,
+        "name": "Commercial #2 (Z1_North)",
+        "category": "Commercial",
+        "contracted_load_kw": 8.0,
+        "height": 10.5,
+        "elevation": 228.5,
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 19.7,
-        "reported_kw": 3.179,
-        "true_kw": 3.179,
+        "anomaly_score": 19.3,
+        "reported_kw": 5.036,
+        "true_kw": 5.036,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -129,24 +192,24 @@
         "coordinates": [
           [
             [
-              77.207962,
-              28.6157204
+              77.2073204,
+              28.6150991
             ],
             [
-              77.2081148,
-              28.6157978
+              77.2074434,
+              28.6150991
             ],
             [
-              77.2080029,
-              28.6159679
+              77.2074434,
+              28.615207
             ],
             [
-              77.2078501,
-              28.6158905
+              77.2073204,
+              28.615207
             ],
             [
-              77.207962,
-              28.6157204
+              77.2073204,
+              28.6150991
             ]
           ]
         ]
@@ -154,31 +217,32 @@
       "properties": {
         "id": "CONS_N_003",
         "meter_id": "MTR_N_003",
-        "name": "Commercial Consumer #3 (Zone_1_North)",
-        "category": "Commercial",
-        "contracted_load_kw": 15.0,
-        "height": 9.6,
-        "elevation": 227.6,
+        "name": "Residential #3 (Z1_North)",
+        "category": "Residential",
+        "contracted_load_kw": 6.0,
+        "height": 7.0,
+        "elevation": 225.0,
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 22.5,
-        "reported_kw": 7.68,
-        "true_kw": 7.68,
+        "anomaly_score": 17.8,
+        "reported_kw": 4.601,
+        "true_kw": 4.601,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -189,24 +253,24 @@
         "coordinates": [
           [
             [
-              77.2083193,
-              28.6156669
+              77.2072999,
+              28.6146315
             ],
             [
-              77.2085568,
-              28.6157227
+              77.2074639,
+              28.6146315
             ],
             [
-              77.2084826,
-              28.615966
+              77.2074639,
+              28.6147754
             ],
             [
-              77.2082451,
-              28.6159101
+              77.2072999,
+              28.6147754
             ],
             [
-              77.2083193,
-              28.6156669
+              77.2072999,
+              28.6146315
             ]
           ]
         ]
@@ -214,31 +278,32 @@
       "properties": {
         "id": "CONS_N_004",
         "meter_id": "MTR_N_004",
-        "name": "LightIndustrial Consumer #4 (Zone_1_North)",
+        "name": "LightIndustrial #4 (Z1_North)",
         "category": "LightIndustrial",
         "contracted_load_kw": 25.0,
-        "height": 6.4,
-        "elevation": 224.4,
+        "height": 7.0,
+        "elevation": 225.0,
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "HIGH",
         "probable_cause": "THEFT_TAMPERING",
-        "anomaly_score": 77.4,
+        "anomaly_score": 83.5,
         "reported_kw": 0.888,
         "true_kw": 3.172,
         "fill_color": [
-          255,
-          45,
-          85,
-          200
+          239,
+          68,
+          68,
+          220
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": true
       }
     },
@@ -249,24 +314,24 @@
         "coordinates": [
           [
             [
-              77.2087368,
-              28.615374
+              77.2075253,
+              28.6150991
             ],
             [
-              77.2088796,
-              28.615374
+              77.2076483,
+              28.6150991
             ],
             [
-              77.2088796,
-              28.6155127
+              77.2076483,
+              28.615207
             ],
             [
-              77.2087368,
-              28.6155127
+              77.2075253,
+              28.615207
             ],
             [
-              77.2087368,
-              28.615374
+              77.2075253,
+              28.6150991
             ]
           ]
         ]
@@ -274,31 +339,32 @@
       "properties": {
         "id": "CONS_N_005",
         "meter_id": "MTR_N_005",
-        "name": "Residential Consumer #5 (Zone_1_North)",
+        "name": "Residential #5 (Z1_North)",
         "category": "Residential",
-        "contracted_load_kw": 3.0,
-        "height": 6.4,
-        "elevation": 224.4,
+        "contracted_load_kw": 4.5,
+        "height": 7.0,
+        "elevation": 225.0,
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 20.2,
-        "reported_kw": 2.61,
-        "true_kw": 2.61,
+        "anomaly_score": 15.7,
+        "reported_kw": 3.914,
+        "true_kw": 3.914,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -309,24 +375,24 @@
         "coordinates": [
           [
             [
-              77.2091652,
-              28.6154229
+              77.2075253,
+              28.6146495
             ],
             [
-              77.2092788,
-              28.6153962
+              77.2076483,
+              28.6146495
             ],
             [
-              77.2093128,
-              28.6155077
+              77.2076483,
+              28.6147574
             ],
             [
-              77.2091992,
-              28.6155345
+              77.2075253,
+              28.6147574
             ],
             [
-              77.2091652,
-              28.6154229
+              77.2075253,
+              28.6146495
             ]
           ]
         ]
@@ -334,31 +400,32 @@
       "properties": {
         "id": "CONS_N_006",
         "meter_id": "MTR_N_006",
-        "name": "Residential Consumer #6 (Zone_1_North)",
+        "name": "Residential #6 (Z1_North)",
         "category": "Residential",
-        "contracted_load_kw": 4.5,
-        "height": 3.2,
-        "elevation": 221.2,
+        "contracted_load_kw": 3.0,
+        "height": 3.5,
+        "elevation": 221.5,
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 16.8,
-        "reported_kw": 4.083,
-        "true_kw": 4.083,
+        "anomaly_score": 19.9,
+        "reported_kw": 2.722,
+        "true_kw": 2.722,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -369,24 +436,24 @@
         "coordinates": [
           [
             [
-              77.2087647,
-              28.6157615
+              77.2077302,
+              28.6150991
             ],
             [
-              77.2088888,
-              28.6157907
+              77.2078531,
+              28.6150991
             ],
             [
-              77.2088513,
-              28.6159135
+              77.2078531,
+              28.615207
             ],
             [
-              77.2087272,
-              28.6158843
+              77.2077302,
+              28.615207
             ],
             [
-              77.2087647,
-              28.6157615
+              77.2077302,
+              28.6150991
             ]
           ]
         ]
@@ -394,31 +461,32 @@
       "properties": {
         "id": "CONS_N_007",
         "meter_id": "MTR_N_007",
-        "name": "Residential Consumer #7 (Zone_1_North)",
+        "name": "Residential #7 (Z1_North)",
         "category": "Residential",
-        "contracted_load_kw": 3.0,
-        "height": 9.6,
-        "elevation": 227.6,
+        "contracted_load_kw": 4.5,
+        "height": 3.5,
+        "elevation": 221.5,
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 20.5,
-        "reported_kw": 2.425,
-        "true_kw": 2.425,
+        "anomaly_score": 15.3,
+        "reported_kw": 3.637,
+        "true_kw": 3.637,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -429,24 +497,24 @@
         "coordinates": [
           [
             [
-              77.2091631,
-              28.6157548
+              77.2077302,
+              28.6146495
             ],
             [
-              77.2092883,
-              28.6157548
+              77.2078531,
+              28.6146495
             ],
             [
-              77.2092883,
-              28.6158873
+              77.2078531,
+              28.6147574
             ],
             [
-              77.2091631,
-              28.6158873
+              77.2077302,
+              28.6147574
             ],
             [
-              77.2091631,
-              28.6157548
+              77.2077302,
+              28.6146495
             ]
           ]
         ]
@@ -454,31 +522,32 @@
       "properties": {
         "id": "CONS_N_008",
         "meter_id": "MTR_N_008",
-        "name": "Residential Consumer #8 (Zone_1_North)",
+        "name": "Residential #8 (Z1_North)",
         "category": "Residential",
-        "contracted_load_kw": 6.0,
-        "height": 9.6,
-        "elevation": 227.6,
+        "contracted_load_kw": 3.0,
+        "height": 7.0,
+        "elevation": 225.0,
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 17.8,
-        "reported_kw": 4.977,
-        "true_kw": 4.977,
+        "anomaly_score": 19.8,
+        "reported_kw": 2.489,
+        "true_kw": 2.489,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -489,24 +558,24 @@
         "coordinates": [
           [
             [
-              77.2095267,
-              28.6153997
+              77.2081195,
+              28.6150991
             ],
             [
-              77.2096363,
-              28.6153739
+              77.2082424,
+              28.6150991
             ],
             [
-              77.2096703,
-              28.6154855
+              77.2082424,
+              28.615207
             ],
             [
-              77.2095608,
-              28.6155113
+              77.2081195,
+              28.615207
             ],
             [
-              77.2095267,
-              28.6153997
+              77.2081195,
+              28.6150991
             ]
           ]
         ]
@@ -514,31 +583,32 @@
       "properties": {
         "id": "CONS_N_009",
         "meter_id": "MTR_N_009",
-        "name": "Residential Consumer #9 (Zone_1_North)",
+        "name": "Residential #9 (Z1_North)",
         "category": "Residential",
-        "contracted_load_kw": 4.5,
-        "height": 6.4,
-        "elevation": 224.4,
+        "contracted_load_kw": 3.0,
+        "height": 7.0,
+        "elevation": 225.0,
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "CRITICAL",
         "probable_cause": "THEFT_TAMPERING",
         "anomaly_score": 98.5,
-        "reported_kw": 1.254,
-        "true_kw": 3.584,
+        "reported_kw": 0.836,
+        "true_kw": 2.389,
         "fill_color": [
-          255,
-          45,
-          85,
-          200
+          239,
+          68,
+          68,
+          220
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": true
       }
     },
@@ -549,24 +619,24 @@
         "coordinates": [
           [
             [
-              77.2099793,
-              28.6154256
+              77.2081195,
+              28.6146495
             ],
             [
-              77.2100839,
-              28.615401
+              77.2082424,
+              28.6146495
             ],
             [
-              77.2101172,
-              28.61551
+              77.2082424,
+              28.6147574
             ],
             [
-              77.2100126,
-              28.6155347
+              77.2081195,
+              28.6147574
             ],
             [
-              77.2099793,
-              28.6154256
+              77.2081195,
+              28.6146495
             ]
           ]
         ]
@@ -574,31 +644,32 @@
       "properties": {
         "id": "CONS_N_010",
         "meter_id": "MTR_N_010",
-        "name": "Residential Consumer #10 (Zone_1_North)",
+        "name": "Residential #10 (Z1_North)",
         "category": "Residential",
-        "contracted_load_kw": 6.0,
-        "height": 6.4,
-        "elevation": 224.4,
+        "contracted_load_kw": 4.5,
+        "height": 10.5,
+        "elevation": 228.5,
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 17.8,
-        "reported_kw": 4.839,
-        "true_kw": 4.839,
+        "anomaly_score": 15.3,
+        "reported_kw": 3.629,
+        "true_kw": 3.629,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -609,24 +680,24 @@
         "coordinates": [
           [
             [
-              77.2095949,
-              28.6157409
+              77.2082834,
+              28.6150901
             ],
             [
-              77.2097082,
-              28.6157676
+              77.2084268,
+              28.6150901
             ],
             [
-              77.2096658,
-              28.6159065
+              77.2084268,
+              28.615216
             ],
             [
-              77.2095525,
-              28.6158798
+              77.2082834,
+              28.615216
             ],
             [
-              77.2095949,
-              28.6157409
+              77.2082834,
+              28.6150901
             ]
           ]
         ]
@@ -634,31 +705,32 @@
       "properties": {
         "id": "CONS_N_011",
         "meter_id": "MTR_N_011",
-        "name": "Residential Consumer #11 (Zone_1_North)",
-        "category": "Residential",
-        "contracted_load_kw": 6.0,
-        "height": 6.4,
-        "elevation": 224.4,
+        "name": "Commercial #11 (Z1_North)",
+        "category": "Commercial",
+        "contracted_load_kw": 12.0,
+        "height": 10.5,
+        "elevation": 228.5,
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 18.4,
-        "reported_kw": 5.21,
-        "true_kw": 5.21,
+        "anomaly_score": 24.1,
+        "reported_kw": 6.958,
+        "true_kw": 6.958,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -669,24 +741,24 @@
         "coordinates": [
           [
             [
-              77.2100518,
-              28.6157324
+              77.2082936,
+              28.6146495
             ],
             [
-              77.210146,
-              28.6157801
+              77.2084166,
+              28.6146495
             ],
             [
-              77.2100812,
-              28.6158786
+              77.2084166,
+              28.6147574
             ],
             [
-              77.2099871,
-              28.6158309
+              77.2082936,
+              28.6147574
             ],
             [
-              77.2100518,
-              28.6157324
+              77.2082936,
+              28.6146495
             ]
           ]
         ]
@@ -694,31 +766,32 @@
       "properties": {
         "id": "CONS_N_012",
         "meter_id": "MTR_N_012",
-        "name": "Residential Consumer #12 (Zone_1_North)",
+        "name": "Residential #12 (Z1_North)",
         "category": "Residential",
-        "contracted_load_kw": 3.0,
-        "height": 3.2,
-        "elevation": 221.2,
+        "contracted_load_kw": 6.0,
+        "height": 7.0,
+        "elevation": 225.0,
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 21.2,
-        "reported_kw": 3.318,
-        "true_kw": 3.318,
+        "anomaly_score": 22.5,
+        "reported_kw": 5.837,
+        "true_kw": 5.837,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -729,24 +802,24 @@
         "coordinates": [
           [
             [
-              77.207894,
-              28.6159031
+              77.2068594,
+              28.6142897
             ],
             [
-              77.20807,
-              28.6159031
+              77.2069824,
+              28.6142897
             ],
             [
-              77.20807,
-              28.6160994
+              77.2069824,
+              28.6143977
             ],
             [
-              77.207894,
-              28.6160994
+              77.2068594,
+              28.6143977
             ],
             [
-              77.207894,
-              28.6159031
+              77.2068594,
+              28.6142897
             ]
           ]
         ]
@@ -754,31 +827,32 @@
       "properties": {
         "id": "CONS_N_013",
         "meter_id": "MTR_N_013",
-        "name": "Commercial Consumer #13 (Zone_1_North)",
-        "category": "Commercial",
-        "contracted_load_kw": 15.0,
-        "height": 9.6,
-        "elevation": 227.6,
+        "name": "Residential #13 (Z1_North)",
+        "category": "Residential",
+        "contracted_load_kw": 6.0,
+        "height": 3.5,
+        "elevation": 221.5,
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 24.3,
-        "reported_kw": 8.918,
-        "true_kw": 8.918,
+        "anomaly_score": 19.1,
+        "reported_kw": 5.342,
+        "true_kw": 5.342,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -789,24 +863,24 @@
         "coordinates": [
           [
             [
-              77.2083555,
-              28.6159438
+              77.2068492,
+              28.6138311
             ],
             [
-              77.2084849,
-              28.6159134
+              77.2069926,
+              28.6138311
             ],
             [
-              77.2085203,
-              28.6160295
+              77.2069926,
+              28.613957
             ],
             [
-              77.2083909,
-              28.6160599
+              77.2068492,
+              28.613957
             ],
             [
-              77.2083555,
-              28.6159438
+              77.2068492,
+              28.6138311
             ]
           ]
         ]
@@ -814,31 +888,32 @@
       "properties": {
         "id": "CONS_N_014",
         "meter_id": "MTR_N_014",
-        "name": "Residential Consumer #14 (Zone_1_North)",
-        "category": "Residential",
-        "contracted_load_kw": 6.0,
-        "height": 6.4,
-        "elevation": 224.4,
+        "name": "Commercial #14 (Z1_North)",
+        "category": "Commercial",
+        "contracted_load_kw": 12.0,
+        "height": 10.5,
+        "elevation": 228.5,
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 22.2,
-        "reported_kw": 5.987,
-        "true_kw": 5.987,
+        "anomaly_score": 25.4,
+        "reported_kw": 7.994,
+        "true_kw": 7.994,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -849,24 +924,24 @@
         "coordinates": [
           [
             [
-              77.2079359,
-              28.616291
+              77.2073102,
+              28.6142807
             ],
             [
-              77.2080453,
-              28.6163167
+              77.2074536,
+              28.6142807
             ],
             [
-              77.2080082,
-              28.6164384
+              77.2074536,
+              28.6144066
             ],
             [
-              77.2078988,
-              28.6164126
+              77.2073102,
+              28.6144066
             ],
             [
-              77.2079359,
-              28.616291
+              77.2073102,
+              28.6142807
             ]
           ]
         ]
@@ -874,11 +949,11 @@
       "properties": {
         "id": "CONS_N_015",
         "meter_id": "MTR_N_015",
-        "name": "Residential Consumer #15 (Zone_1_North)",
-        "category": "Residential",
-        "contracted_load_kw": 6.0,
-        "height": 9.6,
-        "elevation": 227.6,
+        "name": "Commercial #15 (Z1_North)",
+        "category": "Commercial",
+        "contracted_load_kw": 15.0,
+        "height": 14.0,
+        "elevation": 232.0,
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
@@ -886,19 +961,20 @@
         "probable_cause": "METER_MALFUNCTION",
         "anomaly_score": 82.0,
         "reported_kw": 0.42,
-        "true_kw": 5.226,
+        "true_kw": 8.723,
         "fill_color": [
-          255,
-          140,
-          0,
-          190
+          249,
+          115,
+          22,
+          220
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": true
       }
     },
@@ -909,24 +985,24 @@
         "coordinates": [
           [
             [
-              77.2083798,
-              28.6162694
+              77.2073102,
+              28.6138311
             ],
             [
-              77.208512,
-              28.6163005
+              77.2074536,
+              28.6138311
             ],
             [
-              77.2084748,
-              28.6164224
+              77.2074536,
+              28.613957
             ],
             [
-              77.2083426,
-              28.6163913
+              77.2073102,
+              28.613957
             ],
             [
-              77.2083798,
-              28.6162694
+              77.2073102,
+              28.6138311
             ]
           ]
         ]
@@ -934,31 +1010,32 @@
       "properties": {
         "id": "CONS_N_016",
         "meter_id": "MTR_N_016",
-        "name": "Residential Consumer #16 (Zone_1_North)",
-        "category": "Residential",
-        "contracted_load_kw": 6.0,
-        "height": 6.4,
-        "elevation": 224.4,
+        "name": "Commercial #16 (Z1_North)",
+        "category": "Commercial",
+        "contracted_load_kw": 15.0,
+        "height": 17.5,
+        "elevation": 235.5,
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 25.0,
-        "reported_kw": 6.309,
-        "true_kw": 6.309,
+        "anomaly_score": 26.0,
+        "reported_kw": 9.996,
+        "true_kw": 9.996,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -969,24 +1046,24 @@
         "coordinates": [
           [
             [
-              77.2087379,
-              28.6159014
+              77.2075048,
+              28.6142717
             ],
             [
-              77.208911,
-              28.6159892
+              77.2076687,
+              28.6142717
             ],
             [
-              77.2088106,
-              28.6161418
+              77.2076687,
+              28.6144156
             ],
             [
-              77.2086375,
-              28.616054
+              77.2075048,
+              28.6144156
             ],
             [
-              77.2087379,
-              28.6159014
+              77.2075048,
+              28.6142717
             ]
           ]
         ]
@@ -994,31 +1071,32 @@
       "properties": {
         "id": "CONS_N_017",
         "meter_id": "MTR_N_017",
-        "name": "Commercial Consumer #17 (Zone_1_North)",
-        "category": "Commercial",
-        "contracted_load_kw": 15.0,
-        "height": 12.8,
-        "elevation": 230.8,
+        "name": "LightIndustrial #17 (Z1_North)",
+        "category": "LightIndustrial",
+        "contracted_load_kw": 25.0,
+        "height": 7.0,
+        "elevation": 225.0,
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 22.7,
-        "reported_kw": 9.112,
-        "true_kw": 9.112,
+        "anomaly_score": 19.1,
+        "reported_kw": 4.104,
+        "true_kw": 4.104,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -1029,24 +1107,24 @@
         "coordinates": [
           [
             [
-              77.2091644,
-              28.6159608
+              77.2075151,
+              28.6138311
             ],
             [
-              77.2092693,
-              28.6159608
+              77.2076585,
+              28.6138311
             ],
             [
-              77.2092693,
-              28.6161003
+              77.2076585,
+              28.613957
             ],
             [
-              77.2091644,
-              28.6161003
+              77.2075151,
+              28.613957
             ],
             [
-              77.2091644,
-              28.6159608
+              77.2075151,
+              28.6138311
             ]
           ]
         ]
@@ -1054,31 +1132,32 @@
       "properties": {
         "id": "CONS_N_018",
         "meter_id": "MTR_N_018",
-        "name": "Residential Consumer #18 (Zone_1_North)",
-        "category": "Residential",
-        "contracted_load_kw": 4.5,
-        "height": 3.2,
-        "elevation": 221.2,
+        "name": "Commercial #18 (Z1_North)",
+        "category": "Commercial",
+        "contracted_load_kw": 12.0,
+        "height": 17.5,
+        "elevation": 235.5,
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 15.4,
-        "reported_kw": 3.529,
-        "true_kw": 3.529,
+        "anomaly_score": 22.3,
+        "reported_kw": 6.283,
+        "true_kw": 6.283,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -1089,24 +1168,24 @@
         "coordinates": [
           [
             [
-              77.2087306,
-              28.6162593
+              77.2077302,
+              28.6142897
             ],
             [
-              77.2088956,
-              28.6163429
+              77.2078531,
+              28.6142897
             ],
             [
-              77.2088097,
-              28.6164735
+              77.2078531,
+              28.6143977
             ],
             [
-              77.2086447,
-              28.6163899
+              77.2077302,
+              28.6143977
             ],
             [
-              77.2087306,
-              28.6162593
+              77.2077302,
+              28.6142897
             ]
           ]
         ]
@@ -1114,31 +1193,32 @@
       "properties": {
         "id": "CONS_N_019",
         "meter_id": "MTR_N_019",
-        "name": "Commercial Consumer #19 (Zone_1_North)",
-        "category": "Commercial",
-        "contracted_load_kw": 8.0,
-        "height": 12.8,
-        "elevation": 230.8,
+        "name": "Residential #19 (Z1_North)",
+        "category": "Residential",
+        "contracted_load_kw": 3.0,
+        "height": 10.5,
+        "elevation": 228.5,
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 20.8,
-        "reported_kw": 5.209,
-        "true_kw": 5.209,
+        "anomaly_score": 19.9,
+        "reported_kw": 3.276,
+        "true_kw": 3.276,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -1149,24 +1229,24 @@
         "coordinates": [
           [
             [
-              77.209233,
-              28.6162797
+              77.20772,
+              28.6138311
             ],
             [
-              77.2093487,
-              28.6163069
+              77.2078634,
+              28.6138311
             ],
             [
-              77.2093147,
-              28.6164185
+              77.2078634,
+              28.613957
             ],
             [
-              77.209199,
-              28.6163913
+              77.20772,
+              28.613957
             ],
             [
-              77.209233,
-              28.6162797
+              77.20772,
+              28.6138311
             ]
           ]
         ]
@@ -1174,31 +1254,32 @@
       "properties": {
         "id": "CONS_N_020",
         "meter_id": "MTR_N_020",
-        "name": "Residential Consumer #20 (Zone_1_North)",
-        "category": "Residential",
-        "contracted_load_kw": 6.0,
-        "height": 9.6,
-        "elevation": 227.6,
+        "name": "Commercial #20 (Z1_North)",
+        "category": "Commercial",
+        "contracted_load_kw": 8.0,
+        "height": 10.5,
+        "elevation": 228.5,
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 21.3,
-        "reported_kw": 5.561,
-        "true_kw": 5.561,
+        "anomaly_score": 19.7,
+        "reported_kw": 5.039,
+        "true_kw": 5.039,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -1209,24 +1290,24 @@
         "coordinates": [
           [
             [
-              77.2096172,
-              28.6159154
+              77.2081092,
+              28.6142807
             ],
             [
-              77.2097192,
-              28.6159671
+              77.2082527,
+              28.6142807
             ],
             [
-              77.2096393,
-              28.6160886
+              77.2082527,
+              28.6144066
             ],
             [
-              77.2095373,
-              28.6160369
+              77.2081092,
+              28.6144066
             ],
             [
-              77.2096172,
-              28.6159154
+              77.2081092,
+              28.6142807
             ]
           ]
         ]
@@ -1234,11 +1315,11 @@
       "properties": {
         "id": "CONS_N_021",
         "meter_id": "MTR_N_021",
-        "name": "Residential Consumer #21 (Zone_1_North)",
-        "category": "Residential",
-        "contracted_load_kw": 6.0,
-        "height": 9.6,
-        "elevation": 227.6,
+        "name": "Commercial #21 (Z1_North)",
+        "category": "Commercial",
+        "contracted_load_kw": 15.0,
+        "height": 10.5,
+        "elevation": 228.5,
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
@@ -1246,19 +1327,20 @@
         "probable_cause": "COMM_FAILURE",
         "anomaly_score": 68.0,
         "reported_kw": 0.0,
-        "true_kw": 4.667,
+        "true_kw": 7.79,
         "fill_color": [
-          240,
-          200,
-          30,
-          170
+          234,
+          179,
+          8,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": true
       }
     },
@@ -1269,24 +1351,24 @@
         "coordinates": [
           [
             [
-              77.2099986,
-              28.6159221
+              77.2081092,
+              28.6138311
             ],
             [
-              77.2101209,
-              28.6159508
+              77.2082527,
+              28.6138311
             ],
             [
-              77.2100866,
-              28.6160631
+              77.2082527,
+              28.613957
             ],
             [
-              77.2099644,
-              28.6160343
+              77.2081092,
+              28.613957
             ],
             [
-              77.2099986,
-              28.6159221
+              77.2081092,
+              28.6138311
             ]
           ]
         ]
@@ -1294,31 +1376,32 @@
       "properties": {
         "id": "CONS_N_022",
         "meter_id": "MTR_N_022",
-        "name": "Residential Consumer #22 (Zone_1_North)",
-        "category": "Residential",
-        "contracted_load_kw": 4.5,
-        "height": 3.2,
-        "elevation": 221.2,
+        "name": "Commercial #22 (Z1_North)",
+        "category": "Commercial",
+        "contracted_load_kw": 12.0,
+        "height": 10.5,
+        "elevation": 228.5,
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 15.5,
-        "reported_kw": 3.546,
-        "true_kw": 3.546,
+        "anomaly_score": 22.5,
+        "reported_kw": 6.314,
+        "true_kw": 6.314,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -1329,24 +1412,24 @@
         "coordinates": [
           [
             [
-              77.209518,
-              28.6163377
+              77.2082834,
+              28.6142807
             ],
             [
-              77.2096196,
-              28.6163138
+              77.2084268,
+              28.6142807
             ],
             [
-              77.2096518,
-              28.6164191
+              77.2084268,
+              28.6144066
             ],
             [
-              77.2095501,
-              28.616443
+              77.2082834,
+              28.6144066
             ],
             [
-              77.209518,
-              28.6163377
+              77.2082834,
+              28.6142807
             ]
           ]
         ]
@@ -1354,31 +1437,32 @@
       "properties": {
         "id": "CONS_N_023",
         "meter_id": "MTR_N_023",
-        "name": "Residential Consumer #23 (Zone_1_North)",
-        "category": "Residential",
-        "contracted_load_kw": 3.0,
-        "height": 3.2,
-        "elevation": 221.2,
+        "name": "Commercial #23 (Z1_North)",
+        "category": "Commercial",
+        "contracted_load_kw": 8.0,
+        "height": 10.5,
+        "elevation": 228.5,
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 21.3,
-        "reported_kw": 3.182,
-        "true_kw": 3.182,
+        "anomaly_score": 21.9,
+        "reported_kw": 5.042,
+        "true_kw": 5.042,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -1389,24 +1473,24 @@
         "coordinates": [
           [
             [
-              77.2100148,
-              28.6162533
+              77.2082936,
+              28.6138401
             ],
             [
-              77.2101504,
-              28.616322
+              77.2084166,
+              28.6138401
             ],
             [
-              77.2100644,
-              28.6164528
+              77.2084166,
+              28.613948
             ],
             [
-              77.2099287,
-              28.6163841
+              77.2082936,
+              28.613948
             ],
             [
-              77.2100148,
-              28.6162533
+              77.2082936,
+              28.6138401
             ]
           ]
         ]
@@ -1414,31 +1498,32 @@
       "properties": {
         "id": "CONS_N_024",
         "meter_id": "MTR_N_024",
-        "name": "Commercial Consumer #24 (Zone_1_North)",
-        "category": "Commercial",
-        "contracted_load_kw": 15.0,
-        "height": 9.6,
-        "elevation": 227.6,
+        "name": "Residential #24 (Z1_North)",
+        "category": "Residential",
+        "contracted_load_kw": 4.5,
+        "height": 7.0,
+        "elevation": 225.0,
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 22.6,
-        "reported_kw": 8.924,
-        "true_kw": 8.924,
+        "anomaly_score": 16.8,
+        "reported_kw": 4.01,
+        "true_kw": 4.01,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -1449,24 +1534,24 @@
         "coordinates": [
           [
             [
-              77.2078924,
-              28.6113959
+              77.2096254,
+              28.6150991
             ],
             [
-              77.2080642,
-              28.6113959
+              77.2097484,
+              28.6150991
             ],
             [
-              77.2080642,
-              28.611587
+              77.2097484,
+              28.615207
             ],
             [
-              77.2078924,
-              28.611587
+              77.2096254,
+              28.615207
             ],
             [
-              77.2078924,
-              28.6113959
+              77.2096254,
+              28.6150991
             ]
           ]
         ]
@@ -1474,31 +1559,32 @@
       "properties": {
         "id": "CONS_S_001",
         "meter_id": "MTR_S_001",
-        "name": "Commercial Consumer #1 (Zone_2_South)",
-        "category": "Commercial",
-        "contracted_load_kw": 8.0,
-        "height": 9.6,
-        "elevation": 227.6,
+        "name": "Residential #1 (Z2_South)",
+        "category": "Residential",
+        "contracted_load_kw": 3.0,
+        "height": 3.5,
+        "elevation": 221.5,
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 19.6,
-        "reported_kw": 4.579,
-        "true_kw": 4.579,
+        "anomaly_score": 18.9,
+        "reported_kw": 2.572,
+        "true_kw": 2.572,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -1509,24 +1595,24 @@
         "coordinates": [
           [
             [
-              77.2083501,
-              28.6114314
+              77.2096254,
+              28.6146495
             ],
             [
-              77.2084966,
-              28.6114314
+              77.2097484,
+              28.6146495
             ],
             [
-              77.2084966,
-              28.6116292
+              77.2097484,
+              28.6147574
             ],
             [
-              77.2083501,
-              28.6116292
+              77.2096254,
+              28.6147574
             ],
             [
-              77.2083501,
-              28.6114314
+              77.2096254,
+              28.6146495
             ]
           ]
         ]
@@ -1534,31 +1620,32 @@
       "properties": {
         "id": "CONS_S_002",
         "meter_id": "MTR_S_002",
-        "name": "Commercial Consumer #2 (Zone_2_South)",
-        "category": "Commercial",
-        "contracted_load_kw": 15.0,
-        "height": 6.4,
-        "elevation": 224.4,
+        "name": "Residential #2 (Z2_South)",
+        "category": "Residential",
+        "contracted_load_kw": 3.0,
+        "height": 7.0,
+        "elevation": 225.0,
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 22.1,
-        "reported_kw": 7.574,
-        "true_kw": 7.574,
+        "anomaly_score": 20.1,
+        "reported_kw": 2.269,
+        "true_kw": 2.269,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -1569,24 +1656,24 @@
         "coordinates": [
           [
             [
-              77.207989,
-              28.6118132
+              77.2097996,
+              28.6150991
             ],
             [
-              77.2080921,
-              28.6118655
+              77.2099225,
+              28.6150991
             ],
             [
-              77.2080208,
-              28.6119739
+              77.2099225,
+              28.615207
             ],
             [
-              77.2079177,
-              28.6119217
+              77.2097996,
+              28.615207
             ],
             [
-              77.207989,
-              28.6118132
+              77.2097996,
+              28.6150991
             ]
           ]
         ]
@@ -1594,31 +1681,32 @@
       "properties": {
         "id": "CONS_S_003",
         "meter_id": "MTR_S_003",
-        "name": "Residential Consumer #3 (Zone_2_South)",
+        "name": "Residential #3 (Z2_South)",
         "category": "Residential",
-        "contracted_load_kw": 3.0,
-        "height": 3.2,
-        "elevation": 221.2,
+        "contracted_load_kw": 4.5,
+        "height": 7.0,
+        "elevation": 225.0,
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
-        "risk_level": "NORMAL",
-        "probable_cause": "NORMAL",
-        "anomaly_score": 25.5,
-        "reported_kw": 10.185,
-        "true_kw": 10.185,
+        "risk_level": "LOW",
+        "probable_cause": "LEGITIMATE_ABNORMAL",
+        "anomaly_score": 35.0,
+        "reported_kw": 11.578,
+        "true_kw": 11.578,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          16,
+          185,
+          129,
+          220
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -1629,24 +1717,24 @@
         "coordinates": [
           [
             [
-              77.2084413,
-              28.6117687
+              77.2097996,
+              28.6146495
             ],
             [
-              77.2085394,
-              28.6118184
+              77.2099225,
+              28.6146495
             ],
             [
-              77.2084619,
-              28.6119363
+              77.2099225,
+              28.6147574
             ],
             [
-              77.2083637,
-              28.6118865
+              77.2097996,
+              28.6147574
             ],
             [
-              77.2084413,
-              28.6117687
+              77.2097996,
+              28.6146495
             ]
           ]
         ]
@@ -1654,11 +1742,11 @@
       "properties": {
         "id": "CONS_S_004",
         "meter_id": "MTR_S_004",
-        "name": "Residential Consumer #4 (Zone_2_South)",
+        "name": "Residential #4 (Z2_South)",
         "category": "Residential",
         "contracted_load_kw": 3.0,
-        "height": 6.4,
-        "elevation": 224.4,
+        "height": 3.5,
+        "elevation": 221.5,
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
@@ -1668,17 +1756,18 @@
         "reported_kw": 2.216,
         "true_kw": 2.216,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -1689,24 +1778,24 @@
         "coordinates": [
           [
             [
-              77.2087383,
-              28.6114461
+              77.2101889,
+              28.6150991
             ],
             [
-              77.2088635,
-              28.6114756
+              77.2103118,
+              28.6150991
             ],
             [
-              77.2088265,
-              28.6115967
+              77.2103118,
+              28.615207
             ],
             [
-              77.2087014,
-              28.6115673
+              77.2101889,
+              28.615207
             ],
             [
-              77.2087383,
-              28.6114461
+              77.2101889,
+              28.6150991
             ]
           ]
         ]
@@ -1714,31 +1803,32 @@
       "properties": {
         "id": "CONS_S_005",
         "meter_id": "MTR_S_005",
-        "name": "Residential Consumer #5 (Zone_2_South)",
+        "name": "Residential #5 (Z2_South)",
         "category": "Residential",
         "contracted_load_kw": 6.0,
-        "height": 9.6,
-        "elevation": 227.6,
+        "height": 10.5,
+        "elevation": 228.5,
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 20.8,
+        "anomaly_score": 22.1,
         "reported_kw": 5.505,
         "true_kw": 5.505,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -1749,24 +1839,24 @@
         "coordinates": [
           [
             [
-              77.2091715,
-              28.6114687
+              77.2101786,
+              28.6146405
             ],
             [
-              77.2092962,
-              28.6114687
+              77.210322,
+              28.6146405
             ],
             [
-              77.2092962,
-              28.6116035
+              77.210322,
+              28.6147664
             ],
             [
-              77.2091715,
-              28.6116035
+              77.2101786,
+              28.6147664
             ],
             [
-              77.2091715,
-              28.6114687
+              77.2101786,
+              28.6146405
             ]
           ]
         ]
@@ -1774,31 +1864,32 @@
       "properties": {
         "id": "CONS_S_006",
         "meter_id": "MTR_S_006",
-        "name": "Residential Consumer #6 (Zone_2_South)",
-        "category": "Residential",
-        "contracted_load_kw": 6.0,
-        "height": 9.6,
-        "elevation": 227.6,
+        "name": "Commercial #6 (Z2_South)",
+        "category": "Commercial",
+        "contracted_load_kw": 12.0,
+        "height": 10.5,
+        "elevation": 228.5,
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 17.4,
-        "reported_kw": 4.384,
-        "true_kw": 4.384,
+        "anomaly_score": 22.5,
+        "reported_kw": 5.855,
+        "true_kw": 5.855,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -1809,24 +1900,24 @@
         "coordinates": [
           [
             [
-              77.208736,
-              28.6117965
+              77.2103835,
+              28.6150901
             ],
             [
-              77.2088372,
-              28.6118203
+              77.2105269,
+              28.6150901
             ],
             [
-              77.2088,
-              28.6119422
+              77.2105269,
+              28.615216
             ],
             [
-              77.2086988,
-              28.6119183
+              77.2103835,
+              28.615216
             ],
             [
-              77.208736,
-              28.6117965
+              77.2103835,
+              28.6150901
             ]
           ]
         ]
@@ -1834,31 +1925,32 @@
       "properties": {
         "id": "CONS_S_007",
         "meter_id": "MTR_S_007",
-        "name": "Residential Consumer #7 (Zone_2_South)",
-        "category": "Residential",
-        "contracted_load_kw": 6.0,
-        "height": 3.2,
-        "elevation": 221.2,
+        "name": "Commercial #7 (Z2_South)",
+        "category": "Commercial",
+        "contracted_load_kw": 15.0,
+        "height": 14.0,
+        "elevation": 232.0,
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 18.1,
-        "reported_kw": 5.044,
-        "true_kw": 5.044,
+        "anomaly_score": 23.0,
+        "reported_kw": 8.419,
+        "true_kw": 8.419,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -1869,24 +1961,24 @@
         "coordinates": [
           [
             [
-              77.2091886,
-              28.6117675
+              77.2103937,
+              28.6146495
             ],
             [
-              77.2092923,
-              28.6117919
+              77.2105167,
+              28.6146495
             ],
             [
-              77.2092511,
-              28.611927
+              77.2105167,
+              28.6147574
             ],
             [
-              77.2091474,
-              28.6119026
+              77.2103937,
+              28.6147574
             ],
             [
-              77.2091886,
-              28.6117675
+              77.2103937,
+              28.6146495
             ]
           ]
         ]
@@ -1894,31 +1986,32 @@
       "properties": {
         "id": "CONS_S_008",
         "meter_id": "MTR_S_008",
-        "name": "Residential Consumer #8 (Zone_2_South)",
+        "name": "Residential #8 (Z2_South)",
         "category": "Residential",
-        "contracted_load_kw": 3.0,
-        "height": 6.4,
-        "elevation": 224.4,
+        "contracted_load_kw": 4.5,
+        "height": 10.5,
+        "elevation": 228.5,
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 20.5,
-        "reported_kw": 2.461,
-        "true_kw": 2.461,
+        "anomaly_score": 15.3,
+        "reported_kw": 3.692,
+        "true_kw": 3.692,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -1929,24 +2022,24 @@
         "coordinates": [
           [
             [
-              77.2095386,
-              28.6114388
+              77.2105986,
+              28.6150991
             ],
             [
-              77.2096636,
-              28.6114094
+              77.2107216,
+              28.6150991
             ],
             [
-              77.2097014,
-              28.6115332
+              77.2107216,
+              28.615207
             ],
             [
-              77.2095765,
-              28.6115626
+              77.2105986,
+              28.615207
             ],
             [
-              77.2095386,
-              28.6114388
+              77.2105986,
+              28.6150991
             ]
           ]
         ]
@@ -1954,31 +2047,32 @@
       "properties": {
         "id": "CONS_S_009",
         "meter_id": "MTR_S_009",
-        "name": "Residential Consumer #9 (Zone_2_South)",
+        "name": "Residential #9 (Z2_South)",
         "category": "Residential",
-        "contracted_load_kw": 3.0,
-        "height": 6.4,
-        "elevation": 224.4,
+        "contracted_load_kw": 4.5,
+        "height": 3.5,
+        "elevation": 221.5,
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 20.3,
-        "reported_kw": 2.135,
-        "true_kw": 2.135,
+        "anomaly_score": 15.7,
+        "reported_kw": 3.203,
+        "true_kw": 3.203,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -1989,24 +2083,24 @@
         "coordinates": [
           [
             [
-              77.2100204,
-              28.6114486
+              77.2105986,
+              28.6146495
             ],
             [
-              77.2101288,
-              28.6114231
+              77.2107216,
+              28.6146495
             ],
             [
-              77.2101648,
-              28.6115411
+              77.2107216,
+              28.6147574
             ],
             [
-              77.2100565,
-              28.6115666
+              77.2105986,
+              28.6147574
             ],
             [
-              77.2100204,
-              28.6114486
+              77.2105986,
+              28.6146495
             ]
           ]
         ]
@@ -2014,31 +2108,32 @@
       "properties": {
         "id": "CONS_S_010",
         "meter_id": "MTR_S_010",
-        "name": "Residential Consumer #10 (Zone_2_South)",
+        "name": "Residential #10 (Z2_South)",
         "category": "Residential",
-        "contracted_load_kw": 6.0,
-        "height": 6.4,
-        "elevation": 224.4,
+        "contracted_load_kw": 4.5,
+        "height": 3.5,
+        "elevation": 221.5,
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 20.0,
-        "reported_kw": 5.393,
-        "true_kw": 5.393,
+        "anomaly_score": 16.0,
+        "reported_kw": 4.045,
+        "true_kw": 4.045,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -2049,24 +2144,24 @@
         "coordinates": [
           [
             [
-              77.2095519,
-              28.6118218
+              77.2110596,
+              28.6150991
             ],
             [
-              77.2096732,
-              28.6118218
+              77.2111826,
+              28.6150991
             ],
             [
-              77.2096732,
-              28.6119656
+              77.2111826,
+              28.615207
             ],
             [
-              77.2095519,
-              28.6119656
+              77.2110596,
+              28.615207
             ],
             [
-              77.2095519,
-              28.6118218
+              77.2110596,
+              28.6150991
             ]
           ]
         ]
@@ -2074,11 +2169,11 @@
       "properties": {
         "id": "CONS_S_011",
         "meter_id": "MTR_S_011",
-        "name": "Residential Consumer #11 (Zone_2_South)",
+        "name": "Residential #11 (Z2_South)",
         "category": "Residential",
         "contracted_load_kw": 3.0,
-        "height": 3.2,
-        "elevation": 221.2,
+        "height": 10.5,
+        "elevation": 228.5,
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
@@ -2088,17 +2183,18 @@
         "reported_kw": 0.0,
         "true_kw": 2.343,
         "fill_color": [
-          255,
-          140,
-          0,
-          190
+          249,
+          115,
+          22,
+          220
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": true
       }
     },
@@ -2109,24 +2205,24 @@
         "coordinates": [
           [
             [
-              77.2099923,
-              28.6117717
+              77.2110596,
+              28.6146495
             ],
             [
-              77.2101282,
-              28.6118036
+              77.2111826,
+              28.6146495
             ],
             [
-              77.2100871,
-              28.6119385
+              77.2111826,
+              28.6147574
             ],
             [
-              77.2099512,
-              28.6119065
+              77.2110596,
+              28.6147574
             ],
             [
-              77.2099923,
-              28.6117717
+              77.2110596,
+              28.6146495
             ]
           ]
         ]
@@ -2134,31 +2230,32 @@
       "properties": {
         "id": "CONS_S_012",
         "meter_id": "MTR_S_012",
-        "name": "Residential Consumer #12 (Zone_2_South)",
+        "name": "Residential #12 (Z2_South)",
         "category": "Residential",
-        "contracted_load_kw": 4.5,
-        "height": 3.2,
-        "elevation": 221.2,
+        "contracted_load_kw": 6.0,
+        "height": 10.5,
+        "elevation": 228.5,
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 15.2,
-        "reported_kw": 3.592,
-        "true_kw": 3.592,
+        "anomaly_score": 18.5,
+        "reported_kw": 4.789,
+        "true_kw": 4.789,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -2169,24 +2266,24 @@
         "coordinates": [
           [
             [
-              77.2079106,
-              28.6119603
+              77.2096254,
+              28.6142897
             ],
             [
-              77.2080255,
-              28.6119603
+              77.2097484,
+              28.6142897
             ],
             [
-              77.2080255,
-              28.6121036
+              77.2097484,
+              28.6143977
             ],
             [
-              77.2079106,
-              28.6121036
+              77.2096254,
+              28.6143977
             ],
             [
-              77.2079106,
-              28.6119603
+              77.2096254,
+              28.6142897
             ]
           ]
         ]
@@ -2194,31 +2291,32 @@
       "properties": {
         "id": "CONS_S_013",
         "meter_id": "MTR_S_013",
-        "name": "Residential Consumer #13 (Zone_2_South)",
+        "name": "Residential #13 (Z2_South)",
         "category": "Residential",
-        "contracted_load_kw": 6.0,
-        "height": 9.6,
-        "elevation": 227.6,
+        "contracted_load_kw": 4.5,
+        "height": 10.5,
+        "elevation": 228.5,
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 16.4,
-        "reported_kw": 4.209,
-        "true_kw": 4.209,
+        "anomaly_score": 16.2,
+        "reported_kw": 3.157,
+        "true_kw": 3.157,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -2229,24 +2327,24 @@
         "coordinates": [
           [
             [
-              77.2083555,
-              28.6119038
+              77.2096254,
+              28.6138401
             ],
             [
-              77.208593,
-              28.6119597
+              77.2097484,
+              28.6138401
             ],
             [
-              77.2085188,
-              28.6122029
+              77.2097484,
+              28.613948
             ],
             [
-              77.2082813,
-              28.6121471
+              77.2096254,
+              28.613948
             ],
             [
-              77.2083555,
-              28.6119038
+              77.2096254,
+              28.6138401
             ]
           ]
         ]
@@ -2254,31 +2352,32 @@
       "properties": {
         "id": "CONS_S_014",
         "meter_id": "MTR_S_014",
-        "name": "LightIndustrial Consumer #14 (Zone_2_South)",
-        "category": "LightIndustrial",
-        "contracted_load_kw": 25.0,
-        "height": 3.2,
-        "elevation": 221.2,
+        "name": "Residential #14 (Z2_South)",
+        "category": "Residential",
+        "contracted_load_kw": 6.0,
+        "height": 7.0,
+        "elevation": 225.0,
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 18.0,
-        "reported_kw": 3.735,
-        "true_kw": 3.735,
+        "anomaly_score": 19.1,
+        "reported_kw": 4.968,
+        "true_kw": 4.968,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -2289,24 +2388,24 @@
         "coordinates": [
           [
             [
-              77.2079112,
-              28.612337
+              77.2097996,
+              28.6142897
             ],
             [
-              77.2080589,
-              28.6123717
+              77.2099225,
+              28.6142897
             ],
             [
-              77.208012,
-              28.6125254
+              77.2099225,
+              28.6143977
             ],
             [
-              77.2078643,
-              28.6124906
+              77.2097996,
+              28.6143977
             ],
             [
-              77.2079112,
-              28.612337
+              77.2097996,
+              28.6142897
             ]
           ]
         ]
@@ -2314,31 +2413,32 @@
       "properties": {
         "id": "CONS_S_015",
         "meter_id": "MTR_S_015",
-        "name": "Commercial Consumer #15 (Zone_2_South)",
-        "category": "Commercial",
-        "contracted_load_kw": 15.0,
-        "height": 12.8,
-        "elevation": 230.8,
+        "name": "Residential #15 (Z2_South)",
+        "category": "Residential",
+        "contracted_load_kw": 6.0,
+        "height": 7.0,
+        "elevation": 225.0,
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 24.2,
-        "reported_kw": 8.61,
-        "true_kw": 8.61,
+        "anomaly_score": 20.2,
+        "reported_kw": 5.158,
+        "true_kw": 5.158,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -2349,24 +2449,24 @@
         "coordinates": [
           [
             [
-              77.2083786,
-              28.6123357
+              77.2097996,
+              28.6138401
             ],
             [
-              77.2085018,
-              28.6123357
+              77.2099225,
+              28.6138401
             ],
             [
-              77.2085018,
-              28.6124526
+              77.2099225,
+              28.613948
             ],
             [
-              77.2083786,
-              28.6124526
+              77.2097996,
+              28.613948
             ],
             [
-              77.2083786,
-              28.6123357
+              77.2097996,
+              28.6138401
             ]
           ]
         ]
@@ -2374,31 +2474,32 @@
       "properties": {
         "id": "CONS_S_016",
         "meter_id": "MTR_S_016",
-        "name": "Residential Consumer #16 (Zone_2_South)",
+        "name": "Residential #16 (Z2_South)",
         "category": "Residential",
-        "contracted_load_kw": 6.0,
-        "height": 6.4,
-        "elevation": 224.4,
+        "contracted_load_kw": 4.5,
+        "height": 3.5,
+        "elevation": 221.5,
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 21.0,
-        "reported_kw": 5.577,
-        "true_kw": 5.577,
+        "anomaly_score": 16.4,
+        "reported_kw": 4.183,
+        "true_kw": 4.183,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -2409,24 +2510,24 @@
         "coordinates": [
           [
             [
-              77.208701,
-              28.6119924
+              77.2101889,
+              28.6142897
             ],
             [
-              77.2088001,
-              28.6119691
+              77.2103118,
+              28.6142897
             ],
             [
-              77.2088401,
-              28.6121002
+              77.2103118,
+              28.6143977
             ],
             [
-              77.208741,
-              28.6121235
+              77.2101889,
+              28.6143977
             ],
             [
-              77.208701,
-              28.6119924
+              77.2101889,
+              28.6142897
             ]
           ]
         ]
@@ -2434,31 +2535,32 @@
       "properties": {
         "id": "CONS_S_017",
         "meter_id": "MTR_S_017",
-        "name": "Residential Consumer #17 (Zone_2_South)",
+        "name": "Residential #17 (Z2_South)",
         "category": "Residential",
-        "contracted_load_kw": 4.5,
-        "height": 3.2,
-        "elevation": 221.2,
+        "contracted_load_kw": 3.0,
+        "height": 10.5,
+        "elevation": 228.5,
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 15.6,
-        "reported_kw": 3.827,
-        "true_kw": 3.827,
+        "anomaly_score": 19.4,
+        "reported_kw": 2.552,
+        "true_kw": 2.552,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -2469,24 +2571,24 @@
         "coordinates": [
           [
             [
-              77.2091618,
-              28.6119547
+              77.2101889,
+              28.6138401
             ],
             [
-              77.2093336,
-              28.6119951
+              77.2103118,
+              28.6138401
             ],
             [
-              77.2092894,
-              28.6121399
+              77.2103118,
+              28.613948
             ],
             [
-              77.2091176,
-              28.6120995
+              77.2101889,
+              28.613948
             ],
             [
-              77.2091618,
-              28.6119547
+              77.2101889,
+              28.6138401
             ]
           ]
         ]
@@ -2494,31 +2596,32 @@
       "properties": {
         "id": "CONS_S_018",
         "meter_id": "MTR_S_018",
-        "name": "Commercial Consumer #18 (Zone_2_South)",
-        "category": "Commercial",
-        "contracted_load_kw": 15.0,
-        "height": 9.6,
-        "elevation": 227.6,
+        "name": "Residential #18 (Z2_South)",
+        "category": "Residential",
+        "contracted_load_kw": 4.5,
+        "height": 3.5,
+        "elevation": 221.5,
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "HIGH",
         "probable_cause": "THEFT_TAMPERING",
-        "anomaly_score": 73.1,
+        "anomaly_score": 60.0,
         "reported_kw": 0.2,
-        "true_kw": 8.386,
+        "true_kw": 3.768,
         "fill_color": [
-          255,
-          45,
-          85,
-          200
+          239,
+          68,
+          68,
+          220
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": true
       }
     },
@@ -2529,24 +2632,24 @@
         "coordinates": [
           [
             [
-              77.2087025,
-              28.6123727
+              77.2103937,
+              28.6142897
             ],
             [
-              77.2088499,
-              28.6123381
+              77.2105167,
+              28.6142897
             ],
             [
-              77.2088943,
-              28.6124837
+              77.2105167,
+              28.6143977
             ],
             [
-              77.208747,
-              28.6125184
+              77.2103937,
+              28.6143977
             ],
             [
-              77.2087025,
-              28.6123727
+              77.2103937,
+              28.6142897
             ]
           ]
         ]
@@ -2554,31 +2657,32 @@
       "properties": {
         "id": "CONS_S_019",
         "meter_id": "MTR_S_019",
-        "name": "Commercial Consumer #19 (Zone_2_South)",
-        "category": "Commercial",
-        "contracted_load_kw": 15.0,
-        "height": 12.8,
-        "elevation": 230.8,
+        "name": "Residential #19 (Z2_South)",
+        "category": "Residential",
+        "contracted_load_kw": 3.0,
+        "height": 3.5,
+        "elevation": 221.5,
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 23.6,
-        "reported_kw": 9.844,
-        "true_kw": 9.844,
+        "anomaly_score": 19.8,
+        "reported_kw": 3.509,
+        "true_kw": 3.509,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -2589,24 +2693,24 @@
         "coordinates": [
           [
             [
-              77.2091825,
-              28.6123751
+              77.2103835,
+              28.6138311
             ],
             [
-              77.2092936,
-              28.6123751
+              77.2105269,
+              28.6138311
             ],
             [
-              77.2092936,
-              28.612492
+              77.2105269,
+              28.613957
             ],
             [
-              77.2091825,
-              28.612492
+              77.2103835,
+              28.613957
             ],
             [
-              77.2091825,
-              28.6123751
+              77.2103835,
+              28.6138311
             ]
           ]
         ]
@@ -2614,31 +2718,32 @@
       "properties": {
         "id": "CONS_S_020",
         "meter_id": "MTR_S_020",
-        "name": "Residential Consumer #20 (Zone_2_South)",
-        "category": "Residential",
-        "contracted_load_kw": 3.0,
-        "height": 6.4,
-        "elevation": 224.4,
+        "name": "Commercial #20 (Z2_South)",
+        "category": "Commercial",
+        "contracted_load_kw": 8.0,
+        "height": 17.5,
+        "elevation": 235.5,
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 20.3,
-        "reported_kw": 2.672,
-        "true_kw": 2.672,
+        "anomaly_score": 19.1,
+        "reported_kw": 4.758,
+        "true_kw": 4.758,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -2649,24 +2754,24 @@
         "coordinates": [
           [
             [
-              77.2095627,
-              28.6119703
+              77.2105986,
+              28.6142897
             ],
             [
-              77.2096913,
-              28.6120006
+              77.2107216,
+              28.6142897
             ],
             [
-              77.2096497,
-              28.612137
+              77.2107216,
+              28.6143977
             ],
             [
-              77.2095211,
-              28.6121067
+              77.2105986,
+              28.6143977
             ],
             [
-              77.2095627,
-              28.6119703
+              77.2105986,
+              28.6142897
             ]
           ]
         ]
@@ -2674,31 +2779,32 @@
       "properties": {
         "id": "CONS_S_021",
         "meter_id": "MTR_S_021",
-        "name": "Residential Consumer #21 (Zone_2_South)",
+        "name": "Residential #21 (Z2_South)",
         "category": "Residential",
-        "contracted_load_kw": 4.5,
-        "height": 9.6,
-        "elevation": 227.6,
+        "contracted_load_kw": 3.0,
+        "height": 10.5,
+        "elevation": 228.5,
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 15.8,
-        "reported_kw": 3.426,
-        "true_kw": 3.426,
+        "anomaly_score": 20.4,
+        "reported_kw": 2.284,
+        "true_kw": 2.284,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -2709,24 +2815,24 @@
         "coordinates": [
           [
             [
-              77.2100186,
-              28.612023
+              77.2105986,
+              28.6138401
             ],
             [
-              77.2101185,
-              28.6119994
+              77.2107216,
+              28.6138401
             ],
             [
-              77.2101581,
-              28.6121293
+              77.2107216,
+              28.613948
             ],
             [
-              77.2100582,
-              28.6121528
+              77.2105986,
+              28.613948
             ],
             [
-              77.2100186,
-              28.612023
+              77.2105986,
+              28.6138401
             ]
           ]
         ]
@@ -2734,31 +2840,32 @@
       "properties": {
         "id": "CONS_S_022",
         "meter_id": "MTR_S_022",
-        "name": "Residential Consumer #22 (Zone_2_South)",
+        "name": "Residential #22 (Z2_South)",
         "category": "Residential",
-        "contracted_load_kw": 3.0,
-        "height": 6.4,
-        "elevation": 224.4,
+        "contracted_load_kw": 4.5,
+        "height": 10.5,
+        "elevation": 228.5,
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 20.1,
-        "reported_kw": 2.26,
-        "true_kw": 2.26,
+        "anomaly_score": 14.7,
+        "reported_kw": 3.389,
+        "true_kw": 3.389,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -2769,24 +2876,24 @@
         "coordinates": [
           [
             [
-              77.2095647,
-              28.6123466
+              77.2110494,
+              28.6142807
             ],
             [
-              77.2097004,
-              28.6123466
+              77.2111928,
+              28.6142807
             ],
             [
-              77.2097004,
-              28.6124641
+              77.2111928,
+              28.6144066
             ],
             [
-              77.2095647,
-              28.6124641
+              77.2110494,
+              28.6144066
             ],
             [
-              77.2095647,
-              28.6123466
+              77.2110494,
+              28.6142807
             ]
           ]
         ]
@@ -2794,31 +2901,32 @@
       "properties": {
         "id": "CONS_S_023",
         "meter_id": "MTR_S_023",
-        "name": "Residential Consumer #23 (Zone_2_South)",
-        "category": "Residential",
-        "contracted_load_kw": 6.0,
-        "height": 9.6,
-        "elevation": 227.6,
+        "name": "Commercial #23 (Z2_South)",
+        "category": "Commercial",
+        "contracted_load_kw": 8.0,
+        "height": 14.0,
+        "elevation": 232.0,
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 18.3,
-        "reported_kw": 5.118,
-        "true_kw": 5.118,
+        "anomaly_score": 18.4,
+        "reported_kw": 4.557,
+        "true_kw": 4.557,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     },
@@ -2829,24 +2937,24 @@
         "coordinates": [
           [
             [
-              77.2099845,
-              28.6123298
+              77.2110596,
+              28.6138401
             ],
             [
-              77.2100914,
-              28.6123046
+              77.2111826,
+              28.6138401
             ],
             [
-              77.2101329,
-              28.6124408
+              77.2111826,
+              28.613948
             ],
             [
-              77.2100261,
-              28.6124659
+              77.2110596,
+              28.613948
             ],
             [
-              77.2099845,
-              28.6123298
+              77.2110596,
+              28.6138401
             ]
           ]
         ]
@@ -2854,31 +2962,32 @@
       "properties": {
         "id": "CONS_S_024",
         "meter_id": "MTR_S_024",
-        "name": "Residential Consumer #24 (Zone_2_South)",
+        "name": "Residential #24 (Z2_South)",
         "category": "Residential",
         "contracted_load_kw": 4.5,
-        "height": 3.2,
-        "elevation": 221.2,
+        "height": 10.5,
+        "elevation": 228.5,
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 14.9,
+        "anomaly_score": 14.4,
         "reported_kw": 3.784,
         "true_kw": 3.784,
         "fill_color": [
-          120,
-          150,
-          240,
-          95
+          255,
+          255,
+          255,
+          210
         ],
         "wireframe_color": [
-          255,
-          255,
-          255,
-          160
+          148,
+          163,
+          184,
+          200
         ],
+        "is_power_station": false,
         "is_anomalous": false
       }
     }

@@ -1,12 +1,12 @@
 {
-  "report_id": "RPT-Zone-009-BB8D01",
+  "report_id": "RPT-Zone-009-602B25",
   "generated_at": "2026-10-05T07:15:00",
   "consumer": {
     "id": "CONS_N_009",
     "meter_id": "MTR_N_009",
-    "name": "Residential Consumer #9 (Zone_1_North)",
+    "name": "Residential #9 (Z1_North)",
     "category": "Residential",
-    "contracted_load_kw": 4.5,
+    "contracted_load_kw": 3.0,
     "zone_id": "Zone_1_North",
     "transformer_id": "TX_101",
     "feeder_id": "FDR_NORTH_11KV"
@@ -19,28 +19,28 @@
     "inspection_priority_rank": 1
   },
   "metrics": {
-    "reported_kw": 1.254,
-    "historical_baseline_kw": 3.557,
-    "deviation_kw": -2.303,
-    "deviation_pct": -64.7,
-    "deviation_z": -3.88,
+    "reported_kw": 0.836,
+    "historical_baseline_kw": 2.395,
+    "deviation_kw": -1.559,
+    "deviation_pct": -65.1,
+    "deviation_z": -3.84,
     "voltage_v": 230.0,
     "current_a": 0.0,
     "power_factor": 0.95,
-    "zone_unexplained_loss_pct": 11.59
+    "zone_unexplained_loss_pct": 15.65
   },
   "ground_truth_audit": {
     "active_scenario": "THEFT_BYPASS",
-    "ground_truth_kw": 3.584,
-    "unreported_stolen_kw": 2.33
+    "ground_truth_kw": 2.389,
+    "unreported_stolen_kw": 1.553
   },
   "evidence_chain": [
     "Magnetic tamper sensor tripped (strong external neodymium magnet field detected)",
     "Meter terminal enclosure microswitch open event recorded",
-    "Drastic consumption drop (-64.7% below diurnal baseline, z=-3.88)",
-    "Corroborating transformer TX_101 exhibits 11.6% unexplained non-technical losses",
-    "Consumer consumption is 27.9% of peer average on the same distribution line"
+    "Drastic consumption drop (-65.1% below diurnal baseline, z=-3.84)",
+    "Corroborating transformer TX_101 exhibits 15.6% unexplained non-technical losses",
+    "Consumer consumption is 18.6% of peer average on the same distribution line"
   ],
-  "technical_assessment": "Statistical and electrical analysis confirms a non-technical loss event at meter MTR_N_009. While the consumer has a contracted load of 4.5 kW and an established historical baseline of 3.56 kW, the meter reported only 1.25 kW (a -64.7% reduction). Concurrently, the distribution transformer TX_101 is registering 11.6% unexplained non-technical losses that cannot be accounted for by technical I\u00b2R line resistance or core losses. This strong spatial correlation between transformer loss and consumer load reduction indicates an unauthorized meter shunt, line tapping, or bypass.",
+  "technical_assessment": "Statistical and electrical analysis confirms a non-technical loss event at meter MTR_N_009. While the consumer has a contracted load of 3.0 kW and an established historical baseline of 2.39 kW, the meter reported only 0.84 kW (a -65.1% reduction). Concurrently, the distribution transformer TX_101 is registering 15.6% unexplained non-technical losses that cannot be accounted for by technical I\u00b2R line resistance or core losses. This strong spatial correlation between transformer loss and consumer load reduction indicates an unauthorized meter shunt, line tapping, or bypass.",
   "recommended_action": "HIGH PRIORITY: Issue physical inspection warrant. Dispatch anti-theft squad to verify meter shunt/bypass"
 }

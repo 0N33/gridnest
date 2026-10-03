@@ -1,0 +1,326 @@
+{
+  "type": "FeatureCollection",
+  "name": "City_Road_Network",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.209021,
+            28.611960492466977
+          ],
+          [
+            77.209021,
+            28.613399407036447
+          ]
+        ]
+      },
+      "properties": {
+        "id": "ROAD_CENTRAL_HIGHWAY",
+        "name": "Central Energy Highway",
+        "coordinates": [
+          [
+            77.209021,
+            28.611960492466977
+          ],
+          [
+            77.209021,
+            28.613399407036447
+          ]
+        ],
+        "width_m": 14.0,
+        "road_type": "highway"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20666478785266,
+            28.613399407036447
+          ],
+          [
+            77.21137721214735,
+            28.613399407036447
+          ]
+        ]
+      },
+      "properties": {
+        "id": "ROAD_MAIN_CROSS_AVENUE",
+        "name": "Metropolitan Connecting Avenue",
+        "coordinates": [
+          [
+            77.20666478785266,
+            28.613399407036447
+          ],
+          [
+            77.21137721214735,
+            28.613399407036447
+          ]
+        ],
+        "width_m": 14.0,
+        "road_type": "avenue"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.2071770078847,
+            28.613399407036447
+          ],
+          [
+            77.2071770078847,
+            28.615377914569468
+          ]
+        ]
+      },
+      "properties": {
+        "id": "ROAD_WEST_AVE_1",
+        "name": "West District Avenue #1",
+        "coordinates": [
+          [
+            77.2071770078847,
+            28.613399407036447
+          ],
+          [
+            77.2071770078847,
+            28.615377914569468
+          ]
+        ],
+        "width_m": 10.0,
+        "road_type": "avenue"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20799655993595,
+            28.613399407036447
+          ],
+          [
+            77.20799655993595,
+            28.615377914569468
+          ]
+        ]
+      },
+      "properties": {
+        "id": "ROAD_WEST_AVE_2",
+        "name": "West District Avenue #2",
+        "coordinates": [
+          [
+            77.20799655993595,
+            28.613399407036447
+          ],
+          [
+            77.20799655993595,
+            28.615377914569468
+          ]
+        ],
+        "width_m": 10.0,
+        "road_type": "avenue"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20676723185906,
+            28.61411886432118
+          ],
+          [
+            77.20840633596157,
+            28.61411886432118
+          ]
+        ]
+      },
+      "properties": {
+        "id": "ROAD_WEST_ST_1",
+        "name": "West District Street #1",
+        "coordinates": [
+          [
+            77.20676723185906,
+            28.61411886432118
+          ],
+          [
+            77.20840633596157,
+            28.61411886432118
+          ]
+        ],
+        "width_m": 10.0,
+        "road_type": "residential"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20676723185906,
+            28.61492825376651
+          ],
+          [
+            77.20840633596157,
+            28.61492825376651
+          ]
+        ]
+      },
+      "properties": {
+        "id": "ROAD_WEST_ST_2",
+        "name": "West District Street #2",
+        "coordinates": [
+          [
+            77.20676723185906,
+            28.61492825376651
+          ],
+          [
+            77.20840633596157,
+            28.61492825376651
+          ]
+        ],
+        "width_m": 10.0,
+        "road_type": "residential"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.21004544006406,
+            28.613399407036447
+          ],
+          [
+            77.21004544006406,
+            28.615377914569468
+          ]
+        ]
+      },
+      "properties": {
+        "id": "ROAD_EAST_AVE_1",
+        "name": "East District Avenue #1",
+        "coordinates": [
+          [
+            77.21004544006406,
+            28.613399407036447
+          ],
+          [
+            77.21004544006406,
+            28.615377914569468
+          ]
+        ],
+        "width_m": 10.0,
+        "road_type": "avenue"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.21086499211532,
+            28.613399407036447
+          ],
+          [
+            77.21086499211532,
+            28.615377914569468
+          ]
+        ]
+      },
+      "properties": {
+        "id": "ROAD_EAST_AVE_2",
+        "name": "East District Avenue #2",
+        "coordinates": [
+          [
+            77.21086499211532,
+            28.613399407036447
+          ],
+          [
+            77.21086499211532,
+            28.615377914569468
+          ]
+        ],
+        "width_m": 10.0,
+        "road_type": "avenue"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20963566403844,
+            28.61411886432118
+          ],
+          [
+            77.21127476814095,
+            28.61411886432118
+          ]
+        ]
+      },
+      "properties": {
+        "id": "ROAD_EAST_ST_1",
+        "name": "East District Street #1",
+        "coordinates": [
+          [
+            77.20963566403844,
+            28.61411886432118
+          ],
+          [
+            77.21127476814095,
+            28.61411886432118
+          ]
+        ],
+        "width_m": 10.0,
+        "road_type": "residential"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20963566403844,
+            28.61492825376651
+          ],
+          [
+            77.21127476814095,
+            28.61492825376651
+          ]
+        ]
+      },
+      "properties": {
+        "id": "ROAD_EAST_ST_2",
+        "name": "East District Street #2",
+        "coordinates": [
+          [
+            77.20963566403844,
+            28.61492825376651
+          ],
+          [
+            77.21127476814095,
+            28.61492825376651
+          ]
+        ],
+        "width_m": 10.0,
+        "road_type": "residential"
+      }
+    }
+  ]
+}

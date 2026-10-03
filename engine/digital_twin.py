@@ -213,10 +213,21 @@ class SmartGridDigitalTwin:
                 "analysis": anomaly_res.to_dict() if anomaly_res else None,
             }
 
-        transformers_payload = {
-            tx_id: report.to_dict()
-            for tx_id, report in self.latest_transformer_reports.items()
-        }
+        transformers_payload = {}
+        for tx_id, tx_node in self.topology.transformers.items():
+            report = self.latest_transformer_reports.get(tx_id)
+            tx_data = tx_node.to_dict()
+            if report:
+                sec_curr = round((report.transformer_input_kw * 1000.0) / (1.732 * 415.0 * 0.95), 1)
+                tx_data["accounting"] = report.to_dict()
+                tx_data["iot_sensors"]["active_power_kw"] = report.transformer_input_kw
+                tx_data["iot_sensors"]["secondary_current_a"] = sec_curr
+                tx_data["iot_sensors"]["technical_loss_kw"] = report.technical_losses_kw
+                tx_data["iot_sensors"]["unexplained_loss_kw"] = report.unexplained_loss_kw
+                tx_data["iot_sensors"]["unexplained_loss_pct"] = report.unexplained_loss_pct
+                tx_data["iot_sensors"]["is_done_for"] = report.is_done_for
+                tx_data["iot_sensors"]["status"] = "ALERT_THEFT_DISCREPANCY (DONE FOR!)" if report.is_done_for else "BALANCED_HEALTHY"
+            transformers_payload[tx_id] = tx_data
 
         # Aggregate network health KPIs
         total_consumers = len(self.topology.consumers)
@@ -224,10 +235,45 @@ class SmartGridDigitalTwin:
             1 for res in self.latest_anomaly_results.values()
             if res.risk_level in ["HIGH", "CRITICAL"]
         )
+        # Calculate Power Station IoT generation dispatch
         total_tx_input_kw = sum(r.transformer_input_kw for r in self.latest_transformer_reports.values())
         total_unexplained_loss_kw = sum(r.unexplained_loss_kw for r in self.latest_transformer_reports.values())
         total_tech_loss_kw = sum(r.technical_losses_kw for r in self.latest_transformer_reports.values())
         overall_ntl_pct = (total_unexplained_loss_kw / max(0.1, total_tx_input_kw)) * 100.0
+
+        # Update Power Station live IoT sensors
+        if self.topology.power_station:
+            tx1_rep = self.latest_transformer_reports.get("TX_101")
+            tx2_rep = self.latest_transformer_reports.get("TX_102")
+            f1_kw = tx1_rep.transformer_input_kw if tx1_rep else 0.0
+            f2_kw = tx2_rep.transformer_input_kw if tx2_rep else 0.0
+            self.topology.power_station.iot_sensors["total_generation_kw"] = round(total_tx_input_kw + 8.5, 2)
+            self.topology.power_station.iot_sensors["feeder_1_kw"] = round(f1_kw, 2)
+            self.topology.power_station.iot_sensors["feeder_2_kw"] = round(f2_kw, 2)
+
+        # 3-Zone accounting structure
+        zone_accounting = {
+            "Zone_0_PowerStation": {
+                "name": "Central Power Generation & Switching Hub",
+                "type": "GENERATION_TRANSMISSION",
+                "bus_voltage_kv": 33.15,
+                "frequency_hz": 50.02,
+                "dispatched_kw": round(total_tx_input_kw + 8.5, 2),
+                "iot_status": "ONLINE_NORMAL",
+            },
+            "Zone_1_North": {
+                "name": "North City Sector (Commercial / Residential)",
+                "type": "DISTRIBUTION_ZONE",
+                "transformer_id": "TX_101",
+                "metrics": self.latest_transformer_reports.get("TX_101").to_dict() if "TX_101" in self.latest_transformer_reports else {},
+            },
+            "Zone_2_South": {
+                "name": "South City Sector (Suburban Residential)",
+                "type": "DISTRIBUTION_ZONE",
+                "transformer_id": "TX_102",
+                "metrics": self.latest_transformer_reports.get("TX_102").to_dict() if "TX_102" in self.latest_transformer_reports else {},
+            },
+        }
 
         return {
             "clock": time_state,
@@ -240,6 +286,11 @@ class SmartGridDigitalTwin:
                 "grid_unexplained_ntl_pct": round(overall_ntl_pct, 2),
                 "reveal_ground_truth": self.reveal_ground_truth,
             },
+            "power_station": self.topology.power_station.to_dict() if self.topology.power_station else None,
+            "pylons": [p.to_dict() for p in self.topology.pylons.values()],
+            "roads": [r.to_dict() for r in self.topology.roads.values()],
+            "poles": [p.to_dict() for p in self.topology.poles.values()],
+            "zone_accounting": zone_accounting,
             "transformers": transformers_payload,
             "consumers": consumers_payload,
             "inspection_queue": [t.to_dict() for t in self.latest_inspection_targets],
