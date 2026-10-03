@@ -5,6 +5,8 @@ real-time energy accounting, multi-signal anomaly detection, and aerial inspecti
 """
 from __future__ import annotations
 import copy
+import json
+from pathlib import Path
 from typing import Dict, List, Any, Optional
 
 from config import CONFIG
@@ -77,6 +79,25 @@ class SmartGridDigitalTwin:
         # 5. Inject representative operational scenarios if requested
         if setup_scenarios:
             self.injector.setup_default_demo_scenarios()
+
+        # Bind authentic Kaggle dataset IDs & Ground-Truth labels to the 48 buildings
+        profiles_file = Path(__file__).resolve().parent / "artifacts" / "kaggle_consumer_profiles.json"
+        if profiles_file.exists():
+            try:
+                import json
+                with open(profiles_file, "r", encoding="utf-8") as f:
+                    kg_profiles = json.load(f)
+                for cid, c in self.topology.consumers.items():
+                    if cid in kg_profiles:
+                        c.kaggle_id = kg_profiles[cid].get("kaggle_id")
+                        c.kaggle_flag = kg_profiles[cid].get("kaggle_flag")
+            except Exception:
+                pass
+
+        # Initialize streaming daily buffer for all consumers with active scenarios
+        initial_thefts = [cid for cid, inj in self.injector.active_injections.items() if inj.get("scenario") == ScenarioType.THEFT_BYPASS]
+        initial_faults = [cid for cid, inj in self.injector.active_injections.items() if inj.get("scenario") == ScenarioType.METER_MALFUNCTION]
+        self.detector.initialize_consumers(self.topology.consumers, initial_thefts, initial_faults)
 
         # 6. Execute step to populate initial state
         self.step()

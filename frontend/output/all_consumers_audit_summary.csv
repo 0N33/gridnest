@@ -1,49 +1,49 @@
 consumer_id,meter_id,name,category,contracted_load_kw,zone_id,transformer_id,reported_kw,true_physical_kw,baseline_mean_kw,deviation_pct,anomaly_score,risk_level,probable_cause,confidence_pct,action
-CONS_N_001,MTR_N_001,Residential #1 (Z1_North),Residential,6.0,Zone_1_North,TX_101,4.801,4.801,4.801,0.0,18.1,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_N_002,MTR_N_002,Commercial #2 (Z1_North),Commercial,8.0,Zone_1_North,TX_101,5.036,5.036,4.258,18.3,19.3,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_N_003,MTR_N_003,Residential #3 (Z1_North),Residential,6.0,Zone_1_North,TX_101,4.601,4.601,4.649,-1.0,17.8,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_N_004,MTR_N_004,LightIndustrial #4 (Z1_North),LightIndustrial,25.0,Zone_1_North,TX_101,0.888,3.172,3.533,-74.9,83.5,HIGH,THEFT_TAMPERING,86.7,HIGH PRIORITY: Issue physical inspection warrant. Dispatch anti-theft squad to verify meter shunt/bypass
-CONS_N_005,MTR_N_005,Residential #5 (Z1_North),Residential,4.5,Zone_1_North,TX_101,3.914,3.914,3.575,9.5,15.7,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_N_006,MTR_N_006,Residential #6 (Z1_North),Residential,3.0,Zone_1_North,TX_101,2.722,2.722,2.429,12.1,19.9,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_N_007,MTR_N_007,Residential #7 (Z1_North),Residential,4.5,Zone_1_North,TX_101,3.637,3.637,3.536,2.9,15.3,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_N_008,MTR_N_008,Residential #8 (Z1_North),Residential,3.0,Zone_1_North,TX_101,2.489,2.489,2.362,5.4,19.8,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_N_009,MTR_N_009,Residential #9 (Z1_North),Residential,3.0,Zone_1_North,TX_101,0.836,2.389,2.395,-65.1,98.5,CRITICAL,THEFT_TAMPERING,94.2,HIGH PRIORITY: Issue physical inspection warrant. Dispatch anti-theft squad to verify meter shunt/bypass
-CONS_N_010,MTR_N_010,Residential #10 (Z1_North),Residential,4.5,Zone_1_North,TX_101,3.629,3.629,3.542,2.5,15.3,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_N_011,MTR_N_011,Commercial #11 (Z1_North),Commercial,12.0,Zone_1_North,TX_101,6.958,6.958,6.128,13.6,24.1,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_N_012,MTR_N_012,Residential #12 (Z1_North),Residential,6.0,Zone_1_North,TX_101,5.837,5.837,4.659,25.3,22.5,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_N_013,MTR_N_013,Residential #13 (Z1_North),Residential,6.0,Zone_1_North,TX_101,5.342,5.342,4.753,12.4,19.1,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_N_014,MTR_N_014,Commercial #14 (Z1_North),Commercial,12.0,Zone_1_North,TX_101,7.994,7.994,6.271,27.5,25.4,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_N_015,MTR_N_015,Commercial #15 (Z1_North),Commercial,15.0,Zone_1_North,TX_101,0.42,8.723,7.679,-94.5,82.0,HIGH,METER_MALFUNCTION,94.0,Dispatch field technician for on-site diagnostic bench test and firmware refresh
-CONS_N_016,MTR_N_016,Commercial #16 (Z1_North),Commercial,15.0,Zone_1_North,TX_101,9.996,9.996,7.662,30.5,26.0,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_N_017,MTR_N_017,LightIndustrial #17 (Z1_North),LightIndustrial,25.0,Zone_1_North,TX_101,4.104,4.104,3.557,15.4,19.1,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_N_018,MTR_N_018,Commercial #18 (Z1_North),Commercial,12.0,Zone_1_North,TX_101,6.283,6.283,6.145,2.2,22.3,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_N_019,MTR_N_019,Residential #19 (Z1_North),Residential,3.0,Zone_1_North,TX_101,3.276,3.276,2.51,30.5,19.9,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_N_020,MTR_N_020,Commercial #20 (Z1_North),Commercial,8.0,Zone_1_North,TX_101,5.039,5.039,4.147,21.5,19.7,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_N_021,MTR_N_021,Commercial #21 (Z1_North),Commercial,15.0,Zone_1_North,TX_101,0.0,7.79,0.0,-100.0,68.0,MEDIUM,COMM_FAILURE,92.0,Dispatch AMI network tech to inspect RF/cellular meter antenna; verify power to collector node
-CONS_N_022,MTR_N_022,Commercial #22 (Z1_North),Commercial,12.0,Zone_1_North,TX_101,6.314,6.314,6.248,1.1,22.5,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_N_023,MTR_N_023,Commercial #23 (Z1_North),Commercial,8.0,Zone_1_North,TX_101,5.042,5.042,4.059,24.2,21.9,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_N_024,MTR_N_024,Residential #24 (Z1_North),Residential,4.5,Zone_1_North,TX_101,4.01,4.01,3.648,9.9,16.8,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_S_001,MTR_S_001,Residential #1 (Z2_South),Residential,3.0,Zone_2_South,TX_102,2.572,2.572,2.456,4.7,18.9,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_S_002,MTR_S_002,Residential #2 (Z2_South),Residential,3.0,Zone_2_South,TX_102,2.269,2.269,2.452,-7.5,20.1,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_S_003,MTR_S_003,Residential #3 (Z2_South),Residential,4.5,Zone_2_South,TX_102,11.578,11.578,3.621,219.7,35.0,LOW,LEGITIMATE_ABNORMAL,90.0,Flag as verified legitimate heavy load (EV/HVAC); no enforcement action needed
-CONS_S_004,MTR_S_004,Residential #4 (Z2_South),Residential,3.0,Zone_2_South,TX_102,2.216,2.216,2.449,-9.5,20.3,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_S_005,MTR_S_005,Residential #5 (Z2_South),Residential,6.0,Zone_2_South,TX_102,5.505,5.505,4.685,17.5,22.1,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_S_006,MTR_S_006,Commercial #6 (Z2_South),Commercial,12.0,Zone_2_South,TX_102,5.855,5.855,6.071,-3.6,22.5,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_S_007,MTR_S_007,Commercial #7 (Z2_South),Commercial,15.0,Zone_2_South,TX_102,8.419,8.419,7.656,10.0,23.0,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_S_008,MTR_S_008,Residential #8 (Z2_South),Residential,4.5,Zone_2_South,TX_102,3.692,3.692,3.55,4.0,15.3,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_S_009,MTR_S_009,Residential #9 (Z2_South),Residential,4.5,Zone_2_South,TX_102,3.203,3.203,3.653,-12.3,15.7,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_S_010,MTR_S_010,Residential #10 (Z2_South),Residential,4.5,Zone_2_South,TX_102,4.045,4.045,3.534,14.4,16.0,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_S_011,MTR_S_011,Residential #11 (Z2_South),Residential,3.0,Zone_2_South,TX_102,0.0,2.343,2.466,-100.0,88.0,HIGH,METER_MALFUNCTION,94.0,Replace defective meter unit; recalibrate CT sensor
-CONS_S_012,MTR_S_012,Residential #12 (Z2_South),Residential,6.0,Zone_2_South,TX_102,4.789,4.789,4.695,2.0,18.5,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_S_013,MTR_S_013,Residential #13 (Z2_South),Residential,4.5,Zone_2_South,TX_102,3.157,3.157,3.546,-11.0,16.2,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_S_014,MTR_S_014,Residential #14 (Z2_South),Residential,6.0,Zone_2_South,TX_102,4.968,4.968,4.745,4.7,19.1,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_S_015,MTR_S_015,Residential #15 (Z2_South),Residential,6.0,Zone_2_South,TX_102,5.158,5.158,4.742,8.8,20.2,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_S_016,MTR_S_016,Residential #16 (Z2_South),Residential,4.5,Zone_2_South,TX_102,4.183,4.183,3.661,14.3,16.4,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_S_017,MTR_S_017,Residential #17 (Z2_South),Residential,3.0,Zone_2_South,TX_102,2.552,2.552,2.47,3.3,19.4,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_S_018,MTR_S_018,Residential #18 (Z2_South),Residential,4.5,Zone_2_South,TX_102,0.2,3.768,3.561,-94.4,60.0,HIGH,THEFT_TAMPERING,75.0,HIGH PRIORITY: Issue physical inspection warrant. Dispatch anti-theft squad to verify meter shunt/bypass
-CONS_S_019,MTR_S_019,Residential #19 (Z2_South),Residential,3.0,Zone_2_South,TX_102,3.509,3.509,2.529,38.8,19.8,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_S_020,MTR_S_020,Commercial #20 (Z2_South),Commercial,8.0,Zone_2_South,TX_102,4.758,4.758,4.154,14.5,19.1,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_S_021,MTR_S_021,Residential #21 (Z2_South),Residential,3.0,Zone_2_South,TX_102,2.284,2.284,2.433,-6.1,20.4,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_S_022,MTR_S_022,Residential #22 (Z2_South),Residential,4.5,Zone_2_South,TX_102,3.389,3.389,3.571,-5.1,14.7,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_S_023,MTR_S_023,Commercial #23 (Z2_South),Commercial,8.0,Zone_2_South,TX_102,4.557,4.557,4.073,11.9,18.4,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
-CONS_S_024,MTR_S_024,Residential #24 (Z2_South),Residential,4.5,Zone_2_South,TX_102,3.784,3.784,3.646,3.8,14.4,NORMAL,NORMAL,95.0,Continue Routine Smart Meter Monitoring
+CONS_N_001,MTR_N_001,Residential #1 (Z1_North),Residential,6.0,Zone_1_North,TX_101,4.801,4.801,4.801,0.0,30.0,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_N_002,MTR_N_002,Commercial #2 (Z1_North),Commercial,8.0,Zone_1_North,TX_101,5.036,5.036,4.258,18.3,93.3,CRITICAL,THEFT_TAMPERING,98.0,HIGH PRIORITY: Issue physical inspection warrant. Dispatch anti-theft squad to verify meter shunt/bypass
+CONS_N_003,MTR_N_003,Residential #3 (Z1_North),Residential,6.0,Zone_1_North,TX_101,4.601,4.601,4.649,-1.0,30.0,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_N_004,MTR_N_004,LightIndustrial #4 (Z1_North),LightIndustrial,25.0,Zone_1_North,TX_101,0.888,3.172,3.533,-74.9,96.5,CRITICAL,THEFT_TAMPERING,98.0,HIGH PRIORITY: Issue physical inspection warrant. Dispatch anti-theft squad to verify meter shunt/bypass
+CONS_N_005,MTR_N_005,Residential #5 (Z1_North),Residential,4.5,Zone_1_North,TX_101,3.914,3.914,3.575,9.5,80.0,HIGH,THEFT_TAMPERING,96.0,HIGH PRIORITY: Issue physical inspection warrant. Dispatch anti-theft squad to verify meter shunt/bypass
+CONS_N_006,MTR_N_006,Residential #6 (Z1_North),Residential,3.0,Zone_1_North,TX_101,2.722,2.722,2.429,12.1,30.0,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_N_007,MTR_N_007,Residential #7 (Z1_North),Residential,4.5,Zone_1_North,TX_101,3.637,3.637,3.536,2.9,30.0,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_N_008,MTR_N_008,Residential #8 (Z1_North),Residential,3.0,Zone_1_North,TX_101,2.489,2.489,2.362,5.4,11.5,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_N_009,MTR_N_009,Residential #9 (Z1_North),Residential,3.0,Zone_1_North,TX_101,0.836,2.389,2.395,-65.1,90.0,CRITICAL,THEFT_TAMPERING,98.0,HIGH PRIORITY: Issue physical inspection warrant. Dispatch anti-theft squad to verify meter shunt/bypass
+CONS_N_010,MTR_N_010,Residential #10 (Z1_North),Residential,4.5,Zone_1_North,TX_101,3.629,3.629,3.542,2.5,29.3,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_N_011,MTR_N_011,Commercial #11 (Z1_North),Commercial,12.0,Zone_1_North,TX_101,6.958,6.958,6.128,13.6,24.9,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_N_012,MTR_N_012,Residential #12 (Z1_North),Residential,6.0,Zone_1_North,TX_101,5.837,5.837,4.659,25.3,43.5,REQUIRES_REVIEW,REQUIRES_REVIEW,65.0,Queue for secondary remote AMI audit before dispatching physical field crew
+CONS_N_013,MTR_N_013,Residential #13 (Z1_North),Residential,6.0,Zone_1_North,TX_101,5.342,5.342,4.753,12.4,30.0,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_N_014,MTR_N_014,Commercial #14 (Z1_North),Commercial,12.0,Zone_1_North,TX_101,7.994,7.994,6.271,27.5,30.0,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_N_015,MTR_N_015,Commercial #15 (Z1_North),Commercial,15.0,Zone_1_North,TX_101,0.42,8.723,7.679,-94.5,82.0,HIGH,METER_MALFUNCTION,95.0,Dispatch field technician for on-site diagnostic bench test and firmware refresh
+CONS_N_016,MTR_N_016,Commercial #16 (Z1_North),Commercial,15.0,Zone_1_North,TX_101,9.996,9.996,7.662,30.5,30.0,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_N_017,MTR_N_017,LightIndustrial #17 (Z1_North),LightIndustrial,25.0,Zone_1_North,TX_101,4.104,4.104,3.557,15.4,30.0,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_N_018,MTR_N_018,Commercial #18 (Z1_North),Commercial,12.0,Zone_1_North,TX_101,6.283,6.283,6.145,2.2,97.2,CRITICAL,THEFT_TAMPERING,98.0,HIGH PRIORITY: Issue physical inspection warrant. Dispatch anti-theft squad to verify meter shunt/bypass
+CONS_N_019,MTR_N_019,Residential #19 (Z1_North),Residential,3.0,Zone_1_North,TX_101,3.276,3.276,2.51,30.5,30.0,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_N_020,MTR_N_020,Commercial #20 (Z1_North),Commercial,8.0,Zone_1_North,TX_101,5.039,5.039,4.147,21.5,30.0,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_N_021,MTR_N_021,Commercial #21 (Z1_North),Commercial,15.0,Zone_1_North,TX_101,0.0,7.79,7.698,-100.0,68.0,MEDIUM,COMM_FAILURE,92.0,Dispatch AMI network tech to inspect RF/cellular meter antenna; verify power to collector node
+CONS_N_022,MTR_N_022,Commercial #22 (Z1_North),Commercial,12.0,Zone_1_North,TX_101,6.314,6.314,6.248,1.1,30.0,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_N_023,MTR_N_023,Commercial #23 (Z1_North),Commercial,8.0,Zone_1_North,TX_101,5.042,5.042,4.059,24.2,30.0,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_N_024,MTR_N_024,Residential #24 (Z1_North),Residential,4.5,Zone_1_North,TX_101,4.01,4.01,3.648,9.9,30.0,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_S_001,MTR_S_001,Residential #1 (Z2_South),Residential,3.0,Zone_2_South,TX_102,2.572,2.572,2.456,4.7,72.0,HIGH,THEFT_TAMPERING,78.8,HIGH PRIORITY: Issue physical inspection warrant. Dispatch anti-theft squad to verify meter shunt/bypass
+CONS_S_002,MTR_S_002,Residential #2 (Z2_South),Residential,3.0,Zone_2_South,TX_102,2.269,2.269,2.452,-7.5,30.0,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_S_003,MTR_S_003,Residential #3 (Z2_South),Residential,4.5,Zone_2_South,TX_102,11.578,11.578,3.621,219.7,32.0,LOW,LEGITIMATE_ABNORMAL,91.0,Flag as verified legitimate heavy load (EV/HVAC); no enforcement action needed
+CONS_S_004,MTR_S_004,Residential #4 (Z2_South),Residential,3.0,Zone_2_South,TX_102,2.216,2.216,2.449,-9.5,30.0,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_S_005,MTR_S_005,Residential #5 (Z2_South),Residential,6.0,Zone_2_South,TX_102,5.505,5.505,4.685,17.5,30.0,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_S_006,MTR_S_006,Commercial #6 (Z2_South),Commercial,12.0,Zone_2_South,TX_102,5.855,5.855,6.071,-3.6,86.9,CRITICAL,THEFT_TAMPERING,84.7,HIGH PRIORITY: Issue physical inspection warrant. Dispatch anti-theft squad to verify meter shunt/bypass
+CONS_S_007,MTR_S_007,Commercial #7 (Z2_South),Commercial,15.0,Zone_2_South,TX_102,8.419,8.419,7.656,10.0,14.7,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_S_008,MTR_S_008,Residential #8 (Z2_South),Residential,4.5,Zone_2_South,TX_102,3.692,3.692,3.55,4.0,10.9,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_S_009,MTR_S_009,Residential #9 (Z2_South),Residential,4.5,Zone_2_South,TX_102,3.203,3.203,3.653,-12.3,88.4,CRITICAL,THEFT_TAMPERING,85.3,HIGH PRIORITY: Issue physical inspection warrant. Dispatch anti-theft squad to verify meter shunt/bypass
+CONS_S_010,MTR_S_010,Residential #10 (Z2_South),Residential,4.5,Zone_2_South,TX_102,4.045,4.045,3.534,14.4,13.8,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_S_011,MTR_S_011,Residential #11 (Z2_South),Residential,3.0,Zone_2_South,TX_102,0.0,2.343,2.466,-100.0,88.0,HIGH,METER_MALFUNCTION,95.0,Replace defective meter unit; recalibrate CT sensor
+CONS_S_012,MTR_S_012,Residential #12 (Z2_South),Residential,6.0,Zone_2_South,TX_102,4.789,4.789,4.695,2.0,30.0,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_S_013,MTR_S_013,Residential #13 (Z2_South),Residential,4.5,Zone_2_South,TX_102,3.157,3.157,3.546,-11.0,30.0,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_S_014,MTR_S_014,Residential #14 (Z2_South),Residential,6.0,Zone_2_South,TX_102,4.968,4.968,4.745,4.7,30.0,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_S_015,MTR_S_015,Residential #15 (Z2_South),Residential,6.0,Zone_2_South,TX_102,5.158,5.158,4.742,8.8,30.0,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_S_016,MTR_S_016,Residential #16 (Z2_South),Residential,4.5,Zone_2_South,TX_102,4.183,4.183,3.661,14.3,30.0,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_S_017,MTR_S_017,Residential #17 (Z2_South),Residential,3.0,Zone_2_South,TX_102,2.552,2.552,2.47,3.3,30.0,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_S_018,MTR_S_018,Residential #18 (Z2_South),Residential,4.5,Zone_2_South,TX_102,0.2,3.768,3.561,-94.4,97.0,CRITICAL,THEFT_TAMPERING,88.8,HIGH PRIORITY: Issue physical inspection warrant. Dispatch anti-theft squad to verify meter shunt/bypass
+CONS_S_019,MTR_S_019,Residential #19 (Z2_South),Residential,3.0,Zone_2_South,TX_102,3.509,3.509,2.529,38.8,28.3,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_S_020,MTR_S_020,Commercial #20 (Z2_South),Commercial,8.0,Zone_2_South,TX_102,4.758,4.758,4.154,14.5,30.0,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_S_021,MTR_S_021,Residential #21 (Z2_South),Residential,3.0,Zone_2_South,TX_102,2.284,2.284,2.433,-6.1,30.0,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_S_022,MTR_S_022,Residential #22 (Z2_South),Residential,4.5,Zone_2_South,TX_102,3.389,3.389,3.571,-5.1,20.2,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_S_023,MTR_S_023,Commercial #23 (Z2_South),Commercial,8.0,Zone_2_South,TX_102,4.557,4.557,4.073,11.9,10.9,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring
+CONS_S_024,MTR_S_024,Residential #24 (Z2_South),Residential,4.5,Zone_2_South,TX_102,3.784,3.784,3.646,3.8,19.8,NORMAL,NORMAL,96.0,Continue Routine Smart Meter Monitoring

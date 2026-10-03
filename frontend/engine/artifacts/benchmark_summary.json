@@ -1,0 +1,111 @@
+{
+  "internal_test": [
+    {
+      "Model": "Isolation Forest (Unsupervised)",
+      "ROC-AUC": 0.5856,
+      "PR-AUC": 0.1483,
+      "F1-Score": 0.1209,
+      "Precision": 0.3442,
+      "Recall": 0.0733,
+      "P@Top-5%": 0.2317,
+      "P@Top-10%": 0.1558,
+      "FPR": 0.013
+    },
+    {
+      "Model": "LightGBM (Supervised)",
+      "ROC-AUC": 0.7599,
+      "PR-AUC": 0.3093,
+      "F1-Score": 0.294,
+      "Precision": 0.1937,
+      "Recall": 0.61,
+      "P@Top-5%": 0.4208,
+      "P@Top-10%": 0.3176,
+      "FPR": 0.2368
+    },
+    {
+      "Model": "XGBoost (Supervised)",
+      "ROC-AUC": 0.7584,
+      "PR-AUC": 0.3053,
+      "F1-Score": 0.2879,
+      "Precision": 0.1881,
+      "Recall": 0.6141,
+      "P@Top-5%": 0.4208,
+      "P@Top-10%": 0.3105,
+      "FPR": 0.2473
+    },
+    {
+      "Model": "Hybrid Stacking Ensemble (Champion)",
+      "ROC-AUC": 0.7612,
+      "PR-AUC": 0.3115,
+      "F1-Score": 0.3183,
+      "Precision": 0.2237,
+      "Recall": 0.5519,
+      "P@Top-5%": 0.4208,
+      "P@Top-10%": 0.314,
+      "FPR": 0.1787
+    }
+  ],
+  "second_dataset_test": [
+    {
+      "Model": "Isolation Forest (Unsupervised)",
+      "ROC-AUC": 0.6196,
+      "PR-AUC": 0.2812,
+      "F1-Score": 0.1208,
+      "Precision": 0.8053,
+      "Recall": 0.0653,
+      "P@Top-5%": 0.4306,
+      "P@Top-10%": 0.3116,
+      "FPR": 0.0026
+    },
+    {
+      "Model": "LightGBM (Supervised)",
+      "ROC-AUC": 0.7759,
+      "PR-AUC": 0.4493,
+      "F1-Score": 0.4527,
+      "Precision": 0.395,
+      "Recall": 0.5301,
+      "P@Top-5%": 0.6439,
+      "P@Top-10%": 0.5307,
+      "FPR": 0.1322
+    },
+    {
+      "Model": "XGBoost (Supervised)",
+      "ROC-AUC": 0.7958,
+      "PR-AUC": 0.4767,
+      "F1-Score": 0.4664,
+      "Precision": 0.4006,
+      "Recall": 0.5581,
+      "P@Top-5%": 0.6821,
+      "P@Top-10%": 0.5437,
+      "FPR": 0.1359
+    },
+    {
+      "Model": "Hybrid Stacking Ensemble (Champion)",
+      "ROC-AUC": 0.7946,
+      "PR-AUC": 0.4765,
+      "F1-Score": 0.4637,
+      "Precision": 0.4604,
+      "Recall": 0.467,
+      "P@Top-5%": 0.6841,
+      "P@Top-10%": 0.5508,
+      "FPR": 0.0891
+    }
+  ],
+  "features": [
+    "mean_kwh",
+    "median_kwh",
+    "std_kwh",
+    "cv_kwh",
+    "max_kwh",
+    "norm_iqr",
+    "zero_rate",
+    "max_zero_streak",
+    "drop_ratio_mean",
+    "drop_ratio_med",
+    "drop_magnitude",
+    "low_streak_recent",
+    "low_days_ratio",
+    "peer_ratio_dataset"
+  ],
+  "timestamp": "2026-10-03 17:41:53"
+}

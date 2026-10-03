@@ -1,7 +1,8 @@
 """
 Explainable Investigation Report Generator.
 Synthesizes telemetry, historical baselines, spatial transformer context,
-and physical ground truth into auditable, court-ready utility inspection reports.
+champion hybrid ML models (XGBoost + LightGBM + Isolation Forest),
+SHAP feature attributions, and physical ground truth into auditable, court-ready utility inspection reports.
 """
 from __future__ import annotations
 import uuid
@@ -44,6 +45,11 @@ class InvestigationReport:
     technical_assessment: str
     recommended_action: str
     inspection_priority_rank: int = 1
+    # Machine Learning & Explainability
+    ml_score: float = 0.0
+    ml_subscores: Dict[str, float] = field(default_factory=dict)
+    shap_factors: List[Dict[str, Any]] = field(default_factory=list)
+    historical_vs_realtime: Dict[str, Any] = field(default_factory=dict)
     # Ground truth audit (USP: Revealed for validation & ground-truth comparison)
     ground_truth_kw: Optional[float] = None
     unreported_stolen_kw: Optional[float] = None
@@ -70,6 +76,12 @@ class InvestigationReport:
                 "confidence_pct": round(self.confidence_pct, 1),
                 "inspection_priority_rank": self.inspection_priority_rank,
             },
+            "ml_analytics": {
+                "calibrated_score": round(self.ml_score, 1),
+                "subscores": self.ml_subscores,
+                "shap_factors": self.shap_factors,
+            },
+            "historical_vs_realtime": self.historical_vs_realtime,
             "metrics": {
                 "reported_kw": round(self.reported_kw, 3),
                 "historical_baseline_kw": round(self.historical_baseline_kw, 3),
@@ -104,7 +116,38 @@ class InvestigationReport:
 > **Model Accuracy Confirmation:** The detector successfully extracted this anomaly with `{self.confidence_pct:.1f}%` confidence against physical reality.
 """
 
+        hvr = self.historical_vs_realtime or {}
+        hvr_section = ""
+        if hvr:
+            hvr_section = f"""
+### Historical Benchmark vs. Real-Time Telemetry Audit
+| Audit Metric | Ground-Truth Historical Record | Real-Time Telemetry (15-min streaming) |
+|---|---|---|
+| **Dataset Source / Benchmark** | State Grid Corp China (`data.csv`) | Digital Twin IoT Streaming Telemetry |
+| **Kaggle Consumer Hash** | `{hvr.get('kaggle_id', 'N/A')}` | `{self.meter_id}` |
+| **Benchmark Ground Truth** | `{hvr.get('ground_truth_label', 'N/A')}` | Diagnostic Classification: `{self.probable_cause}` |
+| **Daily Energy Baseline** | `{hvr.get('historical_baseline_daily_kwh', 0.0):.2f} kWh/day` | Real-time Extrapolated: `{hvr.get('realtime_projected_daily_kwh', 0.0):.2f} kWh/day` |
+| **Energy Divergence (\Delta)** | Historical Reference | **`{hvr.get('divergence_pct', 0.0):+.1f}%`** (`{hvr.get('divergence_kwh', 0.0):+.2f} kWh/day`) |
+| **Cumulative Theft / Divergence (30-day)** | Historical Baseline Trajectory | **`{hvr.get('cumulative_divergence_kwh', 0.0):.1f} kWh`** |
+| **Estimated Utility Revenue Loss** | - | **`₹{hvr.get('est_revenue_loss_inr', 0.0):,.2f}`** (@ ₹7.50/kWh) |
+| **Temporal Onset Point** | Historical Shift Changepoint | `{hvr.get('anomaly_onset_day', 'N/A')}` |
+"""
+
         evidence_list = "\n".join([f"- {item}" for item in self.evidence_chain])
+
+        # SHAP breakdown table
+        shap_rows = ""
+        if self.shap_factors:
+            for sh in self.shap_factors:
+                f_name = sh["feature"].replace("_", " ").title()
+                shap_rows += f"| `{f_name}` | `{sh['value']}` | `+{sh['shap_impact']:.3f}` |\n"
+        else:
+            shap_rows = "| `Historical Baseline Alignment` | `Nominal` | `+0.000` |\n"
+
+        sub = self.ml_subscores or {}
+        xgb_p = sub.get("xgb_prob", 0.0)
+        lgb_p = sub.get("lgbm_prob", 0.0)
+        iso_s = sub.get("iso_score", 0.0)
 
         return f"""# Smart Grid Anomaly Investigation Report: {self.consumer_id}
 **Report ID:** `{self.report_id}` | **Generated At:** `{self.generated_at}` | **Priority Rank:** `#{self.inspection_priority_rank}`
@@ -118,16 +161,33 @@ class InvestigationReport:
 | **Consumer Name** | {self.consumer_name} |
 | **Category & Contracted Load** | {self.category} ({self.contracted_load_kw} kW) |
 | **Zone & Feeder** | {self.zone_id} ({self.transformer_id} / {self.feeder_id}) |
-| **Anomaly Score** | **`{self.anomaly_score:.1f} / 100`** ({self.risk_level}) |
+| **Final Anomaly Score** | **`{self.anomaly_score:.1f} / 100`** ({self.risk_level}) |
 | **Probable Cause** | **`{self.probable_cause}`** |
-| **Confidence** | **`{self.confidence_pct:.1f}%`** |
+| **Diagnostic Confidence** | **`{self.confidence_pct:.1f}%`** |
 
+---
+
+{hvr_section}
+---
+
+### AI/ML Hybrid Ensemble Attribution
+| Component Model | Architecture | Raw Prediction | Ensemble Weight |
+|---|---|---|---|
+| **XGBoost Classifier** | Supervised Gradient Boosted Trees | `P(Theft) = {xgb_p:.3f}` | 45% |
+| **LightGBM Classifier** | Supervised Leaf-Wise Trees | `P(Theft) = {lgb_p:.3f}` | 45% |
+| **Isolation Forest** | Unsupervised Isolation Trees | `Anomaly = {iso_s:.3f}` | 10% |
+| **Hybrid Stacking Blend** | Multi-Model Meta-Learner | **Score: `{self.anomaly_score:.1f} / 100`** | **100%** |
+
+#### Top SHAP Feature Impacts (XGBoost TreeExplainer)
+| Feature Name | Observed Value | SHAP Impact (\\Delta log-odds) |
+|---|---|---|
+{shap_rows}
 ---
 
 ### Meter & Feeder Analytics
 - **Current Reading:** `{self.reported_kw:.3f} kW` (Voltage: `{self.voltage_v:.1f} V`, Current: `{self.current_a:.2f} A`, PF: `{self.power_factor:.3f}`)
 - **Diurnal Baseline for Hour:** `{self.historical_baseline_kw:.3f} kW`
-- **Baseline Deviation:** `{self.deviation_pct:+.1f}%` (`{self.deviation_z:+.2f} \sigma`)
+- **Baseline Deviation:** `{self.deviation_pct:+.1f}%` (`{self.deviation_z:+.2f} \\sigma`)
 - **Parent Transformer Unexplained Loss (NTL):** `{self.zone_unexplained_loss_pct:.1f}%`
 
 {gt_section}
@@ -181,7 +241,7 @@ class AnomalyExplainer:
             )
         elif cause == "COMM_FAILURE":
             assessment = (
-                f"Telemetry telemetry acquisition failure detected for meter {consumer.meter_id}. "
+                f"Telemetry acquisition failure detected for meter {consumer.meter_id}. "
                 f"The Advanced Metering Infrastructure (AMI) collector failed to receive interval telemetry packets. "
                 "The parent transformer continues to operate normally, indicating the physical service drop is intact. "
                 "The anomaly is localized to the cellular/RF communications subsystem or backhaul gateway."
@@ -192,6 +252,12 @@ class AnomalyExplainer:
                 f"legitimate consumer demand. The parent transformer {consumer.transformer_id} experienced an identical load rise "
                 f"with 0% non-technical loss. The power factor ({anomaly.status_flags.get('power_factor', 0.95)}) and voltage drop "
                 "profile match compliant high-power appliances such as an EV Fast Charger or HVAC multi-split system."
+            )
+        elif cause == "REQUIRES_REVIEW":
+            assessment = (
+                f"Consumer exhibits mild load depression ({anomaly.deviation_pct:.1f}% deviation) with an intermediate "
+                f"anomaly score of {anomaly.anomaly_score:.1f}/100. Diagnostic registers show no physical tamper flags. "
+                "Classified as low-evidence edge case; secondary remote data audit recommended prior to crew dispatch."
             )
         else:
             assessment = (
@@ -235,6 +301,10 @@ class AnomalyExplainer:
             technical_assessment=assessment,
             recommended_action=anomaly.recommended_action,
             inspection_priority_rank=priority_rank,
+            ml_score=anomaly.ml_score,
+            ml_subscores=anomaly.ml_subscores,
+            shap_factors=anomaly.shap_factors,
+            historical_vs_realtime=anomaly.historical_vs_realtime,
             ground_truth_kw=gt_kw,
             unreported_stolen_kw=unreported_kw,
             active_scenario=active_scenario_val,

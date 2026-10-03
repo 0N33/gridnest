@@ -123,6 +123,8 @@ class ConsumerNode:
     line_distance_m: float = 0.0
     phase: str = "R"            # "R", "Y", "B"
     connected_pole_id: Optional[str] = None
+    kaggle_id: Optional[str] = None
+    kaggle_flag: Optional[int] = None
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -140,6 +142,8 @@ class ConsumerNode:
             "line_distance_m": self.line_distance_m,
             "phase": self.phase,
             "connected_pole_id": self.connected_pole_id,
+            "kaggle_id": self.kaggle_id,
+            "kaggle_flag": self.kaggle_flag,
         }
 
 

@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GridNest — Virtual IoT Sensor & AMI Simulator</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpolygon points='16,3.2 27.5,9.8 27.5,22.2 16,28.8 4.5,22.2 4.5,9.8' stroke='%2338bdf8' stroke-width='2' fill='%230f172a'/%3E%3Cpolygon points='18.5,5 8.5,16.5 15,16.5 13,27 23.5,14 17,14' fill='%2338bdf8'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #0b0f19;
+      --bg-surface: #111827;
+      --bg-card: #1e293b;
+      --bg-card-hover: #24344d;
+      --border-color: #334155;
+      --border-bright: #475569;
+      --accent-blue: #3b82f6;
+      --accent-cyan: #06b6d4;
+      --accent-red: #ef4444;
+      --accent-amber: #f59e0b;
+      --accent-yellow: #eab308;
+      --accent-purple: #8b5cf6;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* TOP HEADER */
+    header {
+      background: rgba(17, 24, 39, 0.95);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, #090d16 0%, #1e293b 100%);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 16px rgba(59, 130, 246, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      position: relative;
+    }
+    .brand-title {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+    .brand-sub {
+      font-size: 10px;
+      color: var(--accent-cyan);
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.5px;
+    }
+
+    .status-badges {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .status-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      border: 1px solid var(--border-color);
+      background: var(--bg-surface);
+    }
+    .status-pill.online {
+      background: rgba(59, 130, 246, 0.12);
+      border-color: rgba(59, 130, 246, 0.4);
+      color: #60a5fa;
+    }
+    .status-pill.offline {
+      background: rgba(239, 68, 68, 0.12);
+      border-color: rgba(239, 68, 68, 0.4);
+      color: #f87171;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 8px currentColor;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-bright);
+    }
+    .btn.primary {
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+    }
+    .btn.primary:hover {
+      background: #2563eb;
+    }
+    .btn.success {
+      background: #d97706;
+      border-color: #d97706;
+      color: #fff;
+    }
+    .btn.success:hover {
+      background: #b45309;
+    }
+    .btn.danger {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: rgba(239, 68, 68, 0.4);
+      color: #f87171;
+    }
+    .btn.danger:hover {
+      background: rgba(239, 68, 68, 0.25);
+    }
+
+    /* MAIN CONTAINER */
+    main {
+      flex: 1;
+      padding: 20px 24px;
+      max-width: 1440px;
+      margin: 0 auto;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* KPI STATS BAR */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+    }
+    .kpi-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .kpi-lbl {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .kpi-val {
+      font-size: 20px;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .kpi-sub {
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    /* GRID WORKSPACE LAYOUT */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 20px;
+    }
+    @media (max-width: 1024px) {
+      .workspace-grid { grid-template-columns: 1fr; }
+    }
+
+    .panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .panel-header {
+      background: rgba(30, 41, 59, 0.7);
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .panel-title {
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .panel-body {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* FORM CONTROLS */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    select, input[type="text"], input[type="number"] {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13px;
+      outline: none;
+    }
+    select:focus, input:focus {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+
+    .zone-filter-chips {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    .chip {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .chip.active {
+      background: rgba(59, 130, 246, 0.2);
+      border-color: var(--accent-blue);
+      color: #93c5fd;
+    }
+
+    /* SCENARIO TAB BUTTONS */
+    .scenario-tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      background: var(--bg-base);
+      padding: 4px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .tab-btn.active {
+      background: var(--bg-card);
+      color: var(--text-main);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+    .tab-btn.active.theft { border-bottom: 2px solid var(--accent-red); color: #fca5a5; }
+    .tab-btn.active.fault { border-bottom: 2px solid var(--accent-amber); color: #fcd34d; }
+    .tab-btn.active.comm  { border-bottom: 2px solid var(--accent-purple); color: #d8b4fe; }
+    .tab-btn.active.surge { border-bottom: 2px solid var(--accent-amber); color: #fcd34d; }
+
+    .tab-content {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 14px;
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .tab-content.active {
+      display: flex;
+    }
+
+    /* RANGE SLIDER */
+    .slider-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .slider-head {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    input[type="range"] {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #334155;
+      outline: none;
+      accent-color: var(--accent-blue);
+      cursor: pointer;
+    }
+
+    /* CHECKBOX GROUP */
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .check-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--text-muted);
+      cursor: pointer;
+      background: rgba(15, 23, 42, 0.4);
+      padding: 6px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--border-color);
+    }
+    .check-label:hover {
+      border-color: var(--border-bright);
+    }
+    .check-label input {
+      accent-color: var(--accent-red);
+    }
+
+    /* CURRENT CONSUMER CARD */
+    .consumer-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .consumer-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 8px;
+    }
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .metric-col {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .metric-lbl {
+      font-size: 10px;
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+    .metric-val {
+      font-size: 13px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+    }
+
+    /* TERMINAL / EVENT STREAM */
+    .terminal-wrap {
+      background: #070a13;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      height: 380px;
+      display: flex;
+      flex-direction: column;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+    }
+    .terminal-header {
+      background: #0f172a;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .terminal-body {
+      padding: 10px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .terminal-line {
+      line-height: 1.4;
+      display: flex;
+      gap: 8px;
+      word-break: break-all;
+    }
+    .terminal-line .t-time { color: var(--text-dim); }
+    .terminal-line .t-topic { color: var(--accent-cyan); font-weight: 600; }
+    .terminal-line .t-theft { color: #f87171; }
+    .terminal-line .t-fault { color: #fbbf24; }
+    .terminal-line .t-normal { color: #94a3b8; }
+    .terminal-line .t-info { color: #94a3b8; }
+
+    /* PRESETS STRIP */
+    .presets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 8px;
+    }
+    .preset-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      transition: all 0.2s;
+    }
+    .preset-btn:hover {
+      border-color: var(--accent-blue);
+      background: var(--bg-card-hover);
+    }
+    .preset-desc {
+      font-size: 10px;
+      color: var(--text-dim);
+    }
+
+    /* BADGES */
+    .badge {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .badge.CRITICAL { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+    .badge.HIGH     { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .badge.MEDIUM   { background: rgba(139, 92, 246, 0.2); color: #c084fc; border: 1px solid rgba(139, 92, 246, 0.4); }
+    .badge.LOW      { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .badge.NORMAL   { background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.3); }
+
+    /* TOAST ALERT */
+    #toast-msg {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #1e293b;
+      border: 1px solid var(--accent-blue);
+      padding: 12px 18px;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      font-size: 12px;
+      font-weight: 600;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP HEADER -->
+  <header>
+    <div class="brand">
+      <div class="brand-icon">
+        <svg width="26" height="26" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="sim-bolt-grad" x1="10" y1="4" x2="22" y2="28" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#38bdf8"/>
+              <stop offset="50%" stop-color="#60a5fa"/>
+              <stop offset="100%" stop-color="#2563eb"/>
+            </linearGradient>
+            <linearGradient id="sim-hex-grad" x1="4" y1="4" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.9"/>
+              <stop offset="50%" stop-color="#818cf8" stop-opacity="0.7"/>
+              <stop offset="100%" stop-color="#c084fc" stop-opacity="0.8"/>
+            </linearGradient>
+            <filter id="sim-glow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="0" stdDeviation="1.2" flood-color="#38bdf8" flood-opacity="0.7"/>
+            </filter>
+          </defs>
+          <polygon points="16,3.2 27.5,9.8 27.5,22.2 16,28.8 4.5,22.2 4.5,9.8" stroke="url(#sim-hex-grad)" stroke-width="1.6" stroke-linejoin="round" fill="rgba(15, 23, 42, 0.6)"/>
+          <line x1="16" y1="3.2" x2="16" y2="9.5" stroke="#38bdf8" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="1.5 1.5"/>
+          <line x1="4.5" y1="9.8" x2="11" y2="13.5" stroke="#60a5fa" stroke-width="1" stroke-linecap="round"/>
+          <line x1="27.5" y1="9.8" x2="21" y2="13.5" stroke="#818cf8" stroke-width="1" stroke-linecap="round"/>
+          <line x1="4.5" y1="22.2" x2="11" y2="18.5" stroke="#60a5fa" stroke-width="1" stroke-linecap="round"/>
+          <line x1="27.5" y1="22.2" x2="21" y2="18.5" stroke="#818cf8" stroke-width="1" stroke-linecap="round"/>
+          <line x1="16" y1="28.8" x2="16" y2="23.5" stroke="#38bdf8" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="1.5 1.5"/>
+          <circle cx="16" cy="3.2" r="1.5" fill="#38bdf8"/>
+          <circle cx="27.5" cy="9.8" r="1.3" fill="#60a5fa"/>
+          <circle cx="27.5" cy="22.2" r="1.3" fill="#818cf8"/>
+          <circle cx="16" cy="28.8" r="1.5" fill="#38bdf8"/>
+          <circle cx="4.5" cy="22.2" r="1.3" fill="#818cf8"/>
+          <circle cx="4.5" cy="9.8" r="1.3" fill="#60a5fa"/>
+          <polygon points="18.5,5 8.5,16.5 15,16.5 13,27 23.5,14 17,14" fill="url(#sim-bolt-grad)" filter="url(#sim-glow)"/>
+          <polygon points="17.5,7.5 11,16 14.5,16 13.5,23.5 20.5,14.5 17,14.5" fill="#ffffff" opacity="0.6"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-title">GridNest IoT AMI Simulator</div>
+        <div class="brand-sub">VIRTUAL SENSOR NETWORK & CYBER-PHYSICAL INJECTOR</div>
+      </div>
+    </div>
+
+    <!-- CONNECTION BADGES -->
+    <div class="status-badges">
+      <div class="status-pill online" id="badge-server">
+        <div class="status-dot"></div>
+        <span>HTTP: 8000</span>
+      </div>
+      <div class="status-pill online" id="badge-mqtt">
+        <div class="status-dot"></div>
+        <span id="txt-mqtt">MQTT: 1883</span>
+      </div>
+      <div class="status-pill online" id="badge-ws">
+        <div class="status-dot"></div>
+        <span>WS: LIVE</span>
+      </div>
+    </div>
+
+    <!-- PRIMARY HEADER CONTROLS -->
+    <div class="header-actions">
+      <button class="btn" onclick="stepSimulation()" title="Advance simulation by 1 tick (15 simulated minutes)">
+        <span>⏩ Step Clock (+15m)</span>
+      </button>
+      <button class="btn primary" id="btn-stream" onclick="toggleAutoStream()">
+        <span id="stream-icon">▶️ Auto-Stream (2s)</span>
+      </button>
+      <button class="btn danger" onclick="restoreAllConsumers()" title="Restore all 48 meters to normal baseline">
+        <span>🛡️ Reset All</span>
+      </button>
+      <a href="/" target="_blank" class="btn success" title="Open 3D Digital Twin City View in new tab">
+        <span>🗺️ View 3D Twin</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- MAIN BODY -->
+  <main>
+
+    <!-- KPI STRIP -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <span class="kpi-lbl">Simulated Calendar Clock</span>
+        <span class="kpi-val" id="kpi-clock" style="color: var(--accent-cyan);">2026-10-05 06:15</span>
+        <span class="kpi-sub">Interval: 15 mins / step</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-lbl">Smart Meters Monitored</span>
+        <span class="kpi-val" id="kpi-meters">48 / 48</span>
+        <span class="kpi-sub">24 North (TX-101) + 24 South (TX-102)</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-lbl">Active Anomalies Flagged</span>
+        <span class="kpi-val" id="kpi-anomalies" style="color: var(--accent-red);">5 Detected</span>
+        <span class="kpi-sub">Evaluated by Hybrid ML & Rule Engine</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-lbl">Zone 1 Unexplained NTL</span>
+        <span class="kpi-val" id="kpi-z1-ntl" style="color: var(--accent-amber);">14.2%</span>
+        <span class="kpi-sub">TX-101 Feeder Energy Discrepancy</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-lbl">Zone 2 Unexplained NTL</span>
+        <span class="kpi-val" id="kpi-z2-ntl" style="color: var(--accent-blue);">4.1%</span>
+        <span class="kpi-sub">TX-102 Feeder Energy Discrepancy</span>
+      </div>
+    </div>
+
+    <!-- MAIN TWO-COLUMN WORKSPACE -->
+    <div class="workspace-grid">
+
+      <!-- LEFT COLUMN: INTERACTIVE SCENARIO & SENSOR INJECTOR -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <span>⚡ Interactive Smart Meter Scenario Injector</span>
+          </div>
+          <span style="font-size: 11px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace;">TOPIC: grid/control/inject</span>
+        </div>
+        <div class="panel-body">
+
+          <!-- 1. SELECT TARGET CONSUMER -->
+          <div class="form-group">
+            <div class="form-label">
+              <span>1. SELECT TARGET CONSUMER SMART METER</span>
+              <span id="consumer-count-lbl" style="font-family:'JetBrains Mono'; font-size:11px;">48 Available</span>
+            </div>
+            
+            <div class="zone-filter-chips">
+              <button class="chip active" onclick="filterConsumers('ALL')">All (48)</button>
+              <button class="chip" onclick="filterConsumers('Zone_1_North')">Zone 1: North (TX-101)</button>
+              <button class="chip" onclick="filterConsumers('Zone_2_South')">Zone 2: South (TX-102)</button>
+            </div>
+
+            <select id="select-consumer" onchange="onConsumerChanged()">
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+
+          <!-- SELECTED CONSUMER LIVE CARD -->
+          <div class="consumer-card" id="card-consumer-info">
+            <div class="consumer-card-header">
+              <div>
+                <strong id="card-c-id" style="font-size: 14px; color: var(--text-main);">CONS_N_004</strong>
+                <span id="card-meter-id" style="font-size: 11px; color: var(--text-dim); margin-left: 6px; font-family:'JetBrains Mono';">MTR_N_004</span>
+              </div>
+              <span class="badge CRITICAL" id="card-risk-badge">CRITICAL RISK</span>
+            </div>
+            <div class="metric-row">
+              <div class="metric-col">
+                <span class="metric-lbl">Reported Load</span>
+                <span class="metric-val" id="card-rep-kw" style="color: var(--accent-blue);">0.85 kW</span>
+              </div>
+              <div class="metric-col">
+                <span class="metric-lbl">True Baseline</span>
+                <span class="metric-val" id="card-base-kw">3.50 kW</span>
+              </div>
+              <div class="metric-col">
+                <span class="metric-lbl">Anomaly Score</span>
+                <span class="metric-val" id="card-score-val" style="color: var(--accent-red);">94.0</span>
+              </div>
+              <div class="metric-col">
+                <span class="metric-lbl">Probable Cause</span>
+                <span class="metric-val" id="card-cause-val" style="font-size: 11px; color: var(--accent-amber);">THEFT</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. SCENARIO SELECTOR TABS -->
+          <div class="form-group">
+            <div class="form-label">
+              <span>2. SELECT OPERATIONAL SCENARIO TO INJECT</span>
+            </div>
+
+            <div class="scenario-tabs">
+              <button class="tab-btn active theft" onclick="setScenarioTab('theft')">
+                <span>⚡ Theft Bypass</span>
+                <span style="font-size: 9px; opacity: 0.8;">Non-Technical Loss</span>
+              </button>
+              <button class="tab-btn fault" onclick="setScenarioTab('fault')">
+                <span>🛠️ Meter Fault</span>
+                <span style="font-size: 9px; opacity: 0.8;">Hardware Failure</span>
+              </button>
+              <button class="tab-btn comm" onclick="setScenarioTab('comm')">
+                <span>📡 Comm Drop</span>
+                <span style="font-size: 9px; opacity: 0.8;">AMI Packet Loss</span>
+              </button>
+              <button class="tab-btn surge" onclick="setScenarioTab('surge')">
+                <span>🚗 Heavy Surge</span>
+                <span style="font-size: 9px; opacity: 0.8;">EV Charger / HVAC</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- TAB 1: THEFT BYPASS -->
+          <div class="tab-content active" id="tab-theft">
+            <div class="slider-wrap">
+              <div class="slider-head">
+                <span>Reported Power Shunt Ratio:</span>
+                <strong id="lbl-shunt-ratio" style="color: var(--accent-red);">25% Reported (75% Stolen)</strong>
+              </div>
+              <input type="range" id="input-shunt-slider" min="10" max="80" value="25" oninput="updateShuntLabel(this.value)">
+              <span style="font-size: 10px; color: var(--text-dim);">Lower percentage simulates more aggressive meter shunt or partial terminal bypass.</span>
+            </div>
+
+            <div class="form-group">
+              <span class="form-label">PHYSICAL TAMPER SENSOR REGISTERS:</span>
+              <div class="checkbox-grid">
+                <label class="check-label">
+                  <input type="checkbox" id="chk-mag-tamper" checked>
+                  <span>Magnetic Tamper Flag</span>
+                </label>
+                <label class="check-label">
+                  <input type="checkbox" id="chk-cover-open">
+                  <span>Enclosure Open Switch</span>
+                </label>
+                <label class="check-label">
+                  <input type="checkbox" id="chk-rev-current">
+                  <span>Reverse Power Flow</span>
+                </label>
+                <label class="check-label">
+                  <input type="checkbox" id="chk-covert">
+                  <span>Covert (No Tamper Bits)</span>
+                </label>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+              <button class="btn danger" style="flex: 1; justify-content: center;" onclick="injectTheftScenario()">
+                <span>⚡ Inject Electricity Theft via MQTT</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- TAB 2: METER FAULT -->
+          <div class="tab-content" id="tab-fault">
+            <div class="form-group">
+              <span class="form-label">SELECT HARDWARE TRANSDUCER DEFECT:</span>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <label class="check-label" style="display: flex; gap: 8px;">
+                  <input type="radio" name="fault-type" value="stuck" checked>
+                  <div>
+                    <strong>Stuck ADC Register:</strong>
+                    <div style="font-size: 10px; color: var(--text-dim);">Static flatline at 0.35 kW; unresponsive to diurnal curve.</div>
+                  </div>
+                </label>
+                <label class="check-label" style="display: flex; gap: 8px;">
+                  <input type="radio" name="fault-type" value="zero_reading">
+                  <div>
+                    <strong>Zero Power Loop Fault:</strong>
+                    <div style="font-size: 10px; color: var(--text-dim);">Voltage nominal (230V) but CT loop registers 0.00A current.</div>
+                  </div>
+                </label>
+                <label class="check-label" style="display: flex; gap: 8px;">
+                  <input type="radio" name="fault-type" value="spike">
+                  <div>
+                    <strong>Erratic High-Frequency Spike:</strong>
+                    <div style="font-size: 10px; color: var(--text-dim);">Unphysical power spike (>600% contract capacity).</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <button class="btn" style="background: #d97706; color: #fff; border-color: #d97706; justify-content: center;" onclick="injectFaultScenario()">
+              <span>🛠️ Inject Meter Hardware Fault via MQTT</span>
+            </button>
+          </div>
+
+          <!-- TAB 3: COMM LOSS -->
+          <div class="tab-content" id="tab-comm">
+            <div style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
+              Simulates wireless RF-Mesh or cellular headend packet loss. The smart meter stops transmitting scheduled 15-minute interval frames.
+            </div>
+            <button class="btn" style="background: #7c3aed; color: #fff; border-color: #7c3aed; justify-content: center;" onclick="injectCommScenario()">
+              <span>📡 Inject AMI Communication Failure</span>
+            </button>
+          </div>
+
+          <!-- TAB 4: LEGITIMATE HEAVY SURGE -->
+          <div class="tab-content" id="tab-surge">
+            <div class="slider-wrap">
+              <div class="slider-head">
+                <span>Legitimate Added Demand:</span>
+                <strong id="lbl-surge-val" style="color: #fbbf24;">+7.4 kW (EV Fast Charger)</strong>
+              </div>
+              <input type="range" id="input-surge-slider" min="30" max="150" value="74" oninput="updateSurgeLabel(this.value)">
+              <span style="font-size: 10px; color: var(--text-dim);">Verified appliance load (high PF >=0.92, balanced transformer intake). Not classified as theft!</span>
+            </div>
+
+            <button class="btn success" style="justify-content: center;" onclick="injectSurgeScenario()">
+              <span>🚗 Inject Legitimate Demand Surge</span>
+            </button>
+          </div>
+
+          <!-- RESTORE BUTTON -->
+          <div style="display: flex; gap: 10px; border-top: 1px solid var(--border-color); padding-top: 14px;">
+            <button class="btn" style="flex: 1; justify-content: center;" onclick="restoreSelectedConsumer()">
+              <span>✅ Restore Selected Consumer to Normal Baseline</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: QUICK PRESETS & LIVE TELEMETRY CONSOLE -->
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+
+        <!-- QUICK PRESETS PANEL -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span>🚀 1-Click Demonstration Presets</span>
+            </div>
+            <span style="font-size: 11px; color: var(--text-dim);">Viva / Demo Ready</span>
+          </div>
+          <div class="panel-body">
+            <div class="presets-grid">
+              <button class="preset-btn" onclick="applyPreset('theft_bypass_n003')">
+                <span style="color: #f87171;">⚡ Covert Theft (CONS_N_003)</span>
+                <span class="preset-desc">Residential bypass (80% drop, TX-101 NTL spike)</span>
+              </button>
+              <button class="preset-btn" onclick="applyPreset('tamper_bakery_n009')">
+                <span style="color: #f87171;">🧲 Neodymium Magnet (CONS_N_009)</span>
+                <span class="preset-desc">Commercial Bakery tamper flag tripped</span>
+              </button>
+              <button class="preset-btn" onclick="applyPreset('meter_fault_n015')">
+                <span style="color: #fbbf24;">🛠️ Stuck Meter (CONS_N_015)</span>
+                <span class="preset-desc">Stuck ADC register at 0.35 kW</span>
+              </button>
+              <button class="preset-btn" onclick="applyPreset('ev_surge_s003')">
+                <span style="color: #fbbf24;">🚗 Level-2 EV Surge (CONS_S_003)</span>
+                <span class="preset-desc">Legitimate heavy surge (+7.4 kW, low risk)</span>
+              </button>
+              <button class="preset-btn" onclick="applyPreset('comm_drop_n021')">
+                <span style="color: #c084fc;">📡 Comm Loss (CONS_N_021)</span>
+                <span class="preset-desc">RF packet dropped, awaiting retry</span>
+              </button>
+              <button class="preset-btn" onclick="restoreAllConsumers()">
+                <span style="color: #94a3b8;">🛡️ Reset All to Normal</span>
+                <span class="preset-desc">Clears all injections across both zones</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- REAL-TIME TELEMETRY EVENT STREAM (TERMINAL) -->
+        <div class="panel" style="flex: 1;">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span>📟 Live Telemetry & MQTT Event Stream</span>
+            </div>
+            <div style="display: flex; gap: 6px;">
+              <button class="btn" style="padding: 3px 8px; font-size: 10px;" onclick="clearTerminal()">Clear</button>
+            </div>
+          </div>
+          <div class="terminal-wrap">
+            <div class="terminal-header">
+              <span style="color: var(--text-dim);">Active topics: grid/meters/# | grid/control/#</span>
+              <span id="terminal-count" style="color: var(--accent-cyan);">0 events</span>
+            </div>
+            <div class="terminal-body" id="terminal-log">
+              <!-- Log entries appended dynamically -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast-msg">
+    <span id="toast-icon">⚡</span>
+    <span id="toast-text">Scenario injected successfully</span>
+  </div>
+
+  <script>
+    // Global state
+    let twinSnapshot = null;
+    let liveWs = null;
+    let isAutoStreaming = false;
+    let autoStreamTimer = null;
+    let currentZoneFilter = "ALL";
+    let activeTab = "theft";
+    let logEventCount = 0;
+
+    const apiBase = location.protocol === 'file:' ? 'http://localhost:8000' : '';
+
+    // Initialize on DOM load
+    window.addEventListener('DOMContentLoaded', () => {
+      fetchSnapshot();
+      initWebSocket();
+      setInterval(fetchSnapshot, 1500); // Poll every 1.5s as robust background sync
+      checkMqttBroker();
+      logToTerminal('info', 'SYS', 'GridNest Virtual IoT AMI Simulator initialized');
+    });
+
+    // 1. WEBSOCKET CONNECTION
+    function initWebSocket() {
+      const wsUrl = location.protocol === 'file:' 
+        ? 'ws://localhost:8000/ws/live'
+        : (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/ws/live';
+
+      try {
+        liveWs = new WebSocket(wsUrl);
+        liveWs.onopen = () => {
+          document.getElementById('badge-ws').className = 'status-pill online';
+          logToTerminal('info', 'WS', 'Connected to real-time WebSocket telemetry push stream');
+        };
+        liveWs.onmessage = (evt) => {
+          try {
+            const data = JSON.parse(evt.data);
+            handleSnapshotUpdate(data);
+          } catch (e) {}
+        };
+        liveWs.onclose = () => {
+          document.getElementById('badge-ws').className = 'status-pill offline';
+          setTimeout(initWebSocket, 2500);
+        };
+        liveWs.onerror = () => {
+          document.getElementById('badge-ws').className = 'status-pill offline';
+        };
+      } catch (e) {
+        document.getElementById('badge-ws').className = 'status-pill offline';
+      }
+    }
+
+    // 2. FETCH SNAPSHOT FROM SERVER
+    async function fetchSnapshot() {
+      try {
+        const res = await fetch(`${apiBase}/api/snapshot`);
+        if (res.ok) {
+          const snap = await res.json();
+          handleSnapshotUpdate(snap);
+          document.getElementById('badge-server').className = 'status-pill online';
+        } else {
+          document.getElementById('badge-server').className = 'status-pill offline';
+        }
+      } catch (err) {
+        document.getElementById('badge-server').className = 'status-pill offline';
+      }
+    }
+
+    async function checkMqttBroker() {
+      try {
+        const res = await fetch(`${apiBase}/api/iot/status`);
+        if (res.ok) {
+          const st = await res.json();
+          const pill = document.getElementById('badge-mqtt');
+          const txt = document.getElementById('txt-mqtt');
+          if (st.broker_running) {
+            pill.className = 'status-pill online';
+            txt.innerText = `MQTT: ${st.mqtt_port}`;
+          } else {
+            pill.className = 'status-pill offline';
+            txt.innerText = 'REST BRIDGE';
+          }
+        }
+      } catch (e) {}
+    }
+
+    // 3. UPDATE SNAPSHOT DATA
+    function handleSnapshotUpdate(data) {
+      twinSnapshot = data;
+
+      // Update KPI strip
+      if (data.clock) {
+        document.getElementById('kpi-clock').innerText = data.clock.iso_time.replace('T', ' ').substring(0, 16);
+      }
+      if (data.grid_summary) {
+        document.getElementById('kpi-meters').innerText = `${data.grid_summary.total_consumers} / ${data.grid_summary.total_consumers}`;
+        document.getElementById('kpi-anomalies').innerText = `${data.grid_summary.anomalous_consumers_count} Detected`;
+      }
+      if (data.transformers) {
+        const tx1 = data.transformers['TX_101'];
+        const tx2 = data.transformers['TX_102'];
+        if (tx1 && tx1.accounting) {
+          document.getElementById('kpi-z1-ntl').innerText = `${tx1.accounting.unexplained_loss_pct}%`;
+        }
+        if (tx2 && tx2.accounting) {
+          document.getElementById('kpi-z2-ntl').innerText = `${tx2.accounting.unexplained_loss_pct}%`;
+        }
+      }
+
+      // Populate consumer dropdown if empty
+      const sel = document.getElementById('select-consumer');
+      const prevVal = sel.value;
+      populateConsumerDropdown(data.consumers);
+      if (prevVal && sel.querySelector(`option[value="${prevVal}"]`)) {
+        sel.value = prevVal;
+      }
+      onConsumerChanged();
+    }
+
+    // 4. POPULATE CONSUMER DROPDOWN
+    function populateConsumerDropdown(consumers) {
+      if (!consumers) return;
+      const sel = document.getElementById('select-consumer');
+      const currentSelected = sel.value;
+      sel.innerHTML = '';
+
+      let count = 0;
+      for (const [cId, c] of Object.entries(consumers)) {
+        if (currentZoneFilter !== 'ALL' && c.static.zone_id !== currentZoneFilter) {
+          continue;
+        }
+        count++;
+        const opt = document.createElement('option');
+        opt.value = cId;
+        const cause = c.analysis ? c.analysis.probable_cause : 'NORMAL';
+        const score = c.analysis ? Math.round(c.analysis.anomaly_score) : 0;
+        const icon = cause === 'THEFT_TAMPERING' ? '⚡' : (cause === 'METER_MALFUNCTION' ? '🛠️' : (cause === 'COMM_FAILURE' ? '📡' : (cause === 'LEGITIMATE_ABNORMAL' ? '🚗' : '🟢')));
+        opt.innerText = `${icon} ${cId} (${c.static.meter_id}) — ${cause.replace(/_/g, ' ')} [${score}]`;
+        sel.appendChild(opt);
+      }
+      document.getElementById('consumer-count-lbl').innerText = `${count} Available`;
+
+      if (currentSelected && sel.querySelector(`option[value="${currentSelected}"]`)) {
+        sel.value = currentSelected;
+      }
+    }
+
+    function filterConsumers(zone) {
+      currentZoneFilter = zone;
+      document.querySelectorAll('.zone-filter-chips .chip').forEach(c => c.classList.remove('active'));
+      event.target.classList.add('active');
+      if (twinSnapshot && twinSnapshot.consumers) {
+        populateConsumerDropdown(twinSnapshot.consumers);
+        onConsumerChanged();
+      }
+    }
+
+    // 5. CONSUMER CARD PREVIEW
+    function onConsumerChanged() {
+      const cId = document.getElementById('select-consumer').value;
+      if (!cId || !twinSnapshot || !twinSnapshot.consumers) return;
+      const c = twinSnapshot.consumers[cId];
+      if (!c) return;
+
+      document.getElementById('card-c-id').innerText = cId;
+      document.getElementById('card-meter-id').innerText = `${c.static.meter_id} | ${c.static.zone_id.replace('Zone_', 'Z')}`;
+
+      const an = c.analysis || {};
+      const risk = an.risk_level || 'NORMAL';
+      const cause = an.probable_cause || 'NORMAL';
+      const score = an.anomaly_score !== undefined ? Math.round(an.anomaly_score) : 0;
+      const repKw = an.reported_kw !== undefined ? an.reported_kw : 0.0;
+      const baseKw = an.baseline_mean_kw !== undefined ? an.baseline_mean_kw : 0.0;
+
+      const badge = document.getElementById('card-risk-badge');
+      badge.className = `badge ${risk}`;
+      badge.innerText = `${risk} RISK`;
+
+      document.getElementById('card-rep-kw').innerText = `${repKw} kW`;
+      document.getElementById('card-base-kw').innerText = `${baseKw} kW`;
+      document.getElementById('card-score-val').innerText = score;
+      document.getElementById('card-cause-val').innerText = cause.replace(/_/g, ' ');
+    }
+
+    // 6. SCENARIO TAB SELECTION
+    function setScenarioTab(tabName) {
+      activeTab = tabName;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+      const btn = document.querySelector(`.tab-btn.${tabName}`);
+      if (btn) btn.classList.add('active');
+
+      const content = document.getElementById(`tab-${tabName}`);
+      if (content) content.classList.add('active');
+    }
+
+    function updateShuntLabel(val) {
+      const stolen = 100 - parseInt(val);
+      document.getElementById('lbl-shunt-ratio').innerText = `${val}% Reported (${stolen}% Stolen)`;
+    }
+
+    function updateSurgeLabel(val) {
+      const kw = (parseInt(val) / 10.0).toFixed(1);
+      document.getElementById('lbl-surge-val').innerText = `+${kw} kW (Demand Surge)`;
+    }
+
+    // 7. SCENARIO INJECTION ACTIONS
+    async function injectTheftScenario() {
+      const cId = document.getElementById('select-consumer').value;
+      if (!cId) return;
+
+      const shuntRatio = parseFloat(document.getElementById('input-shunt-slider').value) / 100.0;
+      const magTamper = document.getElementById('chk-mag-tamper').checked;
+      const coverOpen = document.getElementById('chk-cover-open').checked;
+      const revCurrent = document.getElementById('chk-rev-current').checked;
+      const isCovert = document.getElementById('chk-covert').checked;
+
+      const payload = {
+        scenario: "THEFT_BYPASS",
+        params: {
+          mode: "partial_shunt",
+          scaling_factor: shuntRatio,
+          trigger_tamper_flag: !isCovert && magTamper,
+          magnetic_tamper: !isCovert && magTamper,
+          tamper_cover_opened: !isCovert && coverOpen,
+          reverse_current: !isCovert && revCurrent
+        }
+      };
+
+      try {
+        const res = await fetch(`${apiBase}/api/inject/${cId}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          const resp = await res.json();
+          handleSnapshotUpdate(resp.snapshot);
+          showToast(`⚡ THEFT INJECTED on ${cId} (${Math.round(shuntRatio*100)}% shunt)`);
+          logToTerminal('theft', `grid/control/inject`, `Injected THEFT_BYPASS on ${cId} | Shunt: ${shuntRatio} | Anomaly Score: 90+`);
+        }
+      } catch (err) {
+        showToast(`Error: ${err.message}`);
+      }
+    }
+
+    async function injectFaultScenario() {
+      const cId = document.getElementById('select-consumer').value;
+      if (!cId) return;
+      const faultType = document.querySelector('input[name="fault-type"]:checked').value;
+
+      const payload = {
+        scenario: "METER_MALFUNCTION",
+        params: {
+          malfunction_type: faultType
+        }
+      };
+
+      try {
+        const res = await fetch(`${apiBase}/api/inject/${cId}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          const resp = await res.json();
+          handleSnapshotUpdate(resp.snapshot);
+          showToast(`🛠️ METER FAULT INJECTED on ${cId} (${faultType})`);
+          logToTerminal('fault', `grid/control/inject`, `Injected METER_MALFUNCTION on ${cId} | Type: ${faultType}`);
+        }
+      } catch (err) {
+        showToast(`Error: ${err.message}`);
+      }
+    }
+
+    async function injectCommScenario() {
+      const cId = document.getElementById('select-consumer').value;
+      if (!cId) return;
+
+      const payload = { scenario: "COMM_FAILURE", params: {} };
+      try {
+        const res = await fetch(`${apiBase}/api/inject/${cId}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          const resp = await res.json();
+          handleSnapshotUpdate(resp.snapshot);
+          showToast(`📡 COMM FAILURE INJECTED on ${cId} (Offline packet drop)`);
+          logToTerminal('info', `grid/control/inject`, `Injected COMM_FAILURE on ${cId} | Meter offline`);
+        }
+      } catch (err) {
+        showToast(`Error: ${err.message}`);
+      }
+    }
+
+    async function injectSurgeScenario() {
+      const cId = document.getElementById('select-consumer').value;
+      if (!cId) return;
+      const surgeKw = parseFloat(document.getElementById('input-surge-slider').value) / 10.0;
+
+      const payload = {
+        scenario: "LEGITIMATE_ABNORMAL",
+        params: { surge_kw: surgeKw }
+      };
+
+      try {
+        const res = await fetch(`${apiBase}/api/inject/${cId}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          const resp = await res.json();
+          handleSnapshotUpdate(resp.snapshot);
+          showToast(`🚗 SURGE INJECTED on ${cId} (+${surgeKw} kW EV Demand)`);
+          logToTerminal('normal', `grid/control/inject`, `Injected LEGITIMATE_ABNORMAL on ${cId} | +${surgeKw} kW (Low Risk)`);
+        }
+      } catch (err) {
+        showToast(`Error: ${err.message}`);
+      }
+    }
+
+    async function restoreSelectedConsumer() {
+      const cId = document.getElementById('select-consumer').value;
+      if (!cId) return;
+
+      try {
+        const res = await fetch(`${apiBase}/api/restore/${cId}`, { method: 'POST' });
+        if (res.ok) {
+          const resp = await res.json();
+          handleSnapshotUpdate(resp.snapshot);
+          showToast(`✅ ${cId} restored to NOMINAL BASELINE`);
+          logToTerminal('normal', `grid/control/restore`, `Restored ${cId} to NORMAL healthy operation`);
+        }
+      } catch (err) {
+        showToast(`Error: ${err.message}`);
+      }
+    }
+
+    async function restoreAllConsumers() {
+      try {
+        const res = await fetch(`${apiBase}/api/restore-all`, { method: 'POST' });
+        if (res.ok) {
+          const resp = await res.json();
+          handleSnapshotUpdate(resp.snapshot);
+          showToast(`🛡️ ALL 48 METERS RESTORED TO NORMAL`);
+          logToTerminal('normal', `grid/control/restore-all`, `All 48 consumer smart meters restored to nominal operation`);
+        }
+      } catch (err) {
+        showToast(`Error: ${err.message}`);
+      }
+    }
+
+    // 8. SIMULATION CLOCK CONTROLS
+    async function stepSimulation() {
+      try {
+        const res = await fetch(`${apiBase}/api/step`, { method: 'POST' });
+        if (res.ok) {
+          const snap = await res.json();
+          handleSnapshotUpdate(snap);
+          logToTerminal('info', 'grid/control/step', `Clock advanced +15m -> ${snap.clock.iso_time}`);
+        }
+      } catch (e) {}
+    }
+
+    function toggleAutoStream() {
+      isAutoStreaming = !isAutoStreaming;
+      const btn = document.getElementById('btn-stream');
+      const icon = document.getElementById('stream-icon');
+
+      if (isAutoStreaming) {
+        btn.classList.remove('primary');
+        btn.classList.add('danger');
+        icon.innerText = '⏸️ Stop Stream';
+        autoStreamTimer = setInterval(stepSimulation, 2000);
+        showToast('Auto-streaming active (2s interval)');
+      } else {
+        btn.classList.remove('danger');
+        btn.classList.add('primary');
+        icon.innerText = '▶️ Auto-Stream (2s)';
+        clearInterval(autoStreamTimer);
+        showToast('Auto-streaming paused');
+      }
+    }
+
+    // 9. QUICK PRESETS
+    async function applyPreset(presetName) {
+      if (presetName === 'theft_bypass_n003') {
+        document.getElementById('select-consumer').value = 'CONS_N_003';
+        document.getElementById('input-shunt-slider').value = '20';
+        updateShuntLabel('20');
+        setScenarioTab('theft');
+        await injectTheftScenario();
+      } else if (presetName === 'tamper_bakery_n009') {
+        document.getElementById('select-consumer').value = 'CONS_N_009';
+        document.getElementById('input-shunt-slider').value = '35';
+        updateShuntLabel('35');
+        document.getElementById('chk-mag-tamper').checked = true;
+        setScenarioTab('theft');
+        await injectTheftScenario();
+      } else if (presetName === 'meter_fault_n015') {
+        document.getElementById('select-consumer').value = 'CONS_N_015';
+        document.querySelector('input[value="stuck"]').checked = true;
+        setScenarioTab('fault');
+        await injectFaultScenario();
+      } else if (presetName === 'ev_surge_s003') {
+        document.getElementById('select-consumer').value = 'CONS_S_003';
+        document.getElementById('input-surge-slider').value = '74';
+        updateSurgeLabel('74');
+        setScenarioTab('surge');
+        await injectSurgeScenario();
+      } else if (presetName === 'comm_drop_n021') {
+        document.getElementById('select-consumer').value = 'CONS_N_021';
+        setScenarioTab('comm');
+        await injectCommScenario();
+      }
+    }
+
+    // 10. TERMINAL LOGGING
+    function logToTerminal(type, topic, message) {
+      logEventCount++;
+      document.getElementById('terminal-count').innerText = `${logEventCount} events`;
+
+      const term = document.getElementById('terminal-log');
+      const line = document.createElement('div');
+      line.className = 'terminal-line';
+
+      const now = new Date().toTimeString().substring(0, 8);
+      let colorClass = 't-info';
+      if (type === 'theft') colorClass = 't-theft';
+      else if (type === 'fault') colorClass = 't-fault';
+      else if (type === 'normal') colorClass = 't-normal';
+
+      line.innerHTML = `
+        <span class="t-time">[${now}]</span>
+        <span class="t-topic">${topic}</span>
+        <span class="${colorClass}">→ ${message}</span>
+      `;
+
+      term.appendChild(line);
+      term.scrollTop = term.scrollHeight;
+
+      if (term.children.length > 150) {
+        term.removeChild(term.children[0]);
+      }
+    }
+
+    function clearTerminal() {
+      document.getElementById('terminal-log').innerHTML = '';
+      logEventCount = 0;
+      document.getElementById('terminal-count').innerText = '0 events';
+    }
+
+    // 11. TOAST NOTIFICATION
+    function showToast(msg) {
+      const toast = document.getElementById('toast-msg');
+      document.getElementById('toast-text').innerText = msg;
+      toast.style.display = 'flex';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

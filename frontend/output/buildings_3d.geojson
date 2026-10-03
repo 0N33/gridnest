@@ -105,7 +105,7 @@
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 18.1,
+        "anomaly_score": 30.0,
         "reported_kw": 4.801,
         "true_kw": 4.801,
         "fill_color": [
@@ -164,16 +164,16 @@
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
-        "risk_level": "NORMAL",
-        "probable_cause": "NORMAL",
-        "anomaly_score": 19.3,
+        "risk_level": "CRITICAL",
+        "probable_cause": "THEFT_TAMPERING",
+        "anomaly_score": 93.3,
         "reported_kw": 5.036,
         "true_kw": 5.036,
         "fill_color": [
-          255,
-          255,
-          255,
-          210
+          239,
+          68,
+          68,
+          220
         ],
         "wireframe_color": [
           148,
@@ -182,7 +182,7 @@
           200
         ],
         "is_power_station": false,
-        "is_anomalous": false
+        "is_anomalous": true
       }
     },
     {
@@ -227,7 +227,7 @@
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 17.8,
+        "anomaly_score": 30.0,
         "reported_kw": 4.601,
         "true_kw": 4.601,
         "fill_color": [
@@ -286,9 +286,9 @@
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
-        "risk_level": "HIGH",
+        "risk_level": "CRITICAL",
         "probable_cause": "THEFT_TAMPERING",
-        "anomaly_score": 83.5,
+        "anomaly_score": 96.5,
         "reported_kw": 0.888,
         "true_kw": 3.172,
         "fill_color": [
@@ -347,16 +347,16 @@
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
-        "risk_level": "NORMAL",
-        "probable_cause": "NORMAL",
-        "anomaly_score": 15.7,
+        "risk_level": "HIGH",
+        "probable_cause": "THEFT_TAMPERING",
+        "anomaly_score": 80.0,
         "reported_kw": 3.914,
         "true_kw": 3.914,
         "fill_color": [
-          255,
-          255,
-          255,
-          210
+          239,
+          68,
+          68,
+          220
         ],
         "wireframe_color": [
           148,
@@ -365,7 +365,7 @@
           200
         ],
         "is_power_station": false,
-        "is_anomalous": false
+        "is_anomalous": true
       }
     },
     {
@@ -410,7 +410,7 @@
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 19.9,
+        "anomaly_score": 30.0,
         "reported_kw": 2.722,
         "true_kw": 2.722,
         "fill_color": [
@@ -471,7 +471,7 @@
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 15.3,
+        "anomaly_score": 30.0,
         "reported_kw": 3.637,
         "true_kw": 3.637,
         "fill_color": [
@@ -532,7 +532,7 @@
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 19.8,
+        "anomaly_score": 11.5,
         "reported_kw": 2.489,
         "true_kw": 2.489,
         "fill_color": [
@@ -593,7 +593,7 @@
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "CRITICAL",
         "probable_cause": "THEFT_TAMPERING",
-        "anomaly_score": 98.5,
+        "anomaly_score": 90.0,
         "reported_kw": 0.836,
         "true_kw": 2.389,
         "fill_color": [
@@ -654,7 +654,7 @@
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 15.3,
+        "anomaly_score": 29.3,
         "reported_kw": 3.629,
         "true_kw": 3.629,
         "fill_color": [
@@ -715,7 +715,7 @@
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 24.1,
+        "anomaly_score": 24.9,
         "reported_kw": 6.958,
         "true_kw": 6.958,
         "fill_color": [
@@ -774,9 +774,9 @@
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
-        "risk_level": "NORMAL",
-        "probable_cause": "NORMAL",
-        "anomaly_score": 22.5,
+        "risk_level": "REQUIRES_REVIEW",
+        "probable_cause": "REQUIRES_REVIEW",
+        "anomaly_score": 43.5,
         "reported_kw": 5.837,
         "true_kw": 5.837,
         "fill_color": [
@@ -837,7 +837,7 @@
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 19.1,
+        "anomaly_score": 30.0,
         "reported_kw": 5.342,
         "true_kw": 5.342,
         "fill_color": [
@@ -898,7 +898,7 @@
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 25.4,
+        "anomaly_score": 30.0,
         "reported_kw": 7.994,
         "true_kw": 7.994,
         "fill_color": [
@@ -1020,7 +1020,7 @@
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 26.0,
+        "anomaly_score": 30.0,
         "reported_kw": 9.996,
         "true_kw": 9.996,
         "fill_color": [
@@ -1081,7 +1081,7 @@
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 19.1,
+        "anomaly_score": 30.0,
         "reported_kw": 4.104,
         "true_kw": 4.104,
         "fill_color": [
@@ -1140,16 +1140,16 @@
         "zone_id": "Zone_1_North",
         "transformer_id": "TX_101",
         "feeder_id": "FDR_NORTH_11KV",
-        "risk_level": "NORMAL",
-        "probable_cause": "NORMAL",
-        "anomaly_score": 22.3,
+        "risk_level": "CRITICAL",
+        "probable_cause": "THEFT_TAMPERING",
+        "anomaly_score": 97.2,
         "reported_kw": 6.283,
         "true_kw": 6.283,
         "fill_color": [
-          255,
-          255,
-          255,
-          210
+          239,
+          68,
+          68,
+          220
         ],
         "wireframe_color": [
           148,
@@ -1158,7 +1158,7 @@
           200
         ],
         "is_power_station": false,
-        "is_anomalous": false
+        "is_anomalous": true
       }
     },
     {
@@ -1203,7 +1203,7 @@
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 19.9,
+        "anomaly_score": 30.0,
         "reported_kw": 3.276,
         "true_kw": 3.276,
         "fill_color": [
@@ -1264,7 +1264,7 @@
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 19.7,
+        "anomaly_score": 30.0,
         "reported_kw": 5.039,
         "true_kw": 5.039,
         "fill_color": [
@@ -1386,7 +1386,7 @@
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 22.5,
+        "anomaly_score": 30.0,
         "reported_kw": 6.314,
         "true_kw": 6.314,
         "fill_color": [
@@ -1447,7 +1447,7 @@
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 21.9,
+        "anomaly_score": 30.0,
         "reported_kw": 5.042,
         "true_kw": 5.042,
         "fill_color": [
@@ -1508,7 +1508,7 @@
         "feeder_id": "FDR_NORTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 16.8,
+        "anomaly_score": 30.0,
         "reported_kw": 4.01,
         "true_kw": 4.01,
         "fill_color": [
@@ -1567,16 +1567,16 @@
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
-        "risk_level": "NORMAL",
-        "probable_cause": "NORMAL",
-        "anomaly_score": 18.9,
+        "risk_level": "HIGH",
+        "probable_cause": "THEFT_TAMPERING",
+        "anomaly_score": 72.0,
         "reported_kw": 2.572,
         "true_kw": 2.572,
         "fill_color": [
-          255,
-          255,
-          255,
-          210
+          239,
+          68,
+          68,
+          220
         ],
         "wireframe_color": [
           148,
@@ -1585,7 +1585,7 @@
           200
         ],
         "is_power_station": false,
-        "is_anomalous": false
+        "is_anomalous": true
       }
     },
     {
@@ -1630,7 +1630,7 @@
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 20.1,
+        "anomaly_score": 30.0,
         "reported_kw": 2.269,
         "true_kw": 2.269,
         "fill_color": [
@@ -1691,7 +1691,7 @@
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "LOW",
         "probable_cause": "LEGITIMATE_ABNORMAL",
-        "anomaly_score": 35.0,
+        "anomaly_score": 32.0,
         "reported_kw": 11.578,
         "true_kw": 11.578,
         "fill_color": [
@@ -1752,7 +1752,7 @@
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 20.3,
+        "anomaly_score": 30.0,
         "reported_kw": 2.216,
         "true_kw": 2.216,
         "fill_color": [
@@ -1813,7 +1813,7 @@
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 22.1,
+        "anomaly_score": 30.0,
         "reported_kw": 5.505,
         "true_kw": 5.505,
         "fill_color": [
@@ -1872,16 +1872,16 @@
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
-        "risk_level": "NORMAL",
-        "probable_cause": "NORMAL",
-        "anomaly_score": 22.5,
+        "risk_level": "CRITICAL",
+        "probable_cause": "THEFT_TAMPERING",
+        "anomaly_score": 86.9,
         "reported_kw": 5.855,
         "true_kw": 5.855,
         "fill_color": [
-          255,
-          255,
-          255,
-          210
+          239,
+          68,
+          68,
+          220
         ],
         "wireframe_color": [
           148,
@@ -1890,7 +1890,7 @@
           200
         ],
         "is_power_station": false,
-        "is_anomalous": false
+        "is_anomalous": true
       }
     },
     {
@@ -1935,7 +1935,7 @@
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 23.0,
+        "anomaly_score": 14.7,
         "reported_kw": 8.419,
         "true_kw": 8.419,
         "fill_color": [
@@ -1996,7 +1996,7 @@
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 15.3,
+        "anomaly_score": 10.9,
         "reported_kw": 3.692,
         "true_kw": 3.692,
         "fill_color": [
@@ -2055,16 +2055,16 @@
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
-        "risk_level": "NORMAL",
-        "probable_cause": "NORMAL",
-        "anomaly_score": 15.7,
+        "risk_level": "CRITICAL",
+        "probable_cause": "THEFT_TAMPERING",
+        "anomaly_score": 88.4,
         "reported_kw": 3.203,
         "true_kw": 3.203,
         "fill_color": [
-          255,
-          255,
-          255,
-          210
+          239,
+          68,
+          68,
+          220
         ],
         "wireframe_color": [
           148,
@@ -2073,7 +2073,7 @@
           200
         ],
         "is_power_station": false,
-        "is_anomalous": false
+        "is_anomalous": true
       }
     },
     {
@@ -2118,7 +2118,7 @@
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 16.0,
+        "anomaly_score": 13.8,
         "reported_kw": 4.045,
         "true_kw": 4.045,
         "fill_color": [
@@ -2240,7 +2240,7 @@
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 18.5,
+        "anomaly_score": 30.0,
         "reported_kw": 4.789,
         "true_kw": 4.789,
         "fill_color": [
@@ -2301,7 +2301,7 @@
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 16.2,
+        "anomaly_score": 30.0,
         "reported_kw": 3.157,
         "true_kw": 3.157,
         "fill_color": [
@@ -2362,7 +2362,7 @@
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 19.1,
+        "anomaly_score": 30.0,
         "reported_kw": 4.968,
         "true_kw": 4.968,
         "fill_color": [
@@ -2423,7 +2423,7 @@
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 20.2,
+        "anomaly_score": 30.0,
         "reported_kw": 5.158,
         "true_kw": 5.158,
         "fill_color": [
@@ -2484,7 +2484,7 @@
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 16.4,
+        "anomaly_score": 30.0,
         "reported_kw": 4.183,
         "true_kw": 4.183,
         "fill_color": [
@@ -2545,7 +2545,7 @@
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 19.4,
+        "anomaly_score": 30.0,
         "reported_kw": 2.552,
         "true_kw": 2.552,
         "fill_color": [
@@ -2604,9 +2604,9 @@
         "zone_id": "Zone_2_South",
         "transformer_id": "TX_102",
         "feeder_id": "FDR_SOUTH_11KV",
-        "risk_level": "HIGH",
+        "risk_level": "CRITICAL",
         "probable_cause": "THEFT_TAMPERING",
-        "anomaly_score": 60.0,
+        "anomaly_score": 97.0,
         "reported_kw": 0.2,
         "true_kw": 3.768,
         "fill_color": [
@@ -2667,7 +2667,7 @@
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 19.8,
+        "anomaly_score": 28.3,
         "reported_kw": 3.509,
         "true_kw": 3.509,
         "fill_color": [
@@ -2728,7 +2728,7 @@
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 19.1,
+        "anomaly_score": 30.0,
         "reported_kw": 4.758,
         "true_kw": 4.758,
         "fill_color": [
@@ -2789,7 +2789,7 @@
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 20.4,
+        "anomaly_score": 30.0,
         "reported_kw": 2.284,
         "true_kw": 2.284,
         "fill_color": [
@@ -2850,7 +2850,7 @@
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 14.7,
+        "anomaly_score": 20.2,
         "reported_kw": 3.389,
         "true_kw": 3.389,
         "fill_color": [
@@ -2911,7 +2911,7 @@
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 18.4,
+        "anomaly_score": 10.9,
         "reported_kw": 4.557,
         "true_kw": 4.557,
         "fill_color": [
@@ -2972,7 +2972,7 @@
         "feeder_id": "FDR_SOUTH_11KV",
         "risk_level": "NORMAL",
         "probable_cause": "NORMAL",
-        "anomaly_score": 14.4,
+        "anomaly_score": 19.8,
         "reported_kw": 3.784,
         "true_kw": 3.784,
         "fill_color": [

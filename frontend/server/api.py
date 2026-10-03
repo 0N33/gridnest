@@ -8,13 +8,15 @@ import os
 import json
 import asyncio
 from typing import Dict, Any, Optional
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Query, HTTPException
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Query, HTTPException, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from engine.digital_twin import SmartGridDigitalTwin
 from models.telemetry import ScenarioType
 from export.geojson_exporter import GeoJSONTwinExporter
+from iot.mqtt_broker import MicroMQTTBroker
+from iot.mqtt_bridge import SmartGridMQTTBridge
 
 app = FastAPI(
     title="Smart Grid Digital Twin API",
@@ -38,6 +40,30 @@ exporter = GeoJSONTwinExporter(twin)
 # Connected WebSocket clients
 connected_clients: list[WebSocket] = []
 
+# In-process Micro MQTT 3.1.1 Broker & Bridge
+mqtt_broker = MicroMQTTBroker(host="0.0.0.0", port=1883)
+mqtt_bridge: Optional[SmartGridMQTTBridge] = None
+
+
+@app.on_event("startup")
+async def startup_event():
+    global mqtt_bridge
+    mqtt_bridge = SmartGridMQTTBridge(
+        twin=twin,
+        broker=mqtt_broker,
+        broadcast_callback=broadcast_to_clients,
+    )
+    started = await mqtt_broker.start()
+    if started:
+        print(f"[+] GridNest MicroMQTTBroker active on port {mqtt_broker.port} (MQTT 3.1.1)")
+    else:
+        print("[!] MicroMQTTBroker running in internal event bus mode")
+
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    await mqtt_broker.stop()
+
 
 @app.get("/", response_class=HTMLResponse)
 async def get_index():
@@ -47,6 +73,16 @@ async def get_index():
         with open(viewer_path, "r", encoding="utf-8") as f:
             return HTMLResponse(content=f.read())
     return HTMLResponse("<h3>Digital Twin Viewer file not found.</h3>")
+
+
+@app.get("/simulator", response_class=HTMLResponse)
+async def get_simulator():
+    """Serves the Interactive Web-Based Virtual IoT Simulator Control Panel."""
+    sim_path = os.path.join(os.path.dirname(__file__), "..", "viewer", "iot_simulator.html")
+    if os.path.exists(sim_path):
+        with open(sim_path, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return HTMLResponse("<h3>Virtual IoT Simulator file not found.</h3>")
 
 
 @app.get("/api/snapshot")
@@ -86,28 +122,112 @@ async def get_report(consumer_id: str):
     })
 
 
+@app.get("/api/ml/benchmark")
+async def get_benchmark_metrics():
+    """Returns empirical benchmark metrics across data.csv and Electricity_Theft_Data.csv."""
+    summary_path = os.path.join(os.path.dirname(__file__), "..", "engine", "artifacts", "benchmark_summary.json")
+    if os.path.exists(summary_path):
+        with open(summary_path, "r", encoding="utf-8") as f:
+            return JSONResponse(json.load(f))
+    return JSONResponse({"status": "error", "message": "Benchmark summary not found"}, status_code=404)
+
+
 @app.post("/api/inject/{consumer_id}")
 async def inject_scenario_endpoint(
     consumer_id: str,
-    scenario: str = Query(..., description="NORMAL, THEFT_BYPASS, METER_MALFUNCTION, COMM_FAILURE, LEGITIMATE_ABNORMAL"),
+    request: Request,
+    scenario: Optional[str] = Query(None),
     mode: Optional[str] = Query(None),
     scaling_factor: Optional[float] = Query(None),
+    malfunction_type: Optional[str] = Query(None),
+    surge_kw: Optional[float] = Query(None),
+    trigger_tamper_flag: Optional[bool] = Query(None),
 ):
-    """Dynamically injects an operational scenario on a consumer."""
+    """Dynamically injects an operational scenario on a consumer (supports JSON body or query params)."""
+    body = {}
     try:
-        scen_type = ScenarioType(scenario.upper())
-    except ValueError:
-        raise HTTPException(status_code=400, detail=f"Invalid scenario type: {scenario}")
+        body = await request.json()
+    except Exception:
+        pass
 
-    params = {}
+    scen_str = body.get("scenario") or scenario or "NORMAL"
+    try:
+        scen_type = ScenarioType(str(scen_str).upper())
+    except ValueError:
+        raise HTTPException(status_code=400, detail=f"Invalid scenario type: {scen_str}")
+
+    params = body.get("params", {})
     if mode: params["mode"] = mode
-    if scaling_factor: params["scaling_factor"] = scaling_factor
+    if scaling_factor is not None: params["scaling_factor"] = scaling_factor
+    if malfunction_type: params["malfunction_type"] = malfunction_type
+    if surge_kw is not None: params["surge_kw"] = surge_kw
+    if trigger_tamper_flag is not None: params["trigger_tamper_flag"] = trigger_tamper_flag
+
+    for k in ["magnetic_tamper", "tamper_cover_opened", "reverse_current", "trigger_tamper_flag", "scaling_factor", "mode", "malfunction_type", "surge_kw"]:
+        if k in body and k not in params:
+            params[k] = body[k]
 
     twin.inject_scenario(consumer_id, scen_type, params)
-    # Re-evaluate step
     snapshot = twin.step()
     await broadcast_to_clients(snapshot)
-    return JSONResponse({"status": "success", "consumer_id": consumer_id, "scenario": scen_type.value})
+    return JSONResponse({
+        "status": "success",
+        "consumer_id": consumer_id,
+        "scenario": scen_type.value,
+        "params": params,
+        "snapshot": snapshot,
+    })
+
+
+@app.post("/api/restore/{consumer_id}")
+async def restore_consumer_endpoint(consumer_id: str):
+    """Restores consumer meter to normal baseline operation."""
+    twin.clear_scenario(consumer_id)
+    snapshot = twin.step()
+    await broadcast_to_clients(snapshot)
+    return JSONResponse({"status": "success", "consumer_id": consumer_id, "message": "Restored to nominal baseline", "snapshot": snapshot})
+
+
+@app.post("/api/restore-all")
+async def restore_all_consumers_endpoint():
+    """Restores all 48 consumer meters to normal nominal baseline operation."""
+    for cid in list(twin.topology.consumers.keys()):
+        twin.clear_scenario(cid)
+    snapshot = twin.step()
+    await broadcast_to_clients(snapshot)
+    return JSONResponse({"status": "success", "message": "All 48 consumers restored to NORMAL", "snapshot": snapshot})
+
+
+@app.post("/api/reset-demo")
+async def reset_demo_scenarios_endpoint():
+    """Resets grid to default representative demonstration scenarios."""
+    twin.injector.active_injections.clear()
+    twin.injector.setup_default_demo_scenarios()
+    snapshot = twin.step()
+    await broadcast_to_clients(snapshot)
+    return JSONResponse({"status": "success", "message": "Demo scenarios reloaded", "snapshot": snapshot})
+
+
+@app.get("/api/iot/status")
+async def get_iot_status():
+    """Returns the live status of the MQTT broker, connected IoT clients, and topics."""
+    return JSONResponse({
+        "broker_running": mqtt_broker.is_running,
+        "mqtt_host": mqtt_broker.host,
+        "mqtt_port": mqtt_broker.port,
+        "connected_clients": len(mqtt_broker.clients),
+        "active_topic_subscriptions": list(mqtt_broker.subscribers.keys()),
+        "total_smart_meters": len(twin.topology.consumers),
+        "total_transformer_gateways": len(twin.topology.transformers),
+        "power_station_gateway": twin.topology.power_station.id if twin.topology.power_station else "PS_CENTRAL_01",
+    })
+
+
+@app.post("/api/iot/publish")
+async def publish_iot_message(topic: str = Query(...), payload: str = Query(...)):
+    """Allows testing MQTT publishing via HTTP interface."""
+    await mqtt_broker.publish_local(topic, payload)
+    return JSONResponse({"status": "published", "topic": topic})
 
 
 @app.get("/api/geojson/buildings")

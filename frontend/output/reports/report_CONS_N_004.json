@@ -1,0 +1,80 @@
+{
+  "report_id": "RPT-Zone-004-5863FD",
+  "generated_at": "2026-10-05T07:15:00",
+  "consumer": {
+    "id": "CONS_N_004",
+    "meter_id": "MTR_N_004",
+    "name": "LightIndustrial #4 (Z1_North)",
+    "category": "LightIndustrial",
+    "contracted_load_kw": 25.0,
+    "zone_id": "Zone_1_North",
+    "transformer_id": "TX_101",
+    "feeder_id": "FDR_NORTH_11KV"
+  },
+  "findings": {
+    "anomaly_score": 98.5,
+    "risk_level": "CRITICAL",
+    "probable_cause": "THEFT_TAMPERING",
+    "confidence_pct": 98.0,
+    "inspection_priority_rank": 1
+  },
+  "ml_analytics": {
+    "calibrated_score": 98.5,
+    "subscores": {
+      "xgb_prob": 0.8419,
+      "lgbm_prob": 0.871,
+      "iso_score": 0.7314,
+      "hybrid_blend": 0.844
+    },
+    "shap_factors": [
+      {
+        "feature": "max_kwh",
+        "value": 239.408,
+        "shap_impact": 1.135
+      },
+      {
+        "feature": "mean_kwh",
+        "value": 155.988,
+        "shap_impact": 0.654
+      },
+      {
+        "feature": "std_kwh",
+        "value": 72.099,
+        "shap_impact": 0.58
+      },
+      {
+        "feature": "zero_rate",
+        "value": 0.0,
+        "shap_impact": 0.374
+      }
+    ]
+  },
+  "metrics": {
+    "reported_kw": 0.888,
+    "historical_baseline_kw": 3.533,
+    "deviation_kw": -2.645,
+    "deviation_pct": -74.9,
+    "deviation_z": -3.83,
+    "voltage_v": 230.0,
+    "current_a": 0.0,
+    "power_factor": 0.95,
+    "zone_unexplained_loss_pct": 15.65
+  },
+  "ground_truth_audit": {
+    "active_scenario": "THEFT_BYPASS",
+    "ground_truth_kw": 3.172,
+    "unreported_stolen_kw": 2.284
+  },
+  "evidence_chain": [
+    "Drastic consumption drop (74.9% below diurnal baseline, z=-3.83)",
+    "Persistent low-consumption streak lasting 14 consecutive days",
+    "Corroborating transformer TX_101 exhibits 15.6% unexplained non-technical loss (NTL)",
+    "Consumer load is 19.8% of neighborhood feeder peer average",
+    "SHAP ML Evidence: 'Max Kwh' contributed +1.14 toward theft probability",
+    "SHAP ML Evidence: 'Mean Kwh' contributed +0.65 toward theft probability",
+    "SHAP ML Evidence: 'Std Kwh' contributed +0.58 toward theft probability",
+    "SHAP ML Evidence: 'Zero Rate' contributed +0.37 toward theft probability"
+  ],
+  "technical_assessment": "Statistical and electrical analysis confirms a non-technical loss event at meter MTR_N_004. While the consumer has a contracted load of 25.0 kW and an established historical baseline of 3.53 kW, the meter reported only 0.89 kW (a -74.9% reduction). Concurrently, the distribution transformer TX_101 is registering 15.6% unexplained non-technical losses that cannot be accounted for by technical I\u00b2R line resistance or core losses. This strong spatial correlation between transformer loss and consumer load reduction indicates an unauthorized meter shunt, line tapping, or bypass.",
+  "recommended_action": "HIGH PRIORITY: Issue physical inspection warrant. Dispatch anti-theft squad to verify meter shunt/bypass"
+}

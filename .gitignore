@@ -47,3 +47,7 @@ coverage.xml
 *~
 .DS_Store
 Thumbs.db
+
+# Large Raw Datasets (>100MB exceeds GitHub push limits)
+data.csv
+Electricity_Theft_Data.csv
