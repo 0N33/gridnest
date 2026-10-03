@@ -1494,6 +1494,10 @@
             mesh.material.opacity = opacity;
           }
 
+          if (mesh.userData.roofMesh && mesh.userData.roofMesh.material) {
+            mesh.userData.roofMesh.material.color.setHex(isLight ? 0x995533 : 0x5a2d0c);
+          }
+
           // Remove old pins attached to this mesh
           const pinsToRemove = mesh.children.filter(ch => ch.userData && ch.userData.isScorePin);
           pinsToRemove.forEach(p => mesh.remove(p));
@@ -1510,6 +1514,7 @@
               : (risk === "CRITICAL" ? 95 : (risk === "HIGH" ? 78 : 50));
             const pinBadge = createAnomalyScorePin(scoreVal, risk, cause, isLight, cId);
             pinBadge.userData.isScorePin = true;
+            pinBadge.position.y = mesh.userData.roofHeight || 0;
             mesh.add(pinBadge);
           }
         }
@@ -1546,7 +1551,7 @@
       // 4. CITY BUILDINGS IN ORDERLY STREET BLOCKS
       for (const [cId, cData] of Object.entries(consumers)) {
         const poly = cData.static.building_polygon;
-        const height = cData.static.building_height_m * 3.4;
+        const height = cData.static.building_height_m * 1.5; // Reduced height to look like houses
         const coord = cData.static.coordinate;
         const centerPos = gpsToCartesian(coord.lat, coord.lon);
 
@@ -1609,12 +1614,29 @@
         const wire = new THREE.LineSegments(wireGeo, wireMat);
         mesh.add(wire);
 
-        // Rooftop HVAC / Meter Weatherhead Box
-        const roofBoxGeo = new THREE.BoxGeometry(4, 2, 4);
-        const roofBoxMat = new THREE.MeshStandardMaterial({ color: 0x475569 });
-        const roofBox = new THREE.Mesh(roofBoxGeo, roofBoxMat);
-        roofBox.position.set(0, 1, 0);
-        mesh.add(roofBox);
+        // Pitched Roof to make it a house-like structure
+        geom.computeBoundingBox();
+        const bbox = geom.boundingBox;
+        const widthX = bbox.max.x - bbox.min.x;
+        const widthZ = bbox.max.z - bbox.min.z;
+        const roofRadius = Math.max(widthX, widthZ) / Math.sqrt(2) + 1; // Slightly overhang
+        
+        const roofHeight = Math.max(widthX, widthZ) * 0.4 + 2; // Proportional height
+        const roofGeo = new THREE.ConeGeometry(roofRadius, roofHeight, 4);
+        roofGeo.rotateY(Math.PI / 4); // Align with square edges
+        const roofMat = new THREE.MeshStandardMaterial({ color: isLight ? 0x995533 : 0x5a2d0c, roughness: 0.9 });
+        const roof = new THREE.Mesh(roofGeo, roofMat);
+        roof.position.set(0, roofHeight / 2, 0);
+        
+        // Add wireframe to roof
+        const roofWireGeo = new THREE.WireframeGeometry(roofGeo);
+        const roofWireMat = new THREE.LineBasicMaterial({ color: wireColor, linewidth: 1.5, transparent: true, opacity: isLight ? 0.8 : 0.6 });
+        const roofWire = new THREE.LineSegments(roofWireGeo, roofWireMat);
+        roof.add(roofWire);
+
+        mesh.add(roof);
+        mesh.userData.roofMesh = roof;
+        mesh.userData.roofHeight = roofHeight;
 
         // 3D FLOATING STEM & CIRCULAR SCORE BADGE: ONLY for non-normal / anomalous buildings!
         const isAnomalous = (
@@ -1630,6 +1652,7 @@
           
           const pinBadge = createAnomalyScorePin(scoreVal, risk, cause, isLight, cId);
           pinBadge.userData.isScorePin = true;
+          pinBadge.position.y = roofHeight;
           mesh.add(pinBadge);
         }
 
@@ -2145,7 +2168,7 @@
       for (const [cId, cData] of Object.entries(consumers)) {
         const coord = cData.static.coordinate;
         const bPos = gpsToCartesian(coord.lat, coord.lon);
-        const height = cData.static.building_height_m * 3.4;
+        const height = cData.static.building_height_m * 1.5;
 
         // Find assigned pole or nearest pole
         let pId = cData.static.connected_pole_id;
@@ -2891,7 +2914,7 @@
       }
 
       if (buildingMeshes[cId]) {
-        addSelectedMarker(buildingMeshes[cId], staticInfo.building_height_m * 3.4);
+        addSelectedMarker(buildingMeshes[cId], staticInfo.building_height_m * 1.5);
       }
     }
 
