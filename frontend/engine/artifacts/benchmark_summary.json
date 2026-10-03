@@ -2,93 +2,93 @@
   "internal_test": [
     {
       "Model": "Isolation Forest (Unsupervised)",
-      "ROC-AUC": 0.5856,
-      "PR-AUC": 0.1483,
-      "F1-Score": 0.1209,
-      "Precision": 0.3442,
-      "Recall": 0.0733,
-      "P@Top-5%": 0.2317,
-      "P@Top-10%": 0.1558,
-      "FPR": 0.013
+      "ROC-AUC": 0.5444,
+      "PR-AUC": 0.1206,
+      "F1-Score": 0.1099,
+      "Precision": 0.2674,
+      "Recall": 0.0692,
+      "P@Top-5%": 0.1868,
+      "P@Top-10%": 0.1452,
+      "FPR": 0.0177
     },
     {
       "Model": "LightGBM (Supervised)",
-      "ROC-AUC": 0.7599,
-      "PR-AUC": 0.3093,
-      "F1-Score": 0.294,
-      "Precision": 0.1937,
-      "Recall": 0.61,
-      "P@Top-5%": 0.4208,
-      "P@Top-10%": 0.3176,
-      "FPR": 0.2368
+      "ROC-AUC": 0.7733,
+      "PR-AUC": 0.3204,
+      "F1-Score": 0.3201,
+      "Precision": 0.2172,
+      "Recall": 0.6086,
+      "P@Top-5%": 0.4303,
+      "P@Top-10%": 0.3235,
+      "FPR": 0.2046
     },
     {
       "Model": "XGBoost (Supervised)",
-      "ROC-AUC": 0.7584,
-      "PR-AUC": 0.3053,
-      "F1-Score": 0.2879,
-      "Precision": 0.1881,
-      "Recall": 0.6141,
-      "P@Top-5%": 0.4208,
-      "P@Top-10%": 0.3105,
-      "FPR": 0.2473
+      "ROC-AUC": 0.776,
+      "PR-AUC": 0.3272,
+      "F1-Score": 0.3123,
+      "Precision": 0.2079,
+      "Recall": 0.6279,
+      "P@Top-5%": 0.435,
+      "P@Top-10%": 0.3306,
+      "FPR": 0.2232
     },
     {
       "Model": "Hybrid Stacking Ensemble (Champion)",
-      "ROC-AUC": 0.7612,
-      "PR-AUC": 0.3115,
-      "F1-Score": 0.3183,
-      "Precision": 0.2237,
-      "Recall": 0.5519,
-      "P@Top-5%": 0.4208,
-      "P@Top-10%": 0.314,
-      "FPR": 0.1787
+      "ROC-AUC": 0.777,
+      "PR-AUC": 0.3223,
+      "F1-Score": 0.3357,
+      "Precision": 0.241,
+      "Recall": 0.5533,
+      "P@Top-5%": 0.4397,
+      "P@Top-10%": 0.3294,
+      "FPR": 0.1625
     }
   ],
   "second_dataset_test": [
     {
       "Model": "Isolation Forest (Unsupervised)",
-      "ROC-AUC": 0.6196,
-      "PR-AUC": 0.2812,
-      "F1-Score": 0.1208,
-      "Precision": 0.8053,
-      "Recall": 0.0653,
-      "P@Top-5%": 0.4306,
-      "P@Top-10%": 0.3116,
-      "FPR": 0.0026
+      "ROC-AUC": 0.5853,
+      "PR-AUC": 0.2207,
+      "F1-Score": 0.1372,
+      "Precision": 0.3906,
+      "Recall": 0.0832,
+      "P@Top-5%": 0.3803,
+      "P@Top-10%": 0.2754,
+      "FPR": 0.0211
     },
     {
       "Model": "LightGBM (Supervised)",
-      "ROC-AUC": 0.7759,
-      "PR-AUC": 0.4493,
-      "F1-Score": 0.4527,
-      "Precision": 0.395,
-      "Recall": 0.5301,
-      "P@Top-5%": 0.6439,
-      "P@Top-10%": 0.5307,
-      "FPR": 0.1322
+      "ROC-AUC": 0.7837,
+      "PR-AUC": 0.4809,
+      "F1-Score": 0.4802,
+      "Precision": 0.4509,
+      "Recall": 0.5136,
+      "P@Top-5%": 0.7082,
+      "P@Top-10%": 0.5497,
+      "FPR": 0.1018
     },
     {
       "Model": "XGBoost (Supervised)",
-      "ROC-AUC": 0.7958,
-      "PR-AUC": 0.4767,
-      "F1-Score": 0.4664,
-      "Precision": 0.4006,
-      "Recall": 0.5581,
-      "P@Top-5%": 0.6821,
-      "P@Top-10%": 0.5437,
-      "FPR": 0.1359
+      "ROC-AUC": 0.7993,
+      "PR-AUC": 0.4931,
+      "F1-Score": 0.4871,
+      "Precision": 0.443,
+      "Recall": 0.5409,
+      "P@Top-5%": 0.7364,
+      "P@Top-10%": 0.5578,
+      "FPR": 0.1107
     },
     {
       "Model": "Hybrid Stacking Ensemble (Champion)",
-      "ROC-AUC": 0.7946,
-      "PR-AUC": 0.4765,
-      "F1-Score": 0.4637,
-      "Precision": 0.4604,
-      "Recall": 0.467,
-      "P@Top-5%": 0.6841,
-      "P@Top-10%": 0.5508,
-      "FPR": 0.0891
+      "ROC-AUC": 0.8007,
+      "PR-AUC": 0.5056,
+      "F1-Score": 0.4915,
+      "Precision": 0.5092,
+      "Recall": 0.4749,
+      "P@Top-5%": 0.7344,
+      "P@Top-10%": 0.5698,
+      "FPR": 0.0745
     }
   ],
   "features": [
@@ -102,10 +102,22 @@
     "max_zero_streak",
     "drop_ratio_mean",
     "drop_ratio_med",
+    "drop_ratio_max",
+    "drop_ratio_iqr",
     "drop_magnitude",
     "low_streak_recent",
     "low_days_ratio",
-    "peer_ratio_dataset"
+    "peer_ratio_dataset",
+    "diff_mean_ratio",
+    "variance_drop_ratio",
+    "consumption_skew",
+    "load_factor",
+    "decile_spread",
+    "autocorr_lag1",
+    "autocorr_lag7",
+    "floor_to_peak",
+    "recent_slope",
+    "recent_peer_ratio"
   ],
-  "timestamp": "2026-10-03 17:41:53"
+  "timestamp": "2026-10-04 02:57:31"
 }

@@ -88,11 +88,20 @@ def extract_consumer_features(df, id_col='CONS_NO', label_col='FLAG', is_second_
 
     hist_mean = np.mean(X_hist, axis=1)
     hist_med = np.median(X_hist, axis=1)
+    hist_std = np.std(X_hist, axis=1)
+    hist_max = np.max(X_hist, axis=1)
+    hist_iqr = np.percentile(X_hist, 75, axis=1) - np.percentile(X_hist, 25, axis=1)
+
     rec_mean = np.mean(X_rec, axis=1)
     rec_med = np.median(X_rec, axis=1)
+    rec_std = np.std(X_rec, axis=1)
+    rec_max = np.max(X_rec, axis=1)
+    rec_iqr = np.percentile(X_rec, 75, axis=1) - np.percentile(X_rec, 25, axis=1)
 
     drop_ratio_mean = rec_mean / (hist_mean + 1e-4)
     drop_ratio_med = rec_med / (hist_med + 1e-4)
+    drop_ratio_max = rec_max / (hist_max + 1e-4)
+    drop_ratio_iqr = rec_iqr / (hist_iqr + 1e-4)
     drop_magnitude = np.clip(1.0 - drop_ratio_mean, 0.0, 1.0)
 
     # 4. Low-Streak Persistence (consecutive days in recent window where consumption < 40% of baseline)
@@ -104,6 +113,56 @@ def extract_consumer_features(df, id_col='CONS_NO', label_col='FLAG', is_second_
     # 5. Dataset-Wide Peer Baseline Ratio
     dataset_median = np.median(median_kwh)
     peer_ratio_dataset = median_kwh / (dataset_median + 1e-4)
+
+    # === ADVANCED DOMAIN-SPECIFIC TIME-SERIES SIGNALS ===
+    # 6. First-order difference volatility (day-to-day absolute change ratio)
+    diff_arr = np.abs(X_raw[:, 1:] - X_raw[:, :-1])
+    diff_mean = np.mean(diff_arr, axis=1)
+    diff_mean_ratio = diff_mean / (mean_kwh + 1e-4)
+
+    # 7. Variance drop ratio: recent std / historical std
+    variance_drop_ratio = rec_std / (hist_std + 1e-4)
+
+    # 8. Skewness of consumption distribution: E[(X - mu)^3] / (sigma^3 + 1e-4)
+    diff_from_mean = X_raw - mean_kwh[:, None]
+    m3 = np.mean(diff_from_mean ** 3, axis=1)
+    consumption_skew = m3 / ((std_kwh + 1e-4) ** 3)
+
+    # 9. Electrical Engineering Load Factor: mean / (max + 1e-4)
+    load_factor = mean_kwh / (max_kwh + 1e-4)
+
+    # 10. Robust Decile Spread: (P90 - P10) / (median + 1e-4)
+    p90 = np.percentile(X_raw, 90, axis=1)
+    p10 = np.percentile(X_raw, 10, axis=1)
+    decile_spread = (p90 - p10) / (median_kwh + 1e-4)
+
+    # 11. Lag-1 Autocorrelation (temporal continuity vs tampered randomness/flatline)
+    denom = np.sum(diff_from_mean ** 2, axis=1) + 1e-4
+    nom_lag1 = np.sum((X_raw[:, :-1] - mean_kwh[:, None]) * (X_raw[:, 1:] - mean_kwh[:, None]), axis=1)
+    autocorr_lag1 = nom_lag1 / denom
+
+    # 12. Weekly Seasonality: Lag-7 Autocorrelation (weekly human rhythm vs meter tampering)
+    if n_days > 14:
+        nom_lag7 = np.sum((X_raw[:, :-7] - mean_kwh[:, None]) * (X_raw[:, 7:] - mean_kwh[:, None]), axis=1)
+        autocorr_lag7 = nom_lag7 / denom
+    else:
+        autocorr_lag7 = np.zeros(n_samples, dtype=np.float32)
+
+    # 13. Baseline Floor-to-Peak Ratio: P05 / (P95 + 1e-4)
+    p95 = np.percentile(X_raw, 95, axis=1)
+    p05 = np.percentile(X_raw, 5, axis=1)
+    floor_to_peak = p05 / (p95 + 1e-4)
+
+    # 14. Normalized Recent Window Slope (linear downward trend drift)
+    t_idx = np.arange(recent_len, dtype=np.float32)
+    t_center = t_idx - np.mean(t_idx)
+    denom_slope = np.sum(t_center ** 2) + 1e-6
+    rec_centered = X_rec - np.mean(X_rec, axis=1, keepdims=True)
+    cov_slope = np.sum(rec_centered * t_center[None, :], axis=1)
+    recent_slope = (cov_slope / denom_slope) / (rec_mean + 1e-4)
+
+    # 15. Recent window to peer baseline ratio
+    recent_peer_ratio = rec_mean / (dataset_median + 1e-4)
 
     # Assemble feature dataframe
     features_dict = {
@@ -117,10 +176,22 @@ def extract_consumer_features(df, id_col='CONS_NO', label_col='FLAG', is_second_
         'max_zero_streak': max_zero_streak,
         'drop_ratio_mean': drop_ratio_mean,
         'drop_ratio_med': drop_ratio_med,
+        'drop_ratio_max': drop_ratio_max,
+        'drop_ratio_iqr': drop_ratio_iqr,
         'drop_magnitude': drop_magnitude,
         'low_streak_recent': low_streak_recent,
         'low_days_ratio': low_days_ratio,
-        'peer_ratio_dataset': peer_ratio_dataset
+        'peer_ratio_dataset': peer_ratio_dataset,
+        'diff_mean_ratio': diff_mean_ratio,
+        'variance_drop_ratio': variance_drop_ratio,
+        'consumption_skew': consumption_skew,
+        'load_factor': load_factor,
+        'decile_spread': decile_spread,
+        'autocorr_lag1': autocorr_lag1,
+        'autocorr_lag7': autocorr_lag7,
+        'floor_to_peak': floor_to_peak,
+        'recent_slope': recent_slope,
+        'recent_peer_ratio': recent_peer_ratio
     }
     
     feat_df = pd.DataFrame(features_dict)

@@ -158,14 +158,17 @@ class StreamingDailyBuffer:
 
     def extract_features(self, consumer_id: str, peer_median_kwh: float) -> np.ndarray:
         """
-        Extracts the 14 features matching the benchmark training model:
+        Extracts the 26 features matching the benchmark training model:
         ['mean_kwh', 'median_kwh', 'std_kwh', 'cv_kwh', 'max_kwh', 'norm_iqr',
          'zero_rate', 'max_zero_streak', 'drop_ratio_mean', 'drop_ratio_med',
-         'drop_magnitude', 'low_streak_recent', 'low_days_ratio', 'peer_ratio_dataset']
+         'drop_ratio_max', 'drop_ratio_iqr', 'drop_magnitude', 'low_streak_recent',
+         'low_days_ratio', 'peer_ratio_dataset', 'diff_mean_ratio', 'variance_drop_ratio',
+         'consumption_skew', 'load_factor', 'decile_spread', 'autocorr_lag1',
+         'autocorr_lag7', 'floor_to_peak', 'recent_slope', 'recent_peer_ratio']
         """
         history = self.daily_histories.get(consumer_id)
         if not history or len(history) < 10:
-            return np.zeros((1, 14), dtype=np.float32)
+            return np.zeros((1, 26), dtype=np.float32)
 
         # Include estimated today reading in recent history
         curr_kwh = self.current_day_kwh.get(consumer_id, 0.0)
@@ -205,11 +208,20 @@ class StreamingDailyBuffer:
 
         hist_mean = float(np.mean(hist_part))
         hist_med = float(np.median(hist_part))
+        hist_std = float(np.std(hist_part))
+        hist_max = float(np.max(hist_part))
+        hist_iqr = float(np.percentile(hist_part, 75) - np.percentile(hist_part, 25))
+
         rec_mean = float(np.mean(rec_part))
         rec_med = float(np.median(rec_part))
+        rec_std = float(np.std(rec_part))
+        rec_max = float(np.max(rec_part))
+        rec_iqr = float(np.percentile(rec_part, 75) - np.percentile(rec_part, 25))
 
         drop_ratio_mean = float(rec_mean / (hist_mean + 1e-4))
         drop_ratio_med = float(rec_med / (hist_med + 1e-4))
+        drop_ratio_max = float(rec_max / (hist_max + 1e-4))
+        drop_ratio_iqr = float(rec_iqr / (hist_iqr + 1e-4))
         drop_magnitude = float(np.clip(1.0 - drop_ratio_mean, 0.0, 1.0))
 
         # Low streak persistence in recent window (< 40% of baseline)
@@ -228,10 +240,48 @@ class StreamingDailyBuffer:
         # Peer ratio against neighborhood transformer median
         peer_ratio_dataset = float(median_kwh / (peer_median_kwh + 1e-4))
 
+        # Advanced electrical domain features
+        diff_mean_ratio = float(np.mean(np.abs(np.diff(hist_arr))) / (mean_kwh + 1e-4)) if len(hist_arr) > 1 else 0.0
+        variance_drop_ratio = float(rec_std / (hist_std + 1e-4))
+
+        diff_from_mean = hist_arr - mean_kwh
+        consumption_skew = float(np.mean(diff_from_mean ** 3) / ((std_kwh + 1e-4) ** 3))
+        load_factor = float(mean_kwh / (max_kwh + 1e-4))
+
+        p90 = float(np.percentile(hist_arr, 90))
+        p10 = float(np.percentile(hist_arr, 10))
+        decile_spread = float((p90 - p10) / (median_kwh + 1e-4))
+
+        denom = float(np.sum(diff_from_mean ** 2) + 1e-4)
+        nom_lag1 = float(np.sum(diff_from_mean[:-1] * diff_from_mean[1:])) if len(hist_arr) > 1 else 0.0
+        autocorr_lag1 = float(nom_lag1 / denom)
+
+        if len(hist_arr) > 14:
+            nom_lag7 = float(np.sum(diff_from_mean[:-7] * diff_from_mean[7:]))
+            autocorr_lag7 = float(nom_lag7 / denom)
+        else:
+            autocorr_lag7 = 0.0
+
+        p95 = float(np.percentile(hist_arr, 95))
+        p05 = float(np.percentile(hist_arr, 5))
+        floor_to_peak = float(p05 / (p95 + 1e-4))
+
+        t_idx = np.arange(len(rec_part), dtype=np.float32)
+        t_center = t_idx - np.mean(t_idx)
+        denom_slope = float(np.sum(t_center ** 2) + 1e-6)
+        rec_centered = rec_part - np.mean(rec_part)
+        cov_slope = float(np.sum(rec_centered * t_center))
+        recent_slope = float((cov_slope / denom_slope) / (rec_mean + 1e-4))
+
+        recent_peer_ratio = float(rec_mean / (peer_median_kwh + 1e-4))
+
         return np.array([[
             mean_kwh, median_kwh, std_kwh, cv_kwh, max_kwh, norm_iqr,
             zero_rate, max_zero_streak, drop_ratio_mean, drop_ratio_med,
-            drop_magnitude, low_streak_recent, low_days_ratio, peer_ratio_dataset
+            drop_ratio_max, drop_ratio_iqr, drop_magnitude, low_streak_recent,
+            low_days_ratio, peer_ratio_dataset, diff_mean_ratio, variance_drop_ratio,
+            consumption_skew, load_factor, decile_spread, autocorr_lag1,
+            autocorr_lag7, floor_to_peak, recent_slope, recent_peer_ratio
         ]], dtype=np.float32)
 
 
@@ -677,8 +727,10 @@ class MultiSignalAnomalyDetector:
                 factors.append("Reverse active energy flow detected on single-phase line")
 
         # Behavioral drop detection from ML model & daily buffer
-        drop_magnitude = feat_vector[0, 10]
-        low_streak = feat_vector[0, 11]
+        drop_mag_idx = self.feature_cols.index('drop_magnitude') if (self.feature_cols and 'drop_magnitude' in self.feature_cols) else 12
+        low_streak_idx = self.feature_cols.index('low_streak_recent') if (self.feature_cols and 'low_streak_recent' in self.feature_cols) else 13
+        drop_magnitude = feat_vector[0, drop_mag_idx]
+        low_streak = feat_vector[0, low_streak_idx]
 
         # Genuine theft requires either a physical tamper flag OR a distinct negative consumption drop
         has_theft_drop = (drop_magnitude >= 0.35 or dev_pct <= -35.0 or (low_streak >= 3 and dev_pct < -20.0))
