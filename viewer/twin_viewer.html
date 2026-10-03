@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Grid Digital Twin | Cyber-Physical 3D Inspector</title>
+  <!-- Three.js for high-performance 3D rendering with glass wireframe shaders -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #070913;
+      --panel-bg: rgba(13, 17, 29, 0.88);
+      --panel-border: rgba(64, 120, 255, 0.22);
+      --accent-cyan: #00f0ff;
+      --accent-blue: #3d7eff;
+      --accent-red: #ff2a5f;
+      --accent-orange: #ff9800;
+      --accent-yellow: #ffd600;
+      --accent-green: #00e676;
+      --text-main: #f0f4fc;
+      --text-muted: #8a99b5;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Outfit', -apple-system, sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* TOP HEADER */
+    header {
+      height: 58px;
+      background: rgba(10, 14, 26, 0.95);
+      border-bottom: 1px solid var(--panel-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #00f0ff, #3d7eff);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+    }
+    .brand-title {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, #ffffff, #a9c6ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .brand-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--accent-cyan);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(0, 240, 255, 0.08);
+    }
+
+    .kpi-strip {
+      display: flex;
+      gap: 20px;
+    }
+    .kpi-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .kpi-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .kpi-val.cyan { color: var(--accent-cyan); }
+    .kpi-val.red { color: var(--accent-red); }
+    .kpi-val.orange { color: var(--accent-orange); }
+    .kpi-val.green { color: var(--accent-green); }
+    .kpi-lbl {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .controls-strip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    button.btn {
+      background: rgba(61, 126, 255, 0.15);
+      border: 1px solid var(--panel-border);
+      color: var(--text-main);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    button.btn:hover {
+      background: rgba(61, 126, 255, 0.35);
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+    }
+    button.btn.primary {
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.25), rgba(61, 126, 255, 0.35));
+      border-color: var(--accent-cyan);
+    }
+
+    /* MAIN VIEWPORT SPLIT */
+    .app-main {
+      flex: 1;
+      display: flex;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 3D CANVAS */
+    #canvas-container {
+      flex: 1;
+      height: 100%;
+      position: relative;
+      background: radial-gradient(circle at 50% 50%, #0e1428 0%, #060812 100%);
+    }
+    #viewport-overlay {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+    .hud-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      padding: 10px 14px;
+      border-radius: 8px;
+      backdrop-filter: blur(8px);
+      pointer-events: auto;
+      min-width: 200px;
+    }
+    .hud-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--accent-cyan);
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 6px;
+    }
+    .legend-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      margin-bottom: 4px;
+    }
+    .legend-color {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+    }
+
+    /* RIGHT INSPECTION SIDEBAR */
+    #inspector-panel {
+      width: 440px;
+      height: 100%;
+      background: var(--panel-bg);
+      border-left: 1px solid var(--panel-border);
+      display: flex;
+      flex-direction: column;
+      backdrop-filter: blur(16px);
+      z-index: 50;
+      box-shadow: -5px 0 25px rgba(0, 0, 0, 0.5);
+    }
+    .panel-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--panel-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .panel-title {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #fff;
+    }
+    .panel-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .panel-body::-webkit-scrollbar { width: 5px; }
+    .panel-body::-webkit-scrollbar-thumb { background: rgba(64, 120, 255, 0.3); border-radius: 3px; }
+
+    /* CARD COMPONENTS */
+    .card {
+      background: rgba(18, 25, 42, 0.7);
+      border: 1px solid rgba(64, 120, 255, 0.2);
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .card-title {
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .badge.CRITICAL { background: rgba(255, 42, 95, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); }
+    .badge.HIGH { background: rgba(255, 152, 0, 0.2); color: var(--accent-orange); border: 1px solid var(--accent-orange); }
+    .badge.MEDIUM { background: rgba(255, 214, 0, 0.2); color: var(--accent-yellow); border: 1px solid var(--accent-yellow); }
+    .badge.LOW { background: rgba(0, 230, 118, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
+    .badge.NORMAL { background: rgba(138, 153, 181, 0.2); color: var(--text-muted); border: 1px solid var(--text-muted); }
+
+    .risk-banner {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+    }
+    .risk-score-circle {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 16px;
+      border: 2px solid;
+    }
+
+    .data-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+    }
+    .data-cell {
+      background: rgba(10, 14, 25, 0.6);
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .data-cell-lbl {
+      font-size: 9px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .data-cell-val {
+      font-weight: 700;
+    }
+
+    /* BAR COMPARISON */
+    .bar-group {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .bar-row {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .bar-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .bar-track {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+
+    /* EVIDENCE LIST */
+    .evidence-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .evidence-item {
+      font-size: 11px;
+      line-height: 1.4;
+      padding: 6px 8px;
+      border-left: 2px solid var(--accent-cyan);
+      background: rgba(0, 240, 255, 0.05);
+      border-radius: 0 4px 4px 0;
+    }
+
+    /* MODAL FOR REPORT */
+    #report-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+    .modal-box {
+      width: 800px;
+      max-height: 85vh;
+      background: #0d1222;
+      border: 1px solid var(--panel-border);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 0 50px rgba(0, 240, 255, 0.15);
+    }
+    .modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--panel-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-body {
+      padding: 24px;
+      overflow-y: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      color: #cfdcf7;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER NAVIGATION & GLOBAL KPIS -->
+  <header>
+    <div class="brand">
+      <div class="brand-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-title">Smart Grid Digital Twin</div>
+      </div>
+      <div class="brand-sub">GOD'S EYE 3D AUDITOR</div>
+    </div>
+
+    <div class="kpi-strip">
+      <div class="kpi-item">
+        <span class="kpi-val cyan" id="kpi-sim-time">2026-10-05 06:15</span>
+        <span class="kpi-lbl">Virtual Grid Clock</span>
+      </div>
+      <div class="kpi-item">
+        <span class="kpi-val" id="kpi-consumers">48 / 48</span>
+        <span class="kpi-lbl">Meters Monitored</span>
+      </div>
+      <div class="kpi-item">
+        <span class="kpi-val red" id="kpi-anomalies">4 Flagged</span>
+        <span class="kpi-lbl">Field Anomalies</span>
+      </div>
+      <div class="kpi-item">
+        <span class="kpi-val orange" id="kpi-tx-loss">11.4%</span>
+        <span class="kpi-lbl">Transformer NTL Loss</span>
+      </div>
+    </div>
+
+    <div class="controls-strip">
+      <button class="btn" id="btn-toggle-truth" onclick="toggleGroundTruth()">
+        <span id="truth-icon">👁️</span> <span id="truth-label">Truth Reveal: ON</span>
+      </button>
+      <button class="btn" id="btn-step" onclick="stepSimulation()">
+        <span>⏩ Step Tick (+15m)</span>
+      </button>
+      <button class="btn primary" id="btn-drone-mission" onclick="triggerDroneFlight()">
+        <span>🛸 Fly Drone Mission</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN VIEWPORT -->
+  <div class="app-main">
+    
+    <!-- 3D WEBGL CONTAINER -->
+    <div id="canvas-container">
+      <div id="viewport-overlay">
+        <div class="hud-card">
+          <div class="hud-title">3D Transformer Zones</div>
+          <div class="legend-row">
+            <div class="legend-color" style="background: #00f0ff;"></div>
+            <span>Zone 1 (North Sector - TX-101)</span>
+          </div>
+          <div class="legend-row">
+            <div class="legend-color" style="background: #3d7eff;"></div>
+            <span>Zone 2 (South Sector - TX-102)</span>
+          </div>
+        </div>
+
+        <div class="hud-card">
+          <div class="hud-title">Risk Color Classification</div>
+          <div class="legend-row">
+            <div class="legend-color" style="background: #ff2a5f;"></div>
+            <span>Theft / Tampering (Bypass / Shunt)</span>
+          </div>
+          <div class="legend-row">
+            <div class="legend-color" style="background: #ff9800;"></div>
+            <span>Meter Malfunction (Stuck / Hardware)</span>
+          </div>
+          <div class="legend-row">
+            <div class="legend-color" style="background: #ffd600;"></div>
+            <span>Communication Failure (AMI Offline)</span>
+          </div>
+          <div class="legend-row">
+            <div class="legend-color" style="background: #00e676;"></div>
+            <span>Legitimate Abnormal Surge (EV Charger)</span>
+          </div>
+          <div class="legend-row">
+            <div class="legend-color" style="background: rgba(120, 150, 240, 0.6);"></div>
+            <span>Normal Diurnal Consumption</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT INSPECTOR PANEL -->
+    <div id="inspector-panel">
+      <div class="panel-header">
+        <div class="panel-title" id="panel-consumer-header">Target Consumer Details</div>
+        <span class="badge CRITICAL" id="panel-badge-risk">CRITICAL RISK</span>
+      </div>
+
+      <div class="panel-body">
+        
+        <!-- RISK BANNER -->
+        <div class="risk-banner card" id="panel-banner-bg" style="background: rgba(255, 42, 95, 0.1); border-color: rgba(255, 42, 95, 0.3);">
+          <div class="risk-score-circle" id="panel-score-circle" style="border-color: var(--accent-red); color: var(--accent-red);">
+            <span id="panel-score-val">94</span>
+            <span style="font-size: 8px; color: var(--text-muted);">SCORE</span>
+          </div>
+          <div>
+            <div style="font-size: 13px; font-weight: 700;" id="panel-cause-title">THEFT / METER SHUNT BYPASS</div>
+            <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">
+              Confidence: <strong id="panel-confidence-val" style="color:#fff;">96.0%</strong> | Priority Rank: <strong id="panel-rank-val" style="color:var(--accent-red);">#1</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- METER & CONTRACT DATA -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Consumer Identification</span>
+            <span style="font-size: 11px; font-family:'JetBrains Mono';" id="panel-meter-id">MTR_N_004</span>
+          </div>
+          <div class="data-grid">
+            <div class="data-cell">
+              <div class="data-cell-lbl">Consumer ID</div>
+              <div class="data-cell-val" id="panel-cid">CONS_N_004</div>
+            </div>
+            <div class="data-cell">
+              <div class="data-cell-lbl">Category</div>
+              <div class="data-cell-val" id="panel-category">Residential (3-Phase)</div>
+            </div>
+            <div class="data-cell">
+              <div class="data-cell-lbl">Contracted Load</div>
+              <div class="data-cell-val" id="panel-contract">4.5 kW</div>
+            </div>
+            <div class="data-cell">
+              <div class="data-cell-lbl">Transformer / Zone</div>
+              <div class="data-cell-val" id="panel-zone">TX_101 (Zone 1 North)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONSUMPTION VS BASELINE -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Telemetry vs Diurnal Baseline</span>
+            <span class="badge" id="panel-dev-pct" style="background: rgba(255,42,95,0.2); color:var(--accent-red);">-72.4%</span>
+          </div>
+          <div class="data-grid">
+            <div class="data-cell">
+              <div class="data-cell-lbl">Reported Load</div>
+              <div class="data-cell-val" id="panel-rep-kw" style="color: var(--accent-cyan);">0.48 kW</div>
+            </div>
+            <div class="data-cell">
+              <div class="data-cell-lbl">Diurnal Baseline</div>
+              <div class="data-cell-val" id="panel-base-kw">1.74 kW</div>
+            </div>
+            <div class="data-cell">
+              <div class="data-cell-lbl">Terminal Voltage</div>
+              <div class="data-cell-val" id="panel-volt">228.4 V</div>
+            </div>
+            <div class="data-cell">
+              <div class="data-cell-lbl">Line Current</div>
+              <div class="data-cell-val" id="panel-curr">2.18 A</div>
+            </div>
+          </div>
+
+          <!-- COMPARISON BARS -->
+          <div class="bar-group">
+            <div class="bar-row">
+              <div class="bar-labels">
+                <span>Reported Power</span>
+                <span id="bar-rep-lbl">0.48 kW</span>
+              </div>
+              <div class="bar-track">
+                <div class="bar-fill" id="bar-rep-fill" style="width: 25%; background: var(--accent-cyan);"></div>
+              </div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-labels">
+                <span>Diurnal Baseline</span>
+                <span id="bar-base-lbl">1.74 kW</span>
+              </div>
+              <div class="bar-track">
+                <div class="bar-fill" id="bar-base-fill" style="width: 70%; background: rgba(255,255,255,0.4);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIGITAL TWIN TRUTH REVEAL (USP) -->
+        <div class="card" id="panel-truth-card" style="border-color: rgba(0, 240, 255, 0.4); background: rgba(0, 240, 255, 0.05);">
+          <div class="card-header">
+            <span class="card-title" style="color: var(--accent-cyan);">Digital Twin Ground Truth Reveal</span>
+            <span class="badge" style="background: rgba(0,240,255,0.2); color:var(--accent-cyan);">UNMASKED</span>
+          </div>
+          <div class="data-grid">
+            <div class="data-cell">
+              <div class="data-cell-lbl">Physical Consumption</div>
+              <div class="data-cell-val" id="panel-true-kw" style="color:#fff;">1.82 kW</div>
+            </div>
+            <div class="data-cell">
+              <div class="data-cell-lbl">Unreported / Stolen</div>
+              <div class="data-cell-val" id="panel-stolen-kw" style="color: var(--accent-red);">1.34 kW</div>
+            </div>
+          </div>
+          <div style="font-size: 10px; color: var(--accent-cyan); margin-top: 8px; font-family:'JetBrains Mono';">
+            * Transformer TX_101 bulk meter records 11.4% unaccounted non-technical loss directly matching this consumer's bypass.
+          </div>
+        </div>
+
+        <!-- SUPPORTING EVIDENCE CHAIN -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Supporting Evidence Chain</span>
+          </div>
+          <ul class="evidence-list" id="panel-evidence-list">
+            <li class="evidence-item">Drastic consumption drop (-72.4% below diurnal baseline, z=-2.85)</li>
+            <li class="evidence-item">Distribution transformer TX_101 reports 11.4% unexplained NTL</li>
+            <li class="evidence-item">Consumer peer load ratio is 28.5% of neighborhood feeder average</li>
+          </ul>
+        </div>
+
+        <!-- RECOMMENDED ACTION -->
+        <div class="card" style="border-color: rgba(255, 42, 95, 0.3);">
+          <div class="card-header">
+            <span class="card-title" style="color: var(--accent-red);">Recommended Enforcement Action</span>
+          </div>
+          <p style="font-size: 12px; line-height: 1.4; color:#f8b2c2;" id="panel-action-text">
+            HIGH PRIORITY: Issue physical inspection warrant. Dispatch anti-theft squad to verify meter shunt/bypass.
+          </p>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div style="display: flex; gap: 10px; margin-top: 4px;">
+          <button class="btn primary" style="flex: 1;" onclick="viewFullReport()">
+            📄 View Full Investigation Report
+          </button>
+          <button class="btn" onclick="injectScenarioModal()">
+            ⚡ Inject Fault
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- REPORT MODAL -->
+  <div id="report-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span style="font-weight: 700; text-transform: uppercase;" id="modal-title">Investigation Report</span>
+        <button class="btn" onclick="closeReportModal()">✕ Close</button>
+      </div>
+      <div class="modal-body" id="modal-content">
+        Generating investigation audit report...
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- THREE.JS 3D SCENE SETUP ---
+    let scene, camera, renderer, controls;
+    let buildingMeshes = {};
+    let lineGroup, droneMesh, dronePathLine;
+    let selectedConsumerId = "CONS_N_004";
+    let isGroundTruthRevealed = true;
+    let twinSnapshot = null;
+
+    function init3D() {
+      const container = document.getElementById('canvas-container');
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x060812);
+      scene.fog = new THREE.FogExp2(0x060812, 0.0018);
+
+      camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 1, 3000);
+      camera.position.set(0, 320, 420);
+
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.shadowMap.enabled = true;
+      container.appendChild(renderer.domElement);
+
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.maxPolarAngle = Math.PI / 2.05; // Don't go below ground
+      controls.minDistance = 50;
+      controls.maxDistance = 900;
+      controls.target.set(0, 10, 0);
+
+      // Cyber Grid Ground Plane
+      const gridHelper = new THREE.GridHelper(900, 45, 0x1a2b4c, 0x0c1527);
+      gridHelper.position.y = -0.5;
+      scene.add(gridHelper);
+
+      // Lighting
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
+      scene.add(ambientLight);
+
+      const dirLight = new THREE.DirectionalLight(0x00f0ff, 0.9);
+      dirLight.position.set(150, 300, 150);
+      scene.add(dirLight);
+
+      const bluePoint = new THREE.PointLight(0x3d7eff, 1.2, 600);
+      bluePoint.position.set(-100, 120, -100);
+      scene.add(bluePoint);
+
+      lineGroup = new THREE.Group();
+      scene.add(lineGroup);
+
+      // Create Drone Model
+      createDrone();
+
+      // Window resize
+      window.addEventListener('resize', onWindowResize);
+
+      // Raycaster for clicking buildings
+      const raycaster = new THREE.Raycaster();
+      const mouse = new THREE.Vector2();
+      renderer.domElement.addEventListener('pointerdown', (e) => {
+        const rect = renderer.domElement.getBoundingClientRect();
+        mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects(Object.values(buildingMeshes));
+        if (intersects.length > 0) {
+          const clickedId = intersects[0].object.userData.consumerId;
+          if (clickedId) {
+            selectConsumer(clickedId);
+          }
+        }
+      });
+
+      // Fetch initial twin state
+      fetchTwinState();
+
+      animate();
+    }
+
+    function createDrone() {
+      const droneGroup = new THREE.Group();
+
+      // Drone Central Chassis
+      const chassisGeo = new THREE.BoxGeometry(7, 2, 7);
+      const chassisMat = new THREE.MeshStandardMaterial({ color: 0x111111, metalness: 0.8, roughness: 0.2 });
+      const chassis = new THREE.Mesh(chassisGeo, chassisMat);
+      droneGroup.add(chassis);
+
+      // Drone Glowing Ring
+      const ringGeo = new THREE.RingGeometry(4.5, 5.5, 24);
+      const ringMat = new THREE.MeshBasicMaterial({ color: 0xff00b4, side: THREE.DoubleSide });
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      ring.rotation.x = Math.PI / 2;
+      ring.position.y = 1.2;
+      droneGroup.add(ring);
+
+      // Scanner Cone Light
+      const spotLight = new THREE.SpotLight(0x00f0ff, 2.5, 60, Math.PI / 5, 0.4);
+      spotLight.position.set(0, 0, 0);
+      spotLight.target.position.set(0, -50, 0);
+      droneGroup.add(spotLight);
+      droneGroup.add(spotLight.target);
+
+      droneGroup.position.set(0, 50, 0);
+      droneMesh = droneGroup;
+      scene.add(droneMesh);
+    }
+
+    function onWindowResize() {
+      const container = document.getElementById('canvas-container');
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    }
+
+    // Convert GPS (Lat, Lon) to 3D Cartesian Scene Coords
+    const BASE_LAT = 28.613939;
+    const BASE_LON = 77.209021;
+    function gpsToCartesian(lat, lon, alt = 0) {
+      const r_earth = 6371000.0;
+      const x = (lon - BASE_LON) * (Math.PI / 180.0) * r_earth * Math.cos(BASE_LAT * Math.PI / 180.0);
+      const z = -(lat - BASE_LAT) * (Math.PI / 180.0) * r_earth;
+      return { x: x * 0.9, y: alt, z: z * 0.9 };
+    }
+
+    // Build 3D City Meshes from Digital Twin Snapshot
+    function buildCity3D(data) {
+      // Clear existing
+      Object.values(buildingMeshes).forEach(m => scene.remove(m));
+      buildingMeshes = {};
+      while (lineGroup.children.length > 0) {
+        lineGroup.remove(lineGroup.children[0]);
+      }
+
+      // 1. BUILDINGS
+      const consumers = data.consumers;
+      for (const [cId, cData] of Object.entries(consumers)) {
+        const poly = cData.static.building_polygon;
+        const height = cData.static.building_height_m * 3.5; // Scale height for dramatic 3D view
+        const coord = cData.static.coordinate;
+        const centerPos = gpsToCartesian(coord.lat, coord.lon);
+
+        // Building Shape from Polygon
+        const shape = new THREE.Shape();
+        poly.forEach((pt, idx) => {
+          const ptPos = gpsToCartesian(pt[1], pt[0]);
+          const localX = ptPos.x - centerPos.x;
+          const localZ = ptPos.z - centerPos.z;
+          if (idx === 0) shape.moveTo(localX, localZ);
+          else shape.lineTo(localX, localZ);
+        });
+
+        const extrudeSettings = {
+          steps: 1,
+          depth: height,
+          bevelEnabled: true,
+          bevelThickness: 0.8,
+          bevelSize: 0.4,
+          bevelSegments: 2
+        };
+
+        const geom = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+        geom.rotateX(Math.PI / 2); // Orient upright
+
+        // Color based on risk level
+        const risk = cData.analysis ? cData.analysis.risk_level : "NORMAL";
+        const cause = cData.analysis ? cData.analysis.probable_cause : "NORMAL";
+        let colorHex = 0x7896f0; // Lavender glass
+        let opacity = 0.45;
+
+        if (risk === "CRITICAL" || cause === "THEFT_TAMPERING") {
+          colorHex = 0xff2a5f; opacity = 0.85;
+        } else if (risk === "HIGH" || cause === "METER_MALFUNCTION") {
+          colorHex = 0xff9800; opacity = 0.85;
+        } else if (risk === "MEDIUM" || cause === "COMM_FAILURE") {
+          colorHex = 0xffd600; opacity = 0.75;
+        } else if (cause === "LEGITIMATE_ABNORMAL") {
+          colorHex = 0x00e676; opacity = 0.85;
+        }
+
+        const mat = new THREE.MeshStandardMaterial({
+          color: colorHex,
+          transparent: true,
+          opacity: opacity,
+          roughness: 0.25,
+          metalness: 0.6,
+          side: THREE.DoubleSide
+        });
+
+        const mesh = new THREE.Mesh(geom, mat);
+        mesh.position.set(centerPos.x, height, centerPos.z);
+        mesh.userData = { consumerId: cId };
+
+        // Wireframe glowing outline
+        const wireGeo = new THREE.WireframeGeometry(geom);
+        const wireMat = new THREE.LineBasicMaterial({
+          color: (risk === "CRITICAL" || cause === "THEFT_TAMPERING") ? 0xffffff : 0x8ab4f8,
+          linewidth: 1.5,
+          transparent: true,
+          opacity: 0.7
+        });
+        const wire = new THREE.LineSegments(wireGeo, wireMat);
+        mesh.add(wire);
+
+        // Highlight marker if selected
+        if (cId === selectedConsumerId) {
+          addSelectedMarker(mesh, height);
+        }
+
+        scene.add(mesh);
+        buildingMeshes[cId] = mesh;
+      }
+
+      // 2. TRANSFORMER HUBS & POWER LINES
+      for (const [txId, txReport] of Object.entries(data.transformers)) {
+        const isNorth = txId === "TX_101";
+        const txPos = isNorth ? { x: 20, y: 0, z: -200 } : { x: -20, y: 0, z: 200 };
+
+        // Transformer Station Mesh
+        const txGeo = new THREE.CylinderGeometry(8, 10, 14, 16);
+        const txColor = txReport.unexplained_loss_pct > 8.0 ? 0xff2a5f : 0x00f0ff;
+        const txMat = new THREE.MeshStandardMaterial({ color: txColor, emissive: txColor, emissiveIntensity: 0.6 });
+        const txMesh = new THREE.Mesh(txGeo, txMat);
+        txMesh.position.set(txPos.x, 7, txPos.z);
+        lineGroup.add(txMesh);
+
+        // Pulsing Ring under Transformer
+        const pRingGeo = new THREE.RingGeometry(14, 17, 32);
+        const pRingMat = new THREE.MeshBasicMaterial({ color: txColor, side: THREE.DoubleSide, transparent: true, opacity: 0.6 });
+        const pRing = new THREE.Mesh(pRingGeo, pRingMat);
+        pRing.rotation.x = Math.PI / 2;
+        pRing.position.set(txPos.x, 0.4, txPos.z);
+        lineGroup.add(pRing);
+      }
+
+      // 3. 3D DRONE FLIGHT PATH
+      if (data.drone_flight && data.drone_flight.line_coordinates_3d.length > 0) {
+        const points = [];
+        data.drone_flight.line_coordinates_3d.forEach(pt => {
+          const p = gpsToCartesian(pt[1], pt[0], pt[2] * 0.8);
+          points.push(new THREE.Vector3(p.x, p.y, p.z));
+        });
+
+        const pathGeo = new THREE.BufferGeometry().setFromPoints(points);
+        const pathMat = new THREE.LineDashedMaterial({
+          color: 0xff00b4,
+          dashSize: 6,
+          gapSize: 3,
+          linewidth: 2.5
+        });
+        dronePathLine = new THREE.Line(pathGeo, pathMat);
+        dronePathLine.computeLineDistances();
+        lineGroup.add(dronePathLine);
+      }
+    }
+
+    let selectedMarkerMesh = null;
+    function addSelectedMarker(mesh, height) {
+      if (selectedMarkerMesh) scene.remove(selectedMarkerMesh);
+      const ringGeo = new THREE.RingGeometry(12, 14, 32);
+      const ringMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, side: THREE.DoubleSide });
+      selectedMarkerMesh = new THREE.Mesh(ringGeo, ringMat);
+      selectedMarkerMesh.rotation.x = Math.PI / 2;
+      selectedMarkerMesh.position.set(mesh.position.x, 0.8, mesh.position.z);
+      scene.add(selectedMarkerMesh);
+    }
+
+    // Select Consumer and populate Right Inspector Panel
+    function selectConsumer(cId) {
+      selectedConsumerId = cId;
+      if (!twinSnapshot) return;
+      const cData = twinSnapshot.consumers[cId];
+      if (!cData) return;
+
+      const staticInfo = cData.static;
+      const telemetry = cData.telemetry;
+      const analysis = cData.analysis;
+
+      document.getElementById('panel-consumer-header').innerText = `${cId} - Inspection Audit`;
+      document.getElementById('panel-cid').innerText = cId;
+      document.getElementById('panel-meter-id').innerText = staticInfo.meter_id;
+      document.getElementById('panel-category').innerText = staticInfo.category;
+      document.getElementById('panel-contract').innerText = `${staticInfo.contracted_load_kw} kW`;
+      document.getElementById('panel-zone').innerText = `${staticInfo.transformer_id} (${staticInfo.zone_id})`;
+
+      if (analysis) {
+        const score = Math.round(analysis.anomaly_score);
+        document.getElementById('panel-score-val').innerText = score;
+        document.getElementById('panel-badge-risk').className = `badge ${analysis.risk_level}`;
+        document.getElementById('panel-badge-risk').innerText = `${analysis.risk_level} RISK`;
+        document.getElementById('panel-cause-title').innerText = analysis.probable_cause.replace('_', ' ');
+        document.getElementById('panel-confidence-val').innerText = `${analysis.confidence_pct}%`;
+        document.getElementById('panel-action-text').innerText = analysis.recommended_action;
+
+        // Evidence
+        const evList = document.getElementById('panel-evidence-list');
+        evList.innerHTML = '';
+        analysis.contributing_factors.forEach(f => {
+          const li = document.createElement('li');
+          li.className = 'evidence-item';
+          li.innerText = f;
+          evList.appendChild(li);
+        });
+
+        // Telemetry values
+        document.getElementById('panel-rep-kw').innerText = `${analysis.reported_kw} kW`;
+        document.getElementById('panel-base-kw').innerText = `${analysis.baseline_mean_kw} kW`;
+        document.getElementById('panel-dev-pct').innerText = `${analysis.deviation_pct > 0 ? '+' : ''}${analysis.deviation_pct}%`;
+
+        // Bar comparison
+        const maxKw = Math.max(analysis.reported_kw, analysis.baseline_mean_kw, 3.0);
+        document.getElementById('bar-rep-lbl').innerText = `${analysis.reported_kw} kW`;
+        document.getElementById('bar-rep-fill').style.width = `${Math.min(100, (analysis.reported_kw / maxKw) * 100)}%`;
+        document.getElementById('bar-base-lbl').innerText = `${analysis.baseline_mean_kw} kW`;
+        document.getElementById('bar-base-fill').style.width = `${Math.min(100, (analysis.baseline_mean_kw / maxKw) * 100)}%`;
+      }
+
+      if (telemetry && telemetry.reported) {
+        document.getElementById('panel-volt').innerText = `${telemetry.reported.voltage_v} V`;
+        document.getElementById('panel-curr').innerText = `${telemetry.reported.current_a} A`;
+      } else {
+        document.getElementById('panel-volt').innerText = '0.0 V (OFFLINE)';
+        document.getElementById('panel-curr').innerText = '0.00 A';
+      }
+
+      // Truth reveal card
+      if (telemetry) {
+        document.getElementById('panel-true-kw').innerText = `${telemetry.ground_truth.active_power_kw} kW`;
+        document.getElementById('panel-stolen-kw').innerText = `${telemetry.unreported_stolen_kw} kW`;
+      }
+
+      // Reposition selected marker
+      if (buildingMeshes[cId]) {
+        addSelectedMarker(buildingMeshes[cId], staticInfo.building_height_m * 3.5);
+      }
+    }
+
+    // Toggle Ground Truth reveal mode
+    function toggleGroundTruth() {
+      isGroundTruthRevealed = !isGroundTruthRevealed;
+      document.getElementById('truth-label').innerText = `Truth Reveal: ${isGroundTruthRevealed ? 'ON' : 'OFF'}`;
+      document.getElementById('panel-truth-card').style.display = isGroundTruthRevealed ? 'block' : 'none';
+    }
+
+    // Step Simulation Clock
+    async function stepSimulation() {
+      try {
+        const res = await fetch('/api/step', { method: 'POST' });
+        if (res.ok) {
+          const snapshot = await res.json();
+          updateDashboard(snapshot);
+        }
+      } catch (e) {
+        console.log("Running local offline tick simulation...");
+        fetchTwinState();
+      }
+    }
+
+    // Drone flight animation
+    let isDroneFlying = false;
+    let droneProgress = 0;
+    function triggerDroneFlight() {
+      if (!dronePathLine) return;
+      isDroneFlying = true;
+      droneProgress = 0;
+    }
+
+    // Fetch snapshot from Backend API
+    async function fetchTwinState() {
+      try {
+        const res = await fetch('/api/snapshot');
+        if (res.ok) {
+          twinSnapshot = await res.json();
+          updateDashboard(twinSnapshot);
+        }
+      } catch (err) {
+        // Generate client-side mockup if backend is not currently connected
+        console.warn("FastAPI backend not detected at /api/snapshot. Generating internal simulation snapshot...");
+        generateClientMockup();
+      }
+    }
+
+    function updateDashboard(snapshot) {
+      twinSnapshot = snapshot;
+      document.getElementById('kpi-sim-time').innerText = snapshot.clock.iso_time.replace('T', ' ').substring(0, 16);
+      document.getElementById('kpi-consumers').innerText = `${snapshot.grid_summary.total_consumers} / ${snapshot.grid_summary.total_consumers}`;
+      document.getElementById('kpi-anomalies').innerText = `${snapshot.grid_summary.anomalous_consumers_count} Flagged`;
+      document.getElementById('kpi-tx-loss').innerText = `${snapshot.grid_summary.grid_unexplained_ntl_pct}%`;
+
+      buildCity3D(snapshot);
+      selectConsumer(selectedConsumerId);
+    }
+
+    // Self-contained internal mock generator for offline standalone preview
+    function generateClientMockup() {
+      const mockSnapshot = {
+        clock: { iso_time: "2026-10-05T08:30:00", tick: 1 },
+        grid_summary: { total_consumers: 48, anomalous_consumers_count: 5, grid_unexplained_ntl_pct: 12.8 },
+        transformers: {
+          "TX_101": { unexplained_loss_pct: 14.2, status: "CRITICAL_THEFT_CLUSTER" },
+          "TX_102": { unexplained_loss_pct: 2.1, status: "OPTIMAL" }
+        },
+        consumers: {},
+        drone_flight: { line_coordinates_3d: [] }
+      };
+
+      // Generate 48 mock houses across 2 zones
+      for (let i = 1; i <= 48; i++) {
+        const isNorth = i <= 24;
+        const prefix = isNorth ? "N" : "S";
+        const numStr = String(i <= 24 ? i : i - 24).padStart(3, '0');
+        const cId = `CONS_${prefix}_${numStr}`;
+
+        const col = (i % 6) - 3;
+        const row = Math.floor((i % 24) / 6) - 2;
+        const lat = BASE_LAT + (isNorth ? 0.0020 : -0.0020) + row * 0.0006;
+        const lon = BASE_LON + col * 0.0007;
+
+        let risk = "NORMAL", cause = "NORMAL", score = 12.0, rep_kw = 1.6, true_kw = 1.6;
+        let factors = ["Consumption conforms to diurnal residential curve"];
+        let action = "Continue Routine Smart Meter Monitoring";
+
+        if (cId === "CONS_N_004") {
+          risk = "CRITICAL"; cause = "THEFT_TAMPERING"; score = 94.0; rep_kw = 0.48; true_kw = 1.82;
+          factors = ["Drastic consumption drop (-72.4% below diurnal baseline)", "Transformer TX_101 reports 14.2% unexplained NTL loss", "Consumer peer load ratio is 28.5% of neighborhood average"];
+          action = "HIGH PRIORITY: Dispatch anti-theft squad to inspect meter shunt/bypass";
+        } else if (cId === "CONS_N_009") {
+          risk = "CRITICAL"; cause = "THEFT_TAMPERING"; score = 91.0; rep_kw = 0.52; true_kw = 1.95;
+          factors = ["Magnetic tamper sensor tripped (high external magnetic field)", "Unexplained feeder loss"];
+          action = "Inspect physical meter enclosure; confiscate tampering magnet";
+        } else if (cId === "CONS_N_015") {
+          risk = "HIGH"; cause = "METER_MALFUNCTION"; score = 86.0; rep_kw = 0.35; true_kw = 1.40;
+          factors = ["Hardware fault bitmask active in smart meter register", "Persistent static reading unresponsive to diurnal baseline"];
+          action = "Replace defective transducer unit; re-flash meter firmware";
+        } else if (cId === "CONS_N_021") {
+          risk = "MEDIUM"; cause = "COMM_FAILURE"; score = 68.0; rep_kw = 0.0; true_kw = 1.20;
+          factors = ["Meter communication offline: missed scheduled AMI interval telemetry", "Last recorded ping timed out across headend gateway"];
+          action = "Dispatch AMI field technician to check cellular/RF antenna";
+        } else if (cId === "CONS_S_003") {
+          risk = "LOW"; cause = "LEGITIMATE_ABNORMAL"; score = 32.0; rep_kw = 8.5; true_kw = 8.5;
+          factors = ["Sharp consumption increase (+280%) matching Level-2 EV Charging", "Zone transformer has 0% non-technical loss; power factor compliant (0.97)"];
+          action = "Verified legitimate EV charging demand; no enforcement action required";
+        }
+
+        mockSnapshot.consumers[cId] = {
+          static: {
+            id: cId,
+            meter_id: `MTR_${prefix}_${numStr}`,
+            category: i % 5 === 0 ? "Commercial" : "Residential",
+            contracted_load_kw: 4.5,
+            coordinate: { lat: lat, lon: lon },
+            building_height_m: 8.0 + (i % 4) * 3.0,
+            zone_id: isNorth ? "Zone_1_North" : "Zone_2_South",
+            transformer_id: isNorth ? "TX_101" : "TX_102",
+            building_polygon: [
+              [lon - 0.0001, lat - 0.0001],
+              [lon + 0.0001, lat - 0.0001],
+              [lon + 0.0001, lat + 0.0001],
+              [lon - 0.0001, lat + 0.0001]
+            ]
+          },
+          telemetry: {
+            ground_truth: { active_power_kw: true_kw },
+            reported: { active_power_kw: rep_kw, voltage_v: 228.4, current_a: +(rep_kw * 1000 / (228.4 * 0.95)).toFixed(2) },
+            unreported_stolen_kw: +(true_kw - rep_kw).toFixed(2)
+          },
+          analysis: {
+            anomaly_score: score,
+            risk_level: risk,
+            probable_cause: cause,
+            confidence_pct: 95.0,
+            reported_kw: rep_kw,
+            baseline_mean_kw: 1.74,
+            deviation_pct: +(((rep_kw - 1.74) / 1.74) * 100).toFixed(1),
+            contributing_factors: factors,
+            recommended_action: action
+          }
+        };
+      }
+
+      updateDashboard(mockSnapshot);
+    }
+
+    // Modal Report Viewer
+    async function viewFullReport() {
+      const modal = document.getElementById('report-modal');
+      const content = document.getElementById('modal-content');
+      modal.style.display = 'flex';
+      content.innerText = 'Generating comprehensive explainable report...';
+
+      try {
+        const res = await fetch(`/api/report/${selectedConsumerId}`);
+        if (res.ok) {
+          const report = await res.json();
+          content.innerText = report.markdown;
+        } else {
+          fallbackReportText();
+        }
+      } catch (e) {
+        fallbackReportText();
+      }
+    }
+
+    function fallbackReportText() {
+      const c = twinSnapshot.consumers[selectedConsumerId];
+      document.getElementById('modal-content').innerText = 
+`# SMART GRID DIGITAL TWIN | AUDIT INVESTIGATION REPORT
+Report ID: RPT-Z1-004-98AF23 | Timestamp: 2026-10-05T08:30:00
+
+--------------------------------------------------------------------------------
+1. CONSUMER SUMMARY:
+- Target ID: ${selectedConsumerId} (Meter: ${c.static.meter_id})
+- Category: ${c.static.category} | Contracted Load: ${c.static.contracted_load_kw} kW
+- Grid Parent: Transformer ${c.static.transformer_id} (${c.static.zone_id})
+
+2. CLASSIFICATION & RISK SCORING:
+- Anomaly Score: ${c.analysis.anomaly_score} / 100 [${c.analysis.risk_level} RISK]
+- Diagnostic Cause: ${c.analysis.probable_cause} (Confidence: ${c.analysis.confidence_pct}%)
+- Inspection Priority Rank: #1
+
+3. TELEMETRY & PHYSICAL RECONCILIATION:
+- Cyber Reported Load: ${c.analysis.reported_kw} kW (Baseline: ${c.analysis.baseline_mean_kw} kW)
+- Physical Ground Truth: ${c.telemetry.ground_truth.active_power_kw} kW
+- Unreported / Stolen Energy: ${c.telemetry.unreported_stolen_kw} kW
+
+4. SUPPORTING EVIDENCE:
+${c.analysis.contributing_factors.map(f => '  * ' + f).join('\n')}
+
+5. RECOMMENDED UTILITY ACTION:
+>> ${c.analysis.recommended_action}
+--------------------------------------------------------------------------------`;
+    }
+
+    function closeReportModal() {
+      document.getElementById('report-modal').style.display = 'none';
+    }
+
+    function injectScenarioModal() {
+      const scenario = prompt("Inject Scenario for " + selectedConsumerId + ":\nOptions: THEFT_BYPASS, METER_MALFUNCTION, COMM_FAILURE, LEGITIMATE_ABNORMAL, NORMAL", "THEFT_BYPASS");
+      if (scenario) {
+        fetch(`/api/inject/${selectedConsumerId}?scenario=${scenario}`, { method: 'POST' })
+          .then(() => fetchTwinState());
+      }
+    }
+
+    // Animation Render Loop
+    let clock = new THREE.Clock();
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+
+      const time = clock.getElapsedTime();
+
+      // Pulse selected marker
+      if (selectedMarkerMesh) {
+        selectedMarkerMesh.scale.setScalar(1.0 + 0.15 * Math.sin(time * 4.0));
+      }
+
+      // Drone flight interpolation
+      if (isDroneFlying && dronePathLine) {
+        droneProgress += 0.005;
+        if (droneProgress >= 1.0) droneProgress = 0;
+        const geom = dronePathLine.geometry;
+        const count = geom.attributes.position.count;
+        const idx = Math.floor(droneProgress * (count - 1));
+        const p1 = new THREE.Vector3().fromBufferAttribute(geom.attributes.position, idx);
+        const p2 = new THREE.Vector3().fromBufferAttribute(geom.attributes.position, Math.min(count - 1, idx + 1));
+        const t = (droneProgress * (count - 1)) - idx;
+        droneMesh.position.lerpVectors(p1, p2, t);
+        droneMesh.rotation.y = time * 2.0; // Slow propeller spin
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    window.onload = init3D;
+  </script>
+</body>
+</html>

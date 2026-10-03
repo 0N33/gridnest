@@ -1,0 +1,1866 @@
+{
+  "type": "FeatureCollection",
+  "name": "Electrical_Network_Topology",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.209021,
+            28.613939,
+            215.0
+          ],
+          [
+            77.20922588801282,
+            28.61591750753302,
+            218.0
+          ]
+        ]
+      },
+      "properties": {
+        "type": "primary_feeder_11kv",
+        "id": "LINE_28.613939_TX_101",
+        "name": "11kV Feeder to Distribution Transformer TX-101 (North Sector)",
+        "color": [
+          0,
+          220,
+          255,
+          220
+        ],
+        "width": 3.5
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.209021,
+            28.613939,
+            215.0
+          ],
+          [
+            77.20881611198719,
+            28.611960492466977,
+            216.0
+          ]
+        ]
+      },
+      "properties": {
+        "type": "primary_feeder_11kv",
+        "id": "LINE_28.613939_TX_102",
+        "name": "11kV Feeder to Distribution Transformer TX-102 (South Sector)",
+        "color": [
+          0,
+          220,
+          255,
+          220
+        ],
+        "width": 3.5
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20922588801282,
+            28.61591750753302,
+            218.0
+          ],
+          [
+            77.20820144794875,
+            28.615647711051245,
+            218.0
+          ]
+        ]
+      },
+      "properties": {
+        "type": "lv_main_dist_line",
+        "id": "LINE_TX_101_POLE_N_01",
+        "name": "LV Trunk to POLE_N_01",
+        "color": [
+          0,
+          180,
+          230,
+          180
+        ],
+        "width": 2.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20922588801282,
+            28.61591750753302,
+            218.0
+          ],
+          [
+            77.209021,
+            28.615647711051245,
+            218.0
+          ]
+        ]
+      },
+      "properties": {
+        "type": "lv_main_dist_line",
+        "id": "LINE_TX_101_POLE_N_02",
+        "name": "LV Trunk to POLE_N_02",
+        "color": [
+          0,
+          180,
+          230,
+          180
+        ],
+        "width": 2.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20922588801282,
+            28.61591750753302,
+            218.0
+          ],
+          [
+            77.20984055205126,
+            28.615647711051245,
+            218.0
+          ]
+        ]
+      },
+      "properties": {
+        "type": "lv_main_dist_line",
+        "id": "LINE_TX_101_POLE_N_03",
+        "name": "LV Trunk to POLE_N_03",
+        "color": [
+          0,
+          180,
+          230,
+          180
+        ],
+        "width": 2.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20922588801282,
+            28.61591750753302,
+            218.0
+          ],
+          [
+            77.20820144794875,
+            28.616187304014794,
+            218.0
+          ]
+        ]
+      },
+      "properties": {
+        "type": "lv_main_dist_line",
+        "id": "LINE_TX_101_POLE_N_04",
+        "name": "LV Trunk to POLE_N_04",
+        "color": [
+          0,
+          180,
+          230,
+          180
+        ],
+        "width": 2.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20922588801282,
+            28.61591750753302,
+            218.0
+          ],
+          [
+            77.209021,
+            28.616187304014794,
+            218.0
+          ]
+        ]
+      },
+      "properties": {
+        "type": "lv_main_dist_line",
+        "id": "LINE_TX_101_POLE_N_05",
+        "name": "LV Trunk to POLE_N_05",
+        "color": [
+          0,
+          180,
+          230,
+          180
+        ],
+        "width": 2.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20922588801282,
+            28.61591750753302,
+            218.0
+          ],
+          [
+            77.20984055205126,
+            28.616187304014794,
+            218.0
+          ]
+        ]
+      },
+      "properties": {
+        "type": "lv_main_dist_line",
+        "id": "LINE_TX_101_POLE_N_06",
+        "name": "LV Trunk to POLE_N_06",
+        "color": [
+          0,
+          180,
+          230,
+          180
+        ],
+        "width": 2.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20881611198719,
+            28.611960492466977,
+            216.0
+          ],
+          [
+            77.20820144794875,
+            28.611690695985203,
+            218.0
+          ]
+        ]
+      },
+      "properties": {
+        "type": "lv_main_dist_line",
+        "id": "LINE_TX_102_POLE_S_01",
+        "name": "LV Trunk to POLE_S_01",
+        "color": [
+          0,
+          180,
+          230,
+          180
+        ],
+        "width": 2.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20881611198719,
+            28.611960492466977,
+            216.0
+          ],
+          [
+            77.209021,
+            28.611690695985203,
+            218.0
+          ]
+        ]
+      },
+      "properties": {
+        "type": "lv_main_dist_line",
+        "id": "LINE_TX_102_POLE_S_02",
+        "name": "LV Trunk to POLE_S_02",
+        "color": [
+          0,
+          180,
+          230,
+          180
+        ],
+        "width": 2.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20881611198719,
+            28.611960492466977,
+            216.0
+          ],
+          [
+            77.20984055205126,
+            28.611690695985203,
+            218.0
+          ]
+        ]
+      },
+      "properties": {
+        "type": "lv_main_dist_line",
+        "id": "LINE_TX_102_POLE_S_03",
+        "name": "LV Trunk to POLE_S_03",
+        "color": [
+          0,
+          180,
+          230,
+          180
+        ],
+        "width": 2.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20881611198719,
+            28.611960492466977,
+            216.0
+          ],
+          [
+            77.20820144794875,
+            28.61223028894875,
+            218.0
+          ]
+        ]
+      },
+      "properties": {
+        "type": "lv_main_dist_line",
+        "id": "LINE_TX_102_POLE_S_04",
+        "name": "LV Trunk to POLE_S_04",
+        "color": [
+          0,
+          180,
+          230,
+          180
+        ],
+        "width": 2.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20881611198719,
+            28.611960492466977,
+            216.0
+          ],
+          [
+            77.209021,
+            28.61223028894875,
+            218.0
+          ]
+        ]
+      },
+      "properties": {
+        "type": "lv_main_dist_line",
+        "id": "LINE_TX_102_POLE_S_05",
+        "name": "LV Trunk to POLE_S_05",
+        "color": [
+          0,
+          180,
+          230,
+          180
+        ],
+        "width": 2.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20881611198719,
+            28.611960492466977,
+            216.0
+          ],
+          [
+            77.20984055205126,
+            28.61223028894875,
+            218.0
+          ]
+        ]
+      },
+      "properties": {
+        "type": "lv_main_dist_line",
+        "id": "LINE_TX_102_POLE_S_06",
+        "name": "LV Trunk to POLE_S_06",
+        "color": [
+          0,
+          180,
+          230,
+          180
+        ],
+        "width": 2.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20820144794875,
+            28.615647711051245,
+            218.0
+          ],
+          [
+            77.20798155439763,
+            28.615484543379775,
+            221.2
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_N_001",
+        "consumer_id": "CONS_N_001",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20820144794875,
+            28.615647711051245,
+            218.0
+          ],
+          [
+            77.20840932950574,
+            28.615482064687857,
+            221.2
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_N_002",
+        "consumer_id": "CONS_N_002",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20820144794875,
+            28.615647711051245,
+            218.0
+          ],
+          [
+            77.20798244323765,
+            28.615844147797947,
+            227.6
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_N_003",
+        "consumer_id": "CONS_N_003",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20820144794875,
+            28.615647711051245,
+            218.0
+          ],
+          [
+            77.20840093837137,
+            28.615816415418024,
+            224.4
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_N_004",
+        "consumer_id": "CONS_N_004",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.209021,
+            28.615647711051245,
+            218.0
+          ],
+          [
+            77.20880819401873,
+            28.615443339733382,
+            224.4
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_N_005",
+        "consumer_id": "CONS_N_005",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.209021,
+            28.615647711051245,
+            218.0
+          ],
+          [
+            77.20923901215123,
+            28.61546533278276,
+            221.2
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_N_006",
+        "consumer_id": "CONS_N_006",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.209021,
+            28.615647711051245,
+            218.0
+          ],
+          [
+            77.20880802488976,
+            28.61583747947531,
+            227.6
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_N_007",
+        "consumer_id": "CONS_N_007",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.209021,
+            28.615647711051245,
+            218.0
+          ],
+          [
+            77.2092256907061,
+            28.615821070872887,
+            227.6
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_N_008",
+        "consumer_id": "CONS_N_008",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20984055205126,
+            28.615647711051245,
+            218.0
+          ],
+          [
+            77.2095985168587,
+            28.61544259918846,
+            224.4
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_N_009",
+        "consumer_id": "CONS_N_009",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20984055205126,
+            28.615647711051245,
+            218.0
+          ],
+          [
+            77.21004826843193,
+            28.615467805249367,
+            224.4
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_N_010",
+        "consumer_id": "CONS_N_010",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20984055205126,
+            28.615647711051245,
+            218.0
+          ],
+          [
+            77.20963035486803,
+            28.615823713712107,
+            224.4
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_N_011",
+        "consumer_id": "CONS_N_011",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20984055205126,
+            28.615647711051245,
+            218.0
+          ],
+          [
+            77.21006651808877,
+            28.615805501132165,
+            221.2
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_N_012",
+        "consumer_id": "CONS_N_012",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20820144794875,
+            28.616187304014794,
+            218.0
+          ],
+          [
+            77.20798199235304,
+            28.61600122181883,
+            227.6
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_N_013",
+        "consumer_id": "CONS_N_013",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20820144794875,
+            28.616187304014794,
+            218.0
+          ],
+          [
+            77.20843791119788,
+            28.61598664117688,
+            224.4
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_N_014",
+        "consumer_id": "CONS_N_014",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20820144794875,
+            28.616187304014794,
+            218.0
+          ],
+          [
+            77.20797205647848,
+            28.616364671299735,
+            227.6
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_N_015",
+        "consumer_id": "CONS_N_015",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20820144794875,
+            28.616187304014794,
+            218.0
+          ],
+          [
+            77.20842730176277,
+            28.616345930540923,
+            224.4
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_N_016",
+        "consumer_id": "CONS_N_016",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.209021,
+            28.616187304014794,
+            218.0
+          ],
+          [
+            77.20877427918248,
+            28.61602160459167,
+            230.8
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_N_017",
+        "consumer_id": "CONS_N_017",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.209021,
+            28.616187304014794,
+            218.0
+          ],
+          [
+            77.20921684497007,
+            28.61603059355301,
+            221.2
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_N_018",
+        "consumer_id": "CONS_N_018",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.209021,
+            28.616187304014794,
+            218.0
+          ],
+          [
+            77.20877014942354,
+            28.616366412391237,
+            230.8
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_N_019",
+        "consumer_id": "CONS_N_019",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.209021,
+            28.616187304014794,
+            218.0
+          ],
+          [
+            77.2092738484084,
+            28.616349098822315,
+            227.6
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_N_020",
+        "consumer_id": "CONS_N_020",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20984055205126,
+            28.616187304014794,
+            218.0
+          ],
+          [
+            77.20962825990004,
+            28.61600198938919,
+            227.6
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_N_021",
+        "consumer_id": "CONS_N_021",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20984055205126,
+            28.616187304014794,
+            218.0
+          ],
+          [
+            77.21004263768239,
+            28.61599258455563,
+            221.2
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_N_022",
+        "consumer_id": "CONS_N_022",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20984055205126,
+            28.616187304014794,
+            218.0
+          ],
+          [
+            77.20958487855688,
+            28.616378383287206,
+            221.2
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_N_023",
+        "consumer_id": "CONS_N_023",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20984055205126,
+            28.616187304014794,
+            218.0
+          ],
+          [
+            77.21003955527011,
+            28.6163530312504,
+            227.6
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_N_024",
+        "consumer_id": "CONS_N_024",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20820144794875,
+            28.611690695985203,
+            218.0
+          ],
+          [
+            77.20797830626606,
+            28.611491416153953,
+            227.6
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_S_001",
+        "consumer_id": "CONS_S_001",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20820144794875,
+            28.611690695985203,
+            218.0
+          ],
+          [
+            77.20842332446473,
+            28.61153032980745,
+            224.4
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_S_002",
+        "consumer_id": "CONS_S_002",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20820144794875,
+            28.611690695985203,
+            218.0
+          ],
+          [
+            77.20800490285528,
+            28.611893566768778,
+            221.2
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_S_003",
+        "consumer_id": "CONS_S_003",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20820144794875,
+            28.611690695985203,
+            218.0
+          ],
+          [
+            77.2084515561247,
+            28.611852464361434,
+            224.4
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_S_004",
+        "consumer_id": "CONS_S_004",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.209021,
+            28.611690695985203,
+            218.0
+          ],
+          [
+            77.20878242833518,
+            28.611521439603223,
+            227.6
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_S_005",
+        "consumer_id": "CONS_S_005",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.209021,
+            28.611690695985203,
+            218.0
+          ],
+          [
+            77.20923387661834,
+            28.611536122891547,
+            227.6
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_S_006",
+        "consumer_id": "CONS_S_006",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.209021,
+            28.611690695985203,
+            218.0
+          ],
+          [
+            77.20876797746938,
+            28.611869307831103,
+            221.2
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_S_007",
+        "consumer_id": "CONS_S_007",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.209021,
+            28.611690695985203,
+            218.0
+          ],
+          [
+            77.20921985111545,
+            28.611847247778577,
+            224.4
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_S_008",
+        "consumer_id": "CONS_S_008",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20984055205126,
+            28.611690695985203,
+            218.0
+          ],
+          [
+            77.20962003082833,
+            28.611485996447975,
+            224.4
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_S_009",
+        "consumer_id": "CONS_S_009",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20984055205126,
+            28.611690695985203,
+            218.0
+          ],
+          [
+            77.21009264329945,
+            28.61149487369852,
+            224.4
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_S_010",
+        "consumer_id": "CONS_S_010",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20984055205126,
+            28.611690695985203,
+            218.0
+          ],
+          [
+            77.2096125508661,
+            28.61189370983369,
+            221.2
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_S_011",
+        "consumer_id": "CONS_S_011",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20984055205126,
+            28.611690695985203,
+            218.0
+          ],
+          [
+            77.21003969447364,
+            28.611855082314914,
+            221.2
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_S_012",
+        "consumer_id": "CONS_S_012",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20820144794875,
+            28.61223028894875,
+            218.0
+          ],
+          [
+            77.20796805523102,
+            28.612031956887467,
+            227.6
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_S_013",
+        "consumer_id": "CONS_S_013",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20820144794875,
+            28.61223028894875,
+            218.0
+          ],
+          [
+            77.20843713887591,
+            28.61205337092831,
+            221.2
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_S_014",
+        "consumer_id": "CONS_S_014",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20820144794875,
+            28.61223028894875,
+            218.0
+          ],
+          [
+            77.20796159760394,
+            28.612431181893385,
+            230.8
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_S_015",
+        "consumer_id": "CONS_S_015",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20820144794875,
+            28.61223028894875,
+            218.0
+          ],
+          [
+            77.20844019671726,
+            28.61239415958947,
+            224.4
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_S_016",
+        "consumer_id": "CONS_S_016",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.209021,
+            28.61223028894875,
+            218.0
+          ],
+          [
+            77.20877056731312,
+            28.61204630083003,
+            221.2
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_S_017",
+        "consumer_id": "CONS_S_017",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.209021,
+            28.61223028894875,
+            218.0
+          ],
+          [
+            77.20922557214705,
+            28.612047286112716,
+            227.6
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_S_018",
+        "consumer_id": "CONS_S_018",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.209021,
+            28.61223028894875,
+            218.0
+          ],
+          [
+            77.208798429078,
+            28.61242820778177,
+            230.8
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_S_019",
+        "consumer_id": "CONS_S_019",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.209021,
+            28.61223028894875,
+            218.0
+          ],
+          [
+            77.20923805389828,
+            28.61243352239424,
+            224.4
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_S_020",
+        "consumer_id": "CONS_S_020",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20984055205126,
+            28.61223028894875,
+            218.0
+          ],
+          [
+            77.20960618520189,
+            28.612053655900123,
+            227.6
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_S_021",
+        "consumer_id": "CONS_S_021",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20984055205126,
+            28.61223028894875,
+            218.0
+          ],
+          [
+            77.21008833583518,
+            28.612076120370023,
+            224.4
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_S_022",
+        "consumer_id": "CONS_S_022",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20984055205126,
+            28.61223028894875,
+            218.0
+          ],
+          [
+            77.20963253590375,
+            28.612405389374526,
+            227.6
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_S_023",
+        "consumer_id": "CONS_S_023",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20984055205126,
+            28.61223028894875,
+            218.0
+          ],
+          [
+            77.21005870557835,
+            28.61238526317434,
+            221.2
+          ]
+        ]
+      },
+      "properties": {
+        "type": "service_drop",
+        "id": "DROP_CONS_S_024",
+        "consumer_id": "CONS_S_024",
+        "color": [
+          255,
+          240,
+          160,
+          140
+        ],
+        "width": 1.2
+      }
+    }
+  ]
+}

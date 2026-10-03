@@ -1,0 +1,84 @@
+{
+  "type": "FeatureCollection",
+  "name": "Transformer_Stations",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.209021,
+          28.613939,
+          215.0
+        ]
+      },
+      "properties": {
+        "id": "SUB_CENTRAL_01",
+        "type": "primary_substation",
+        "name": "Central 33/11kV Substation",
+        "voltage": "33kV / 11kV",
+        "icon": "substation",
+        "color": [
+          0,
+          255,
+          200,
+          255
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.20922588801282,
+          28.61591750753302,
+          218.0
+        ]
+      },
+      "properties": {
+        "id": "TX_101",
+        "type": "distribution_transformer",
+        "name": "Distribution Transformer TX-101 (North Sector)",
+        "zone_id": "Zone_1_North",
+        "capacity_kva": 100.0,
+        "unexplained_loss_pct": 11.6,
+        "status": "SUSPICIOUS_NTL",
+        "connected_consumers": 24,
+        "color": [
+          255,
+          170,
+          0,
+          255
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.20881611198719,
+          28.611960492466977,
+          216.0
+        ]
+      },
+      "properties": {
+        "id": "TX_102",
+        "type": "distribution_transformer",
+        "name": "Distribution Transformer TX-102 (South Sector)",
+        "zone_id": "Zone_2_South",
+        "capacity_kva": 100.0,
+        "unexplained_loss_pct": 8.7,
+        "status": "SUSPICIOUS_NTL",
+        "connected_consumers": 24,
+        "color": [
+          255,
+          170,
+          0,
+          255
+        ]
+      }
+    }
+  ]
+}

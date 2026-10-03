@@ -1,0 +1,2886 @@
+{
+  "type": "FeatureCollection",
+  "name": "SmartGrid_3D_Buildings",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.207936,
+              28.6154116
+            ],
+            [
+              77.2080626,
+              28.6154414
+            ],
+            [
+              77.2080271,
+              28.6155575
+            ],
+            [
+              77.2079005,
+              28.6155277
+            ],
+            [
+              77.207936,
+              28.6154116
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_N_001",
+        "meter_id": "MTR_N_001",
+        "name": "Residential Consumer #1 (Zone_1_North)",
+        "category": "Residential",
+        "contracted_load_kw": 3.0,
+        "height": 3.2,
+        "elevation": 221.2,
+        "zone_id": "Zone_1_North",
+        "transformer_id": "TX_101",
+        "feeder_id": "FDR_NORTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 20.7,
+        "reported_kw": 2.4,
+        "true_kw": 2.4,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2083345,
+              28.6154371
+            ],
+            [
+              77.2084485,
+              28.6154103
+            ],
+            [
+              77.2084841,
+              28.615527
+            ],
+            [
+              77.2083701,
+              28.6155538
+            ],
+            [
+              77.2083345,
+              28.6154371
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_N_002",
+        "meter_id": "MTR_N_002",
+        "name": "Residential Consumer #2 (Zone_1_North)",
+        "category": "Residential",
+        "contracted_load_kw": 3.0,
+        "height": 3.2,
+        "elevation": 221.2,
+        "zone_id": "Zone_1_North",
+        "transformer_id": "TX_101",
+        "feeder_id": "FDR_NORTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 19.7,
+        "reported_kw": 3.179,
+        "true_kw": 3.179,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.207962,
+              28.6157204
+            ],
+            [
+              77.2081148,
+              28.6157978
+            ],
+            [
+              77.2080029,
+              28.6159679
+            ],
+            [
+              77.2078501,
+              28.6158905
+            ],
+            [
+              77.207962,
+              28.6157204
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_N_003",
+        "meter_id": "MTR_N_003",
+        "name": "Commercial Consumer #3 (Zone_1_North)",
+        "category": "Commercial",
+        "contracted_load_kw": 15.0,
+        "height": 9.6,
+        "elevation": 227.6,
+        "zone_id": "Zone_1_North",
+        "transformer_id": "TX_101",
+        "feeder_id": "FDR_NORTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 22.5,
+        "reported_kw": 7.68,
+        "true_kw": 7.68,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2083193,
+              28.6156669
+            ],
+            [
+              77.2085568,
+              28.6157227
+            ],
+            [
+              77.2084826,
+              28.615966
+            ],
+            [
+              77.2082451,
+              28.6159101
+            ],
+            [
+              77.2083193,
+              28.6156669
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_N_004",
+        "meter_id": "MTR_N_004",
+        "name": "LightIndustrial Consumer #4 (Zone_1_North)",
+        "category": "LightIndustrial",
+        "contracted_load_kw": 25.0,
+        "height": 6.4,
+        "elevation": 224.4,
+        "zone_id": "Zone_1_North",
+        "transformer_id": "TX_101",
+        "feeder_id": "FDR_NORTH_11KV",
+        "risk_level": "HIGH",
+        "probable_cause": "THEFT_TAMPERING",
+        "anomaly_score": 77.4,
+        "reported_kw": 0.888,
+        "true_kw": 3.172,
+        "fill_color": [
+          255,
+          45,
+          85,
+          200
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2087368,
+              28.615374
+            ],
+            [
+              77.2088796,
+              28.615374
+            ],
+            [
+              77.2088796,
+              28.6155127
+            ],
+            [
+              77.2087368,
+              28.6155127
+            ],
+            [
+              77.2087368,
+              28.615374
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_N_005",
+        "meter_id": "MTR_N_005",
+        "name": "Residential Consumer #5 (Zone_1_North)",
+        "category": "Residential",
+        "contracted_load_kw": 3.0,
+        "height": 6.4,
+        "elevation": 224.4,
+        "zone_id": "Zone_1_North",
+        "transformer_id": "TX_101",
+        "feeder_id": "FDR_NORTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 20.2,
+        "reported_kw": 2.61,
+        "true_kw": 2.61,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2091652,
+              28.6154229
+            ],
+            [
+              77.2092788,
+              28.6153962
+            ],
+            [
+              77.2093128,
+              28.6155077
+            ],
+            [
+              77.2091992,
+              28.6155345
+            ],
+            [
+              77.2091652,
+              28.6154229
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_N_006",
+        "meter_id": "MTR_N_006",
+        "name": "Residential Consumer #6 (Zone_1_North)",
+        "category": "Residential",
+        "contracted_load_kw": 4.5,
+        "height": 3.2,
+        "elevation": 221.2,
+        "zone_id": "Zone_1_North",
+        "transformer_id": "TX_101",
+        "feeder_id": "FDR_NORTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 16.8,
+        "reported_kw": 4.083,
+        "true_kw": 4.083,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2087647,
+              28.6157615
+            ],
+            [
+              77.2088888,
+              28.6157907
+            ],
+            [
+              77.2088513,
+              28.6159135
+            ],
+            [
+              77.2087272,
+              28.6158843
+            ],
+            [
+              77.2087647,
+              28.6157615
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_N_007",
+        "meter_id": "MTR_N_007",
+        "name": "Residential Consumer #7 (Zone_1_North)",
+        "category": "Residential",
+        "contracted_load_kw": 3.0,
+        "height": 9.6,
+        "elevation": 227.6,
+        "zone_id": "Zone_1_North",
+        "transformer_id": "TX_101",
+        "feeder_id": "FDR_NORTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 20.5,
+        "reported_kw": 2.425,
+        "true_kw": 2.425,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2091631,
+              28.6157548
+            ],
+            [
+              77.2092883,
+              28.6157548
+            ],
+            [
+              77.2092883,
+              28.6158873
+            ],
+            [
+              77.2091631,
+              28.6158873
+            ],
+            [
+              77.2091631,
+              28.6157548
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_N_008",
+        "meter_id": "MTR_N_008",
+        "name": "Residential Consumer #8 (Zone_1_North)",
+        "category": "Residential",
+        "contracted_load_kw": 6.0,
+        "height": 9.6,
+        "elevation": 227.6,
+        "zone_id": "Zone_1_North",
+        "transformer_id": "TX_101",
+        "feeder_id": "FDR_NORTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 17.8,
+        "reported_kw": 4.977,
+        "true_kw": 4.977,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2095267,
+              28.6153997
+            ],
+            [
+              77.2096363,
+              28.6153739
+            ],
+            [
+              77.2096703,
+              28.6154855
+            ],
+            [
+              77.2095608,
+              28.6155113
+            ],
+            [
+              77.2095267,
+              28.6153997
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_N_009",
+        "meter_id": "MTR_N_009",
+        "name": "Residential Consumer #9 (Zone_1_North)",
+        "category": "Residential",
+        "contracted_load_kw": 4.5,
+        "height": 6.4,
+        "elevation": 224.4,
+        "zone_id": "Zone_1_North",
+        "transformer_id": "TX_101",
+        "feeder_id": "FDR_NORTH_11KV",
+        "risk_level": "CRITICAL",
+        "probable_cause": "THEFT_TAMPERING",
+        "anomaly_score": 98.5,
+        "reported_kw": 1.254,
+        "true_kw": 3.584,
+        "fill_color": [
+          255,
+          45,
+          85,
+          200
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2099793,
+              28.6154256
+            ],
+            [
+              77.2100839,
+              28.615401
+            ],
+            [
+              77.2101172,
+              28.61551
+            ],
+            [
+              77.2100126,
+              28.6155347
+            ],
+            [
+              77.2099793,
+              28.6154256
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_N_010",
+        "meter_id": "MTR_N_010",
+        "name": "Residential Consumer #10 (Zone_1_North)",
+        "category": "Residential",
+        "contracted_load_kw": 6.0,
+        "height": 6.4,
+        "elevation": 224.4,
+        "zone_id": "Zone_1_North",
+        "transformer_id": "TX_101",
+        "feeder_id": "FDR_NORTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 17.8,
+        "reported_kw": 4.839,
+        "true_kw": 4.839,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2095949,
+              28.6157409
+            ],
+            [
+              77.2097082,
+              28.6157676
+            ],
+            [
+              77.2096658,
+              28.6159065
+            ],
+            [
+              77.2095525,
+              28.6158798
+            ],
+            [
+              77.2095949,
+              28.6157409
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_N_011",
+        "meter_id": "MTR_N_011",
+        "name": "Residential Consumer #11 (Zone_1_North)",
+        "category": "Residential",
+        "contracted_load_kw": 6.0,
+        "height": 6.4,
+        "elevation": 224.4,
+        "zone_id": "Zone_1_North",
+        "transformer_id": "TX_101",
+        "feeder_id": "FDR_NORTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 18.4,
+        "reported_kw": 5.21,
+        "true_kw": 5.21,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2100518,
+              28.6157324
+            ],
+            [
+              77.210146,
+              28.6157801
+            ],
+            [
+              77.2100812,
+              28.6158786
+            ],
+            [
+              77.2099871,
+              28.6158309
+            ],
+            [
+              77.2100518,
+              28.6157324
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_N_012",
+        "meter_id": "MTR_N_012",
+        "name": "Residential Consumer #12 (Zone_1_North)",
+        "category": "Residential",
+        "contracted_load_kw": 3.0,
+        "height": 3.2,
+        "elevation": 221.2,
+        "zone_id": "Zone_1_North",
+        "transformer_id": "TX_101",
+        "feeder_id": "FDR_NORTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 21.2,
+        "reported_kw": 3.318,
+        "true_kw": 3.318,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.207894,
+              28.6159031
+            ],
+            [
+              77.20807,
+              28.6159031
+            ],
+            [
+              77.20807,
+              28.6160994
+            ],
+            [
+              77.207894,
+              28.6160994
+            ],
+            [
+              77.207894,
+              28.6159031
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_N_013",
+        "meter_id": "MTR_N_013",
+        "name": "Commercial Consumer #13 (Zone_1_North)",
+        "category": "Commercial",
+        "contracted_load_kw": 15.0,
+        "height": 9.6,
+        "elevation": 227.6,
+        "zone_id": "Zone_1_North",
+        "transformer_id": "TX_101",
+        "feeder_id": "FDR_NORTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 24.3,
+        "reported_kw": 8.918,
+        "true_kw": 8.918,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2083555,
+              28.6159438
+            ],
+            [
+              77.2084849,
+              28.6159134
+            ],
+            [
+              77.2085203,
+              28.6160295
+            ],
+            [
+              77.2083909,
+              28.6160599
+            ],
+            [
+              77.2083555,
+              28.6159438
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_N_014",
+        "meter_id": "MTR_N_014",
+        "name": "Residential Consumer #14 (Zone_1_North)",
+        "category": "Residential",
+        "contracted_load_kw": 6.0,
+        "height": 6.4,
+        "elevation": 224.4,
+        "zone_id": "Zone_1_North",
+        "transformer_id": "TX_101",
+        "feeder_id": "FDR_NORTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 22.2,
+        "reported_kw": 5.987,
+        "true_kw": 5.987,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2079359,
+              28.616291
+            ],
+            [
+              77.2080453,
+              28.6163167
+            ],
+            [
+              77.2080082,
+              28.6164384
+            ],
+            [
+              77.2078988,
+              28.6164126
+            ],
+            [
+              77.2079359,
+              28.616291
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_N_015",
+        "meter_id": "MTR_N_015",
+        "name": "Residential Consumer #15 (Zone_1_North)",
+        "category": "Residential",
+        "contracted_load_kw": 6.0,
+        "height": 9.6,
+        "elevation": 227.6,
+        "zone_id": "Zone_1_North",
+        "transformer_id": "TX_101",
+        "feeder_id": "FDR_NORTH_11KV",
+        "risk_level": "HIGH",
+        "probable_cause": "METER_MALFUNCTION",
+        "anomaly_score": 82.0,
+        "reported_kw": 0.42,
+        "true_kw": 5.226,
+        "fill_color": [
+          255,
+          140,
+          0,
+          190
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2083798,
+              28.6162694
+            ],
+            [
+              77.208512,
+              28.6163005
+            ],
+            [
+              77.2084748,
+              28.6164224
+            ],
+            [
+              77.2083426,
+              28.6163913
+            ],
+            [
+              77.2083798,
+              28.6162694
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_N_016",
+        "meter_id": "MTR_N_016",
+        "name": "Residential Consumer #16 (Zone_1_North)",
+        "category": "Residential",
+        "contracted_load_kw": 6.0,
+        "height": 6.4,
+        "elevation": 224.4,
+        "zone_id": "Zone_1_North",
+        "transformer_id": "TX_101",
+        "feeder_id": "FDR_NORTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 25.0,
+        "reported_kw": 6.309,
+        "true_kw": 6.309,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2087379,
+              28.6159014
+            ],
+            [
+              77.208911,
+              28.6159892
+            ],
+            [
+              77.2088106,
+              28.6161418
+            ],
+            [
+              77.2086375,
+              28.616054
+            ],
+            [
+              77.2087379,
+              28.6159014
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_N_017",
+        "meter_id": "MTR_N_017",
+        "name": "Commercial Consumer #17 (Zone_1_North)",
+        "category": "Commercial",
+        "contracted_load_kw": 15.0,
+        "height": 12.8,
+        "elevation": 230.8,
+        "zone_id": "Zone_1_North",
+        "transformer_id": "TX_101",
+        "feeder_id": "FDR_NORTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 22.7,
+        "reported_kw": 9.112,
+        "true_kw": 9.112,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2091644,
+              28.6159608
+            ],
+            [
+              77.2092693,
+              28.6159608
+            ],
+            [
+              77.2092693,
+              28.6161003
+            ],
+            [
+              77.2091644,
+              28.6161003
+            ],
+            [
+              77.2091644,
+              28.6159608
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_N_018",
+        "meter_id": "MTR_N_018",
+        "name": "Residential Consumer #18 (Zone_1_North)",
+        "category": "Residential",
+        "contracted_load_kw": 4.5,
+        "height": 3.2,
+        "elevation": 221.2,
+        "zone_id": "Zone_1_North",
+        "transformer_id": "TX_101",
+        "feeder_id": "FDR_NORTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 15.4,
+        "reported_kw": 3.529,
+        "true_kw": 3.529,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2087306,
+              28.6162593
+            ],
+            [
+              77.2088956,
+              28.6163429
+            ],
+            [
+              77.2088097,
+              28.6164735
+            ],
+            [
+              77.2086447,
+              28.6163899
+            ],
+            [
+              77.2087306,
+              28.6162593
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_N_019",
+        "meter_id": "MTR_N_019",
+        "name": "Commercial Consumer #19 (Zone_1_North)",
+        "category": "Commercial",
+        "contracted_load_kw": 8.0,
+        "height": 12.8,
+        "elevation": 230.8,
+        "zone_id": "Zone_1_North",
+        "transformer_id": "TX_101",
+        "feeder_id": "FDR_NORTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 20.8,
+        "reported_kw": 5.209,
+        "true_kw": 5.209,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.209233,
+              28.6162797
+            ],
+            [
+              77.2093487,
+              28.6163069
+            ],
+            [
+              77.2093147,
+              28.6164185
+            ],
+            [
+              77.209199,
+              28.6163913
+            ],
+            [
+              77.209233,
+              28.6162797
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_N_020",
+        "meter_id": "MTR_N_020",
+        "name": "Residential Consumer #20 (Zone_1_North)",
+        "category": "Residential",
+        "contracted_load_kw": 6.0,
+        "height": 9.6,
+        "elevation": 227.6,
+        "zone_id": "Zone_1_North",
+        "transformer_id": "TX_101",
+        "feeder_id": "FDR_NORTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 21.3,
+        "reported_kw": 5.561,
+        "true_kw": 5.561,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2096172,
+              28.6159154
+            ],
+            [
+              77.2097192,
+              28.6159671
+            ],
+            [
+              77.2096393,
+              28.6160886
+            ],
+            [
+              77.2095373,
+              28.6160369
+            ],
+            [
+              77.2096172,
+              28.6159154
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_N_021",
+        "meter_id": "MTR_N_021",
+        "name": "Residential Consumer #21 (Zone_1_North)",
+        "category": "Residential",
+        "contracted_load_kw": 6.0,
+        "height": 9.6,
+        "elevation": 227.6,
+        "zone_id": "Zone_1_North",
+        "transformer_id": "TX_101",
+        "feeder_id": "FDR_NORTH_11KV",
+        "risk_level": "MEDIUM",
+        "probable_cause": "COMM_FAILURE",
+        "anomaly_score": 68.0,
+        "reported_kw": 0.0,
+        "true_kw": 4.667,
+        "fill_color": [
+          240,
+          200,
+          30,
+          170
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2099986,
+              28.6159221
+            ],
+            [
+              77.2101209,
+              28.6159508
+            ],
+            [
+              77.2100866,
+              28.6160631
+            ],
+            [
+              77.2099644,
+              28.6160343
+            ],
+            [
+              77.2099986,
+              28.6159221
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_N_022",
+        "meter_id": "MTR_N_022",
+        "name": "Residential Consumer #22 (Zone_1_North)",
+        "category": "Residential",
+        "contracted_load_kw": 4.5,
+        "height": 3.2,
+        "elevation": 221.2,
+        "zone_id": "Zone_1_North",
+        "transformer_id": "TX_101",
+        "feeder_id": "FDR_NORTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 15.5,
+        "reported_kw": 3.546,
+        "true_kw": 3.546,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.209518,
+              28.6163377
+            ],
+            [
+              77.2096196,
+              28.6163138
+            ],
+            [
+              77.2096518,
+              28.6164191
+            ],
+            [
+              77.2095501,
+              28.616443
+            ],
+            [
+              77.209518,
+              28.6163377
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_N_023",
+        "meter_id": "MTR_N_023",
+        "name": "Residential Consumer #23 (Zone_1_North)",
+        "category": "Residential",
+        "contracted_load_kw": 3.0,
+        "height": 3.2,
+        "elevation": 221.2,
+        "zone_id": "Zone_1_North",
+        "transformer_id": "TX_101",
+        "feeder_id": "FDR_NORTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 21.3,
+        "reported_kw": 3.182,
+        "true_kw": 3.182,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2100148,
+              28.6162533
+            ],
+            [
+              77.2101504,
+              28.616322
+            ],
+            [
+              77.2100644,
+              28.6164528
+            ],
+            [
+              77.2099287,
+              28.6163841
+            ],
+            [
+              77.2100148,
+              28.6162533
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_N_024",
+        "meter_id": "MTR_N_024",
+        "name": "Commercial Consumer #24 (Zone_1_North)",
+        "category": "Commercial",
+        "contracted_load_kw": 15.0,
+        "height": 9.6,
+        "elevation": 227.6,
+        "zone_id": "Zone_1_North",
+        "transformer_id": "TX_101",
+        "feeder_id": "FDR_NORTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 22.6,
+        "reported_kw": 8.924,
+        "true_kw": 8.924,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2078924,
+              28.6113959
+            ],
+            [
+              77.2080642,
+              28.6113959
+            ],
+            [
+              77.2080642,
+              28.611587
+            ],
+            [
+              77.2078924,
+              28.611587
+            ],
+            [
+              77.2078924,
+              28.6113959
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_S_001",
+        "meter_id": "MTR_S_001",
+        "name": "Commercial Consumer #1 (Zone_2_South)",
+        "category": "Commercial",
+        "contracted_load_kw": 8.0,
+        "height": 9.6,
+        "elevation": 227.6,
+        "zone_id": "Zone_2_South",
+        "transformer_id": "TX_102",
+        "feeder_id": "FDR_SOUTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 19.6,
+        "reported_kw": 4.579,
+        "true_kw": 4.579,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2083501,
+              28.6114314
+            ],
+            [
+              77.2084966,
+              28.6114314
+            ],
+            [
+              77.2084966,
+              28.6116292
+            ],
+            [
+              77.2083501,
+              28.6116292
+            ],
+            [
+              77.2083501,
+              28.6114314
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_S_002",
+        "meter_id": "MTR_S_002",
+        "name": "Commercial Consumer #2 (Zone_2_South)",
+        "category": "Commercial",
+        "contracted_load_kw": 15.0,
+        "height": 6.4,
+        "elevation": 224.4,
+        "zone_id": "Zone_2_South",
+        "transformer_id": "TX_102",
+        "feeder_id": "FDR_SOUTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 22.1,
+        "reported_kw": 7.574,
+        "true_kw": 7.574,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.207989,
+              28.6118132
+            ],
+            [
+              77.2080921,
+              28.6118655
+            ],
+            [
+              77.2080208,
+              28.6119739
+            ],
+            [
+              77.2079177,
+              28.6119217
+            ],
+            [
+              77.207989,
+              28.6118132
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_S_003",
+        "meter_id": "MTR_S_003",
+        "name": "Residential Consumer #3 (Zone_2_South)",
+        "category": "Residential",
+        "contracted_load_kw": 3.0,
+        "height": 3.2,
+        "elevation": 221.2,
+        "zone_id": "Zone_2_South",
+        "transformer_id": "TX_102",
+        "feeder_id": "FDR_SOUTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 25.5,
+        "reported_kw": 10.185,
+        "true_kw": 10.185,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2084413,
+              28.6117687
+            ],
+            [
+              77.2085394,
+              28.6118184
+            ],
+            [
+              77.2084619,
+              28.6119363
+            ],
+            [
+              77.2083637,
+              28.6118865
+            ],
+            [
+              77.2084413,
+              28.6117687
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_S_004",
+        "meter_id": "MTR_S_004",
+        "name": "Residential Consumer #4 (Zone_2_South)",
+        "category": "Residential",
+        "contracted_load_kw": 3.0,
+        "height": 6.4,
+        "elevation": 224.4,
+        "zone_id": "Zone_2_South",
+        "transformer_id": "TX_102",
+        "feeder_id": "FDR_SOUTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 20.3,
+        "reported_kw": 2.216,
+        "true_kw": 2.216,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2087383,
+              28.6114461
+            ],
+            [
+              77.2088635,
+              28.6114756
+            ],
+            [
+              77.2088265,
+              28.6115967
+            ],
+            [
+              77.2087014,
+              28.6115673
+            ],
+            [
+              77.2087383,
+              28.6114461
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_S_005",
+        "meter_id": "MTR_S_005",
+        "name": "Residential Consumer #5 (Zone_2_South)",
+        "category": "Residential",
+        "contracted_load_kw": 6.0,
+        "height": 9.6,
+        "elevation": 227.6,
+        "zone_id": "Zone_2_South",
+        "transformer_id": "TX_102",
+        "feeder_id": "FDR_SOUTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 20.8,
+        "reported_kw": 5.505,
+        "true_kw": 5.505,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2091715,
+              28.6114687
+            ],
+            [
+              77.2092962,
+              28.6114687
+            ],
+            [
+              77.2092962,
+              28.6116035
+            ],
+            [
+              77.2091715,
+              28.6116035
+            ],
+            [
+              77.2091715,
+              28.6114687
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_S_006",
+        "meter_id": "MTR_S_006",
+        "name": "Residential Consumer #6 (Zone_2_South)",
+        "category": "Residential",
+        "contracted_load_kw": 6.0,
+        "height": 9.6,
+        "elevation": 227.6,
+        "zone_id": "Zone_2_South",
+        "transformer_id": "TX_102",
+        "feeder_id": "FDR_SOUTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 17.4,
+        "reported_kw": 4.384,
+        "true_kw": 4.384,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.208736,
+              28.6117965
+            ],
+            [
+              77.2088372,
+              28.6118203
+            ],
+            [
+              77.2088,
+              28.6119422
+            ],
+            [
+              77.2086988,
+              28.6119183
+            ],
+            [
+              77.208736,
+              28.6117965
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_S_007",
+        "meter_id": "MTR_S_007",
+        "name": "Residential Consumer #7 (Zone_2_South)",
+        "category": "Residential",
+        "contracted_load_kw": 6.0,
+        "height": 3.2,
+        "elevation": 221.2,
+        "zone_id": "Zone_2_South",
+        "transformer_id": "TX_102",
+        "feeder_id": "FDR_SOUTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 18.1,
+        "reported_kw": 5.044,
+        "true_kw": 5.044,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2091886,
+              28.6117675
+            ],
+            [
+              77.2092923,
+              28.6117919
+            ],
+            [
+              77.2092511,
+              28.611927
+            ],
+            [
+              77.2091474,
+              28.6119026
+            ],
+            [
+              77.2091886,
+              28.6117675
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_S_008",
+        "meter_id": "MTR_S_008",
+        "name": "Residential Consumer #8 (Zone_2_South)",
+        "category": "Residential",
+        "contracted_load_kw": 3.0,
+        "height": 6.4,
+        "elevation": 224.4,
+        "zone_id": "Zone_2_South",
+        "transformer_id": "TX_102",
+        "feeder_id": "FDR_SOUTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 20.5,
+        "reported_kw": 2.461,
+        "true_kw": 2.461,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2095386,
+              28.6114388
+            ],
+            [
+              77.2096636,
+              28.6114094
+            ],
+            [
+              77.2097014,
+              28.6115332
+            ],
+            [
+              77.2095765,
+              28.6115626
+            ],
+            [
+              77.2095386,
+              28.6114388
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_S_009",
+        "meter_id": "MTR_S_009",
+        "name": "Residential Consumer #9 (Zone_2_South)",
+        "category": "Residential",
+        "contracted_load_kw": 3.0,
+        "height": 6.4,
+        "elevation": 224.4,
+        "zone_id": "Zone_2_South",
+        "transformer_id": "TX_102",
+        "feeder_id": "FDR_SOUTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 20.3,
+        "reported_kw": 2.135,
+        "true_kw": 2.135,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2100204,
+              28.6114486
+            ],
+            [
+              77.2101288,
+              28.6114231
+            ],
+            [
+              77.2101648,
+              28.6115411
+            ],
+            [
+              77.2100565,
+              28.6115666
+            ],
+            [
+              77.2100204,
+              28.6114486
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_S_010",
+        "meter_id": "MTR_S_010",
+        "name": "Residential Consumer #10 (Zone_2_South)",
+        "category": "Residential",
+        "contracted_load_kw": 6.0,
+        "height": 6.4,
+        "elevation": 224.4,
+        "zone_id": "Zone_2_South",
+        "transformer_id": "TX_102",
+        "feeder_id": "FDR_SOUTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 20.0,
+        "reported_kw": 5.393,
+        "true_kw": 5.393,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2095519,
+              28.6118218
+            ],
+            [
+              77.2096732,
+              28.6118218
+            ],
+            [
+              77.2096732,
+              28.6119656
+            ],
+            [
+              77.2095519,
+              28.6119656
+            ],
+            [
+              77.2095519,
+              28.6118218
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_S_011",
+        "meter_id": "MTR_S_011",
+        "name": "Residential Consumer #11 (Zone_2_South)",
+        "category": "Residential",
+        "contracted_load_kw": 3.0,
+        "height": 3.2,
+        "elevation": 221.2,
+        "zone_id": "Zone_2_South",
+        "transformer_id": "TX_102",
+        "feeder_id": "FDR_SOUTH_11KV",
+        "risk_level": "HIGH",
+        "probable_cause": "METER_MALFUNCTION",
+        "anomaly_score": 88.0,
+        "reported_kw": 0.0,
+        "true_kw": 2.343,
+        "fill_color": [
+          255,
+          140,
+          0,
+          190
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2099923,
+              28.6117717
+            ],
+            [
+              77.2101282,
+              28.6118036
+            ],
+            [
+              77.2100871,
+              28.6119385
+            ],
+            [
+              77.2099512,
+              28.6119065
+            ],
+            [
+              77.2099923,
+              28.6117717
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_S_012",
+        "meter_id": "MTR_S_012",
+        "name": "Residential Consumer #12 (Zone_2_South)",
+        "category": "Residential",
+        "contracted_load_kw": 4.5,
+        "height": 3.2,
+        "elevation": 221.2,
+        "zone_id": "Zone_2_South",
+        "transformer_id": "TX_102",
+        "feeder_id": "FDR_SOUTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 15.2,
+        "reported_kw": 3.592,
+        "true_kw": 3.592,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2079106,
+              28.6119603
+            ],
+            [
+              77.2080255,
+              28.6119603
+            ],
+            [
+              77.2080255,
+              28.6121036
+            ],
+            [
+              77.2079106,
+              28.6121036
+            ],
+            [
+              77.2079106,
+              28.6119603
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_S_013",
+        "meter_id": "MTR_S_013",
+        "name": "Residential Consumer #13 (Zone_2_South)",
+        "category": "Residential",
+        "contracted_load_kw": 6.0,
+        "height": 9.6,
+        "elevation": 227.6,
+        "zone_id": "Zone_2_South",
+        "transformer_id": "TX_102",
+        "feeder_id": "FDR_SOUTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 16.4,
+        "reported_kw": 4.209,
+        "true_kw": 4.209,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2083555,
+              28.6119038
+            ],
+            [
+              77.208593,
+              28.6119597
+            ],
+            [
+              77.2085188,
+              28.6122029
+            ],
+            [
+              77.2082813,
+              28.6121471
+            ],
+            [
+              77.2083555,
+              28.6119038
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_S_014",
+        "meter_id": "MTR_S_014",
+        "name": "LightIndustrial Consumer #14 (Zone_2_South)",
+        "category": "LightIndustrial",
+        "contracted_load_kw": 25.0,
+        "height": 3.2,
+        "elevation": 221.2,
+        "zone_id": "Zone_2_South",
+        "transformer_id": "TX_102",
+        "feeder_id": "FDR_SOUTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 18.0,
+        "reported_kw": 3.735,
+        "true_kw": 3.735,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2079112,
+              28.612337
+            ],
+            [
+              77.2080589,
+              28.6123717
+            ],
+            [
+              77.208012,
+              28.6125254
+            ],
+            [
+              77.2078643,
+              28.6124906
+            ],
+            [
+              77.2079112,
+              28.612337
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_S_015",
+        "meter_id": "MTR_S_015",
+        "name": "Commercial Consumer #15 (Zone_2_South)",
+        "category": "Commercial",
+        "contracted_load_kw": 15.0,
+        "height": 12.8,
+        "elevation": 230.8,
+        "zone_id": "Zone_2_South",
+        "transformer_id": "TX_102",
+        "feeder_id": "FDR_SOUTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 24.2,
+        "reported_kw": 8.61,
+        "true_kw": 8.61,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2083786,
+              28.6123357
+            ],
+            [
+              77.2085018,
+              28.6123357
+            ],
+            [
+              77.2085018,
+              28.6124526
+            ],
+            [
+              77.2083786,
+              28.6124526
+            ],
+            [
+              77.2083786,
+              28.6123357
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_S_016",
+        "meter_id": "MTR_S_016",
+        "name": "Residential Consumer #16 (Zone_2_South)",
+        "category": "Residential",
+        "contracted_load_kw": 6.0,
+        "height": 6.4,
+        "elevation": 224.4,
+        "zone_id": "Zone_2_South",
+        "transformer_id": "TX_102",
+        "feeder_id": "FDR_SOUTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 21.0,
+        "reported_kw": 5.577,
+        "true_kw": 5.577,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.208701,
+              28.6119924
+            ],
+            [
+              77.2088001,
+              28.6119691
+            ],
+            [
+              77.2088401,
+              28.6121002
+            ],
+            [
+              77.208741,
+              28.6121235
+            ],
+            [
+              77.208701,
+              28.6119924
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_S_017",
+        "meter_id": "MTR_S_017",
+        "name": "Residential Consumer #17 (Zone_2_South)",
+        "category": "Residential",
+        "contracted_load_kw": 4.5,
+        "height": 3.2,
+        "elevation": 221.2,
+        "zone_id": "Zone_2_South",
+        "transformer_id": "TX_102",
+        "feeder_id": "FDR_SOUTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 15.6,
+        "reported_kw": 3.827,
+        "true_kw": 3.827,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2091618,
+              28.6119547
+            ],
+            [
+              77.2093336,
+              28.6119951
+            ],
+            [
+              77.2092894,
+              28.6121399
+            ],
+            [
+              77.2091176,
+              28.6120995
+            ],
+            [
+              77.2091618,
+              28.6119547
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_S_018",
+        "meter_id": "MTR_S_018",
+        "name": "Commercial Consumer #18 (Zone_2_South)",
+        "category": "Commercial",
+        "contracted_load_kw": 15.0,
+        "height": 9.6,
+        "elevation": 227.6,
+        "zone_id": "Zone_2_South",
+        "transformer_id": "TX_102",
+        "feeder_id": "FDR_SOUTH_11KV",
+        "risk_level": "HIGH",
+        "probable_cause": "THEFT_TAMPERING",
+        "anomaly_score": 73.1,
+        "reported_kw": 0.2,
+        "true_kw": 8.386,
+        "fill_color": [
+          255,
+          45,
+          85,
+          200
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2087025,
+              28.6123727
+            ],
+            [
+              77.2088499,
+              28.6123381
+            ],
+            [
+              77.2088943,
+              28.6124837
+            ],
+            [
+              77.208747,
+              28.6125184
+            ],
+            [
+              77.2087025,
+              28.6123727
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_S_019",
+        "meter_id": "MTR_S_019",
+        "name": "Commercial Consumer #19 (Zone_2_South)",
+        "category": "Commercial",
+        "contracted_load_kw": 15.0,
+        "height": 12.8,
+        "elevation": 230.8,
+        "zone_id": "Zone_2_South",
+        "transformer_id": "TX_102",
+        "feeder_id": "FDR_SOUTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 23.6,
+        "reported_kw": 9.844,
+        "true_kw": 9.844,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2091825,
+              28.6123751
+            ],
+            [
+              77.2092936,
+              28.6123751
+            ],
+            [
+              77.2092936,
+              28.612492
+            ],
+            [
+              77.2091825,
+              28.612492
+            ],
+            [
+              77.2091825,
+              28.6123751
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_S_020",
+        "meter_id": "MTR_S_020",
+        "name": "Residential Consumer #20 (Zone_2_South)",
+        "category": "Residential",
+        "contracted_load_kw": 3.0,
+        "height": 6.4,
+        "elevation": 224.4,
+        "zone_id": "Zone_2_South",
+        "transformer_id": "TX_102",
+        "feeder_id": "FDR_SOUTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 20.3,
+        "reported_kw": 2.672,
+        "true_kw": 2.672,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2095627,
+              28.6119703
+            ],
+            [
+              77.2096913,
+              28.6120006
+            ],
+            [
+              77.2096497,
+              28.612137
+            ],
+            [
+              77.2095211,
+              28.6121067
+            ],
+            [
+              77.2095627,
+              28.6119703
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_S_021",
+        "meter_id": "MTR_S_021",
+        "name": "Residential Consumer #21 (Zone_2_South)",
+        "category": "Residential",
+        "contracted_load_kw": 4.5,
+        "height": 9.6,
+        "elevation": 227.6,
+        "zone_id": "Zone_2_South",
+        "transformer_id": "TX_102",
+        "feeder_id": "FDR_SOUTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 15.8,
+        "reported_kw": 3.426,
+        "true_kw": 3.426,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2100186,
+              28.612023
+            ],
+            [
+              77.2101185,
+              28.6119994
+            ],
+            [
+              77.2101581,
+              28.6121293
+            ],
+            [
+              77.2100582,
+              28.6121528
+            ],
+            [
+              77.2100186,
+              28.612023
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_S_022",
+        "meter_id": "MTR_S_022",
+        "name": "Residential Consumer #22 (Zone_2_South)",
+        "category": "Residential",
+        "contracted_load_kw": 3.0,
+        "height": 6.4,
+        "elevation": 224.4,
+        "zone_id": "Zone_2_South",
+        "transformer_id": "TX_102",
+        "feeder_id": "FDR_SOUTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 20.1,
+        "reported_kw": 2.26,
+        "true_kw": 2.26,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2095647,
+              28.6123466
+            ],
+            [
+              77.2097004,
+              28.6123466
+            ],
+            [
+              77.2097004,
+              28.6124641
+            ],
+            [
+              77.2095647,
+              28.6124641
+            ],
+            [
+              77.2095647,
+              28.6123466
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_S_023",
+        "meter_id": "MTR_S_023",
+        "name": "Residential Consumer #23 (Zone_2_South)",
+        "category": "Residential",
+        "contracted_load_kw": 6.0,
+        "height": 9.6,
+        "elevation": 227.6,
+        "zone_id": "Zone_2_South",
+        "transformer_id": "TX_102",
+        "feeder_id": "FDR_SOUTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 18.3,
+        "reported_kw": 5.118,
+        "true_kw": 5.118,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2099845,
+              28.6123298
+            ],
+            [
+              77.2100914,
+              28.6123046
+            ],
+            [
+              77.2101329,
+              28.6124408
+            ],
+            [
+              77.2100261,
+              28.6124659
+            ],
+            [
+              77.2099845,
+              28.6123298
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "CONS_S_024",
+        "meter_id": "MTR_S_024",
+        "name": "Residential Consumer #24 (Zone_2_South)",
+        "category": "Residential",
+        "contracted_load_kw": 4.5,
+        "height": 3.2,
+        "elevation": 221.2,
+        "zone_id": "Zone_2_South",
+        "transformer_id": "TX_102",
+        "feeder_id": "FDR_SOUTH_11KV",
+        "risk_level": "NORMAL",
+        "probable_cause": "NORMAL",
+        "anomaly_score": 14.9,
+        "reported_kw": 3.784,
+        "true_kw": 3.784,
+        "fill_color": [
+          120,
+          150,
+          240,
+          95
+        ],
+        "wireframe_color": [
+          255,
+          255,
+          255,
+          160
+        ],
+        "is_anomalous": false
+      }
+    }
+  ]
+}

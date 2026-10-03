@@ -1,0 +1,259 @@
+{
+  "type": "FeatureCollection",
+  "name": "Drone_Inspection_Mission",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.20922588801282,
+            28.61591750753302,
+            218.0
+          ],
+          [
+            77.20922588801282,
+            28.61591750753302,
+            258.0
+          ],
+          [
+            77.2095985168587,
+            28.61544259918846,
+            258.0
+          ],
+          [
+            77.2095985168587,
+            28.61544259918846,
+            230.4
+          ],
+          [
+            77.2095985168587,
+            28.61544259918846,
+            258.0
+          ],
+          [
+            77.20840093837137,
+            28.615816415418024,
+            258.0
+          ],
+          [
+            77.20840093837137,
+            28.615816415418024,
+            230.4
+          ],
+          [
+            77.20840093837137,
+            28.615816415418024,
+            258.0
+          ],
+          [
+            77.20797205647848,
+            28.616364671299735,
+            258.0
+          ],
+          [
+            77.20797205647848,
+            28.616364671299735,
+            233.6
+          ],
+          [
+            77.20797205647848,
+            28.616364671299735,
+            258.0
+          ],
+          [
+            77.20922557214705,
+            28.612047286112716,
+            258.0
+          ],
+          [
+            77.20922557214705,
+            28.612047286112716,
+            233.6
+          ],
+          [
+            77.20922557214705,
+            28.612047286112716,
+            258.0
+          ],
+          [
+            77.2096125508661,
+            28.61189370983369,
+            258.0
+          ],
+          [
+            77.2096125508661,
+            28.61189370983369,
+            227.2
+          ],
+          [
+            77.2096125508661,
+            28.61189370983369,
+            258.0
+          ],
+          [
+            77.20922588801282,
+            28.61591750753302,
+            258.0
+          ],
+          [
+            77.20922588801282,
+            28.61591750753302,
+            218.0
+          ]
+        ]
+      },
+      "properties": {
+        "type": "drone_flight_path_3d",
+        "base_hub": "TX_101",
+        "total_distance_m": 1517.635341317687,
+        "flight_minutes": 5.661740294411848,
+        "targets_count": 5,
+        "color": [
+          255,
+          0,
+          180,
+          240
+        ],
+        "width": 3.0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.20922588801282,
+          28.61591750753302,
+          218.0
+        ]
+      },
+      "properties": {
+        "index": 1,
+        "action": "TAKEOFF",
+        "target_id": null,
+        "altitude_m": 218.0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.20922588801282,
+          28.61591750753302,
+          258.0
+        ]
+      },
+      "properties": {
+        "index": 2,
+        "action": "CRUISE",
+        "target_id": null,
+        "altitude_m": 258.0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.2095985168587,
+          28.61544259918846,
+          230.4
+        ]
+      },
+      "properties": {
+        "index": 3,
+        "action": "HOVER_INSPECT",
+        "target_id": "CONS_N_009",
+        "altitude_m": 230.4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.20840093837137,
+          28.615816415418024,
+          230.4
+        ]
+      },
+      "properties": {
+        "index": 4,
+        "action": "HOVER_INSPECT",
+        "target_id": "CONS_N_004",
+        "altitude_m": 230.4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.20797205647848,
+          28.616364671299735,
+          233.6
+        ]
+      },
+      "properties": {
+        "index": 5,
+        "action": "HOVER_INSPECT",
+        "target_id": "CONS_N_015",
+        "altitude_m": 233.6
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.20922557214705,
+          28.612047286112716,
+          233.6
+        ]
+      },
+      "properties": {
+        "index": 6,
+        "action": "HOVER_INSPECT",
+        "target_id": "CONS_S_018",
+        "altitude_m": 233.6
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.2096125508661,
+          28.61189370983369,
+          227.2
+        ]
+      },
+      "properties": {
+        "index": 7,
+        "action": "HOVER_INSPECT",
+        "target_id": "CONS_S_011",
+        "altitude_m": 227.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.20922588801282,
+          28.61591750753302,
+          218.0
+        ]
+      },
+      "properties": {
+        "index": 8,
+        "action": "LAND",
+        "target_id": null,
+        "altitude_m": 218.0
+      }
+    }
+  ]
+}
