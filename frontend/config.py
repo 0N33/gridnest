@@ -52,5 +52,10 @@ class GridConfig:
     HIGH_RISK_ANOMALY_SCORE: float = 70.0
     CRITICAL_RISK_ANOMALY_SCORE: float = 85.0
 
+    # Telegram Bot Alert Configuration
+    TELEGRAM_BOT_TOKEN: str = "8322452678:AAGbkk48lL0RSdjmj1xNUW65kXfo8JcN9_Y"
+    TELEGRAM_CHAT_ID: str = "1085775169"
+    TELEGRAM_ALERT_THRESHOLD: float = 75.0
+
 
 CONFIG = GridConfig()

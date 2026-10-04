@@ -20,6 +20,7 @@ from export.geojson_exporter import GeoJSONTwinExporter
 from iot.mqtt_broker import MicroMQTTBroker
 from iot.mqtt_bridge import SmartGridMQTTBridge
 from iot.adafruit_bridge import AdafruitIOBridge
+from engine.telegram_notifier import TELEGRAM_NOTIFIER
 
 app = FastAPI(
     title="Smart Grid Digital Twin API",
@@ -57,6 +58,44 @@ adafruit_bridge = AdafruitIOBridge(
     physical_consumer_id=twin.physical_consumer_id,
     broadcast_callback=None,  # Set in startup_event
 )
+
+
+def check_and_send_telegram_alerts(snapshot: dict):
+    """Scans snapshot for high-risk anomalies and dispatches alerts if configured."""
+    if not TELEGRAM_NOTIFIER.is_configured:
+        return
+
+    # Check consumer anomalies
+    consumers = snapshot.get("consumers", {})
+    for c_id, c_data in consumers.items():
+        analysis = c_data.get("analysis")
+        if analysis and analysis.get("anomaly_score", 0) >= TELEGRAM_NOTIFIER.alert_threshold:
+            telem = c_data.get("telemetry") or {}
+            rep = telem.get("reported_telemetry") or {}
+            true = telem.get("true_telemetry") or {}
+            static = c_data.get("static") or {}
+            TELEGRAM_NOTIFIER.check_and_alert_consumer_anomaly(
+                consumer_id=c_id,
+                anomaly_score=float(analysis.get("anomaly_score", 0)),
+                probable_cause=str(analysis.get("probable_cause", "UNKNOWN")),
+                reported_kw=float(rep.get("active_power_kw", 0)),
+                true_kw=float(true.get("active_power_kw", 0)),
+                zone=str(static.get("zone_id", "Zone 1 (TX-101)")),
+                consumer_name=str(static.get("name", c_id)),
+            )
+
+    # Check transformer reports for NTL > 6%
+    tx_reports = snapshot.get("transformer_reports", {})
+    for tx_id, r in tx_reports.items():
+        if isinstance(r, dict) and r.get("ntl_percentage", 0) >= 6.0:
+            TELEGRAM_NOTIFIER.check_and_alert_transformer_loss(
+                tx_id=tx_id,
+                ntl_percentage=float(r.get("ntl_percentage", 0)),
+                supplied_kw=float(r.get("supplied_kwh", 0)),
+                metered_kw=float(r.get("metered_kwh", 0)),
+                unexplained_loss_kw=float(r.get("unexplained_loss_kwh", 0)),
+            )
+
 
 # Live physical IoT hardware overlay state (ESP32 / Adafruit IO)
 latest_iot_telemetry: Optional[dict] = None
@@ -329,6 +368,7 @@ async def step_simulation():
     """Advances simulation clock by 1 tick (15 mins) and returns updated state."""
     snapshot = twin.step()
     snapshot = sync_snapshot_cache(snapshot)
+    check_and_send_telegram_alerts(snapshot)
     # Broadcast to websocket clients
     await broadcast_to_clients(snapshot)
     return JSONResponse(snapshot)
@@ -453,6 +493,7 @@ async def inject_scenario_endpoint(
 
     twin.inject_scenario(consumer_id, scen_type, params)
     snapshot = twin.step()
+    check_and_send_telegram_alerts(snapshot)
     await broadcast_to_clients(snapshot)
     return JSONResponse({
         "status": "success",
@@ -574,6 +615,51 @@ async def inject_mock_adafruit_packet(request: Request):
         "physical_transformer": adafruit_bridge.physical_transformer_id,
         "physical_consumer": adafruit_bridge.physical_consumer_id,
     })
+
+
+@app.get("/api/telegram/status")
+async def get_telegram_status():
+    """Returns the live configuration status of the Telegram alert bot."""
+    return JSONResponse({
+        "configured": TELEGRAM_NOTIFIER.is_configured,
+        "bot_token_set": bool(TELEGRAM_NOTIFIER.bot_token),
+        "chat_id_set": bool(TELEGRAM_NOTIFIER.chat_id),
+        "alert_threshold": TELEGRAM_NOTIFIER.alert_threshold,
+    })
+
+
+@app.post("/api/telegram/config")
+async def configure_telegram(request: Request):
+    """Allows dynamically configuring Telegram bot token and chat ID."""
+    body = await request.json()
+    token = (body.get("bot_token") or body.get("token") or "").strip()
+    chat = str(body.get("chat_id") or "").strip()
+    if token and chat:
+        TELEGRAM_NOTIFIER.update_credentials(token, chat)
+        test_res = TELEGRAM_NOTIFIER.send_message(
+            "⚡ <b>GridNest Telegram Alert Bot Connected!</b>\n"
+            "Real-time electricity theft & NTL alerts are now active."
+        )
+        return JSONResponse({"status": "success", "message": "Credentials updated & test notification dispatched", "test_result": test_res})
+    return JSONResponse({"status": "error", "message": "Both bot_token and chat_id are required."}, status_code=400)
+
+
+@app.post("/api/telegram/test")
+async def test_telegram_alert():
+    """Dispatches a simulated high-priority theft alert to the configured Telegram chat."""
+    if not TELEGRAM_NOTIFIER.is_configured:
+        return JSONResponse({"status": "error", "message": "Bot not configured. Please supply bot_token and chat_id first."}, status_code=400)
+    res = TELEGRAM_NOTIFIER.check_and_alert_consumer_anomaly(
+        consumer_id="CONS_N_004",
+        anomaly_score=94.5,
+        probable_cause="PHYSICAL_SHUNT_TAP",
+        reported_kw=0.75,
+        true_kw=3.85,
+        zone="Zone 1 (TX-101 North)",
+        consumer_name="Building 4 (Commercial Test Node)",
+        force=True,
+    )
+    return JSONResponse({"status": "sent", "result": res})
 
 
 @app.get("/api/geojson/buildings")
