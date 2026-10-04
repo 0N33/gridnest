@@ -421,10 +421,24 @@ async def inject_scenario_endpoint(
         pass
 
     scen_str = body.get("scenario") or scenario or "NORMAL"
-    try:
-        scen_type = ScenarioType(str(scen_str).upper())
-    except ValueError:
-        raise HTTPException(status_code=400, detail=f"Invalid scenario type: {scen_str}")
+    scen_upper = str(scen_str).upper()
+    SCENARIO_MAP = {
+        "THEFT": ScenarioType.THEFT_BYPASS,
+        "THEFT_BYPASS": ScenarioType.THEFT_BYPASS,
+        "FAULT": ScenarioType.METER_MALFUNCTION,
+        "METER_MALFUNCTION": ScenarioType.METER_MALFUNCTION,
+        "COMM": ScenarioType.COMM_FAILURE,
+        "COMM_FAILURE": ScenarioType.COMM_FAILURE,
+        "SURGE": ScenarioType.LEGITIMATE_ABNORMAL,
+        "LEGITIMATE_ABNORMAL": ScenarioType.LEGITIMATE_ABNORMAL,
+        "NORMAL": ScenarioType.NORMAL,
+    }
+    scen_type = SCENARIO_MAP.get(scen_upper)
+    if not scen_type:
+        try:
+            scen_type = ScenarioType(scen_upper)
+        except ValueError:
+            raise HTTPException(status_code=400, detail=f"Invalid scenario type: {scen_str}")
 
     params = body.get("params", {})
     if mode: params["mode"] = mode
