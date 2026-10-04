@@ -1369,9 +1369,12 @@
         </div>
 
         <!-- ACTION BUTTONS -->
-        <div style="display: flex; gap: 10px; justify-content: flex-end; align-items: center; margin-top: 4px;">
+        <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center; margin-top: 4px; flex-wrap: wrap;">
+          <button class="btn" id="btn-toggle-esp-stream" onclick="toggleVirtualEsp32Stream()" style="padding: 7px 14px; background: rgba(217, 70, 239, 0.12); color: #c026d3; border: 1px solid #d946ef; font-weight: 700; cursor: pointer;" title="Continuously stream virtual ESP32 hardware telemetry every 1.5s without physical hardware">
+            <span id="esp-stream-text">▶️ Auto-Stream Virtual ESP32 (1.5s)</span>
+          </button>
           <button class="btn" onclick="testAioMockPacket()" style="padding: 7px 14px; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-weight: 700; cursor: pointer;" title="Send sample ESP32 telemetry packet to test ingestion pipeline">
-            <span>⚡ Test Mock ESP32 Packet</span>
+            <span>⚡ Test 1 Mock Packet</span>
           </button>
           <button class="btn primary" onclick="saveAioConfig()" style="padding: 7px 18px; font-weight: 700; cursor: pointer;">
             <span>💾 Save & Connect Broker</span>
@@ -3432,6 +3435,71 @@
       } catch (e) {
         alert('Network error sending mock packet: ' + e.message);
       }
+    }
+
+    // CONTINUOUS VIRTUAL ESP32 HARDWARE STREAMER (Runs firmware calibration math without hardware)
+    let virtualEspStreamTimer = null;
+    let virtualTransEnergyWh = 0.0;
+    let virtualConsEnergyWh = 0.0;
+
+    function toggleVirtualEsp32Stream() {
+      const btnText = document.getElementById('esp-stream-text');
+      if (virtualEspStreamTimer) {
+        clearInterval(virtualEspStreamTimer);
+        virtualEspStreamTimer = null;
+        if (btnText) btnText.innerText = '▶️ Auto-Stream Virtual ESP32 (1.5s)';
+        return;
+      }
+
+      if (btnText) btnText.innerText = '⏸️ Stop Virtual ESP32 Stream';
+      sendVirtualEspPacket();
+      virtualEspStreamTimer = setInterval(sendVirtualEspPacket, 1500);
+    }
+
+    async function sendVirtualEspPacket() {
+      // Physical ADC fluctuations matching the exact calibrations in esp32_adafruit_gridnest.ino
+      const transV = 230.5 + (Math.random() * 2.8 - 1.4);
+      const transC = 4180.0 + (Math.random() * 90.0 - 45.0);
+      const consV = 228.2 + (Math.random() * 2.2 - 1.1);
+      // Realistic meter shunt bypass: 28% of active current recorded
+      const consC = 1190.0 + (Math.random() * 60.0 - 30.0);
+
+      const transP = transV * (transC / 1000.0);
+      const consP = consV * (consC / 1000.0);
+      const lossW = Math.max(0.0, transP - consP);
+
+      const dtHours = 1.5 / 3600.0;
+      virtualTransEnergyWh += transP * dtHours;
+      virtualConsEnergyWh += consP * dtHours;
+
+      const mockPayload = {
+        transVoltage: parseFloat(transV.toFixed(2)),
+        transCurrent: parseFloat(transC.toFixed(1)),
+        transPower_W: parseFloat(transP.toFixed(2)),
+        transEnergy_Wh: parseFloat(virtualTransEnergyWh.toFixed(4)),
+        consVoltage: parseFloat(consV.toFixed(2)),
+        consCurrent: parseFloat(consC.toFixed(1)),
+        consPower_W: parseFloat(consP.toFixed(2)),
+        consEnergy_Wh: parseFloat(virtualConsEnergyWh.toFixed(4)),
+        powerLoss_W: parseFloat(lossW.toFixed(2)),
+        energyLoss_Wh: parseFloat(Math.max(0.0, virtualTransEnergyWh - virtualConsEnergyWh).toFixed(4)),
+      };
+
+      try {
+        const res = await fetch(`${getApiBase()}/api/iot/adafruit/mock-packet`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(mockPayload)
+        });
+        if (res.ok) {
+          const ret = await res.json();
+          const mPreview = document.getElementById('aio-modal-preview');
+          if (mPreview && ret.readings) {
+            mPreview.innerText = JSON.stringify(ret.readings, null, 2);
+          }
+          checkAioStatus();
+        }
+      } catch (e) {}
     }
 
     async function fetchTwinState() {

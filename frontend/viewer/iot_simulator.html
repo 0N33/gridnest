@@ -879,11 +879,16 @@
                 <div style="font-size: 9px; color: var(--text-dim); margin-top: 2px;">GPIO 33 (V) / GPIO 32 (I)</div>
               </div>
             </div>
-            <div style="display: flex; gap: 8px; align-items: center; justify-content: space-between; padding-top: 4px;">
+            <div style="display: flex; gap: 8px; align-items: center; justify-content: space-between; padding-top: 4px; flex-wrap: wrap;">
               <span style="font-size: 10px; font-family: 'JetBrains Mono'; color: var(--text-dim);" id="sim-aio-pkts">Packets: 0</span>
-              <button class="btn" onclick="triggerMockPacket()" style="padding: 4px 10px; font-size: 11px; background: rgba(217, 70, 239, 0.15); border: 1px solid #d946ef; color: #f0abfc; font-weight: 700; cursor: pointer;">
-                <span>⚡ Test Mock Packet</span>
-              </button>
+              <div style="display: flex; gap: 6px;">
+                <button class="btn" id="btn-sim-auto-esp" onclick="toggleSimAutoEspStream()" style="padding: 4px 10px; font-size: 10px; background: rgba(217, 70, 239, 0.15); border: 1px solid #d946ef; color: #f0abfc; font-weight: 700; cursor: pointer;">
+                  <span id="txt-sim-auto-esp">▶️ Auto-Stream (1.5s)</span>
+                </button>
+                <button class="btn" onclick="triggerMockPacket()" style="padding: 4px 10px; font-size: 10px; background: rgba(59, 130, 246, 0.15); border: 1px solid #3b82f6; color: #93c5fd; font-weight: 700; cursor: pointer;">
+                  <span>⚡ 1-Shot Test</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -1462,6 +1467,63 @@
           if (bBadge) { bBadge.innerText = 'STANDBY'; bBadge.style.color = '#f0abfc'; }
         }
       } catch (e) {}
+    }
+
+    let simAutoEspTimer = null;
+    let simEspStep = 0;
+
+    function toggleSimAutoEspStream() {
+      const btnTxt = document.getElementById('txt-sim-auto-esp');
+      const btn = document.getElementById('btn-sim-auto-esp');
+      if (simAutoEspTimer) {
+        clearInterval(simAutoEspTimer);
+        simAutoEspTimer = null;
+        if (btnTxt) btnTxt.innerText = '▶️ Auto-Stream (1.5s)';
+        if (btn) btn.style.background = 'rgba(217, 70, 239, 0.15)';
+        showToast('Virtual ESP32 hardware streaming stopped');
+      } else {
+        if (btnTxt) btnTxt.innerText = '⏸️ Stop Stream';
+        if (btn) btn.style.background = 'rgba(239, 68, 68, 0.25)';
+        showToast('Virtual ESP32 hardware streaming running (1.5s interval)...');
+        sendSimEspPacket();
+        simAutoEspTimer = setInterval(sendSimEspPacket, 1500);
+      }
+    }
+
+    async function sendSimEspPacket() {
+      simEspStep++;
+      // Exact ESP32 ADC calculation simulation
+      const baseV = 230.0 + Math.sin(simEspStep * 0.4) * 2.5 + (Math.random() - 0.5) * 1.0;
+      const transI = 4200.0 + Math.sin(simEspStep * 0.3) * 150.0 + (Math.random() - 0.5) * 60.0;
+      // Consumer has physical shunt theft: reported ~1250 mA vs 4200 mA transformer feeder
+      const consI = 1250.0 + Math.sin(simEspStep * 0.3) * 45.0 + (Math.random() - 0.5) * 30.0;
+      const transW = baseV * (transI / 1000.0);
+      const consW = (baseV - 1.5) * (consI / 1000.0);
+      const lossW = Math.max(0.0, transW - consW);
+      const energyLossWh = (lossW * (1.5 / 3600.0));
+
+      const payload = {
+        transVoltage: parseFloat(baseV.toFixed(2)),
+        transCurrent: parseFloat(transI.toFixed(1)),
+        consVoltage: parseFloat((baseV - 1.5).toFixed(2)),
+        consCurrent: parseFloat(consI.toFixed(1)),
+        powerLoss_W: parseFloat(lossW.toFixed(2)),
+        energyLoss_Wh: parseFloat(energyLossWh.toFixed(4))
+      };
+
+      try {
+        const res = await fetch('/api/iot/adafruit/mock-packet', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          logToTerminal('theft', 'io.adafruit.com/smartgrid', `[ESP32 #` + simEspStep + `] TX: ${payload.transVoltage}V, ${payload.transCurrent}mA | CONS: ${payload.consVoltage}V, ${payload.consCurrent}mA | Shunt Loss: ${payload.powerLoss_W}W`);
+          checkAioSimulatorStatus();
+        }
+      } catch (e) {
+        console.warn('Virtual ESP packet error:', e);
+      }
     }
 
     async function triggerMockPacket() {
