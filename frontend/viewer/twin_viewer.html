@@ -584,12 +584,20 @@
     }
     .evidence-item {
       font-size: 11px;
-      line-height: 1.4;
-      padding: 6px 8px;
-      border-left: 3px solid var(--accent-blue);
-      background: #eff6ff;
-      color: #1e3a8a;
-      border-radius: 0 5px 5px 0;
+      line-height: 1.5;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      display: flex;
+    }
+    .evidence-item:last-child {
+      border-bottom: none;
+    }
+    .evidence-item::before {
+      content: "•";
+      color: var(--text-muted);
+      margin-right: 6px;
+      font-weight: bold;
     }
 
     /* MODAL */

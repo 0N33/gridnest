@@ -2,1620 +2,431 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GridNest Console — V2.0 // AMI Telemetry & IoT SCADA</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpolygon points='16,3.2 27.5,9.8 27.5,22.2 16,28.8 4.5,22.2 4.5,9.8' stroke='%232563eb' stroke-width='2' fill='%23eff6ff'/%3E%3Cpolygon points='18.5,5 8.5,16.5 15,16.5 13,27 23.5,14 17,14' fill='%232563eb'/%3E%3C/svg%3E">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>GridNest - Industrial Telemetry Console</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['Fira Code', 'JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg-page: #f8fafc;
-      --bg-card: #ffffff;
-      --border-color: #e2e8f0;
-      --border-subtle: #edf2f7;
-      --text-main: #0f172a;
-      --text-muted: #64748b;
-      --text-dim: #94a3b8;
-      --accent-blue: #2563eb;
-      --accent-blue-hover: #1d4ed8;
-      --accent-blue-light: #eff6ff;
-      --accent-cyan: #0284c7;
-      --accent-red: #ef4444;
-      --accent-red-light: #fee2e2;
-      --accent-red-badge: #fff1f2;
-      --accent-red-text: #e11d48;
-      --accent-amber: #d97706;
-      --accent-amber-light: #fef3c7;
-      --accent-green: #10b981;
-      --accent-green-light: #ecfdf5;
-      --accent-purple: #9333ea;
-      --font-mono: 'JetBrains Mono', monospace;
-      --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      background-color: var(--bg-page);
-      color: var(--text-main);
-      font-family: var(--font-sans);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* TOP HEADER */
-    header {
-      background: #ffffff;
-      border-bottom: 1px solid var(--border-color);
-      padding: 10px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .brand-wrap {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .brand-icon {
-      width: 36px;
-      height: 36px;
-      background: var(--accent-blue-light);
-      border: 1px solid #bfdbfe;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--accent-blue);
-      flex-shrink: 0;
-    }
-
-    .brand-title {
-      font-size: 15px;
-      font-weight: 800;
-      letter-spacing: -0.3px;
-      color: var(--text-main);
-      line-height: 1.2;
-    }
-
-    .brand-sub {
-      font-size: 10px;
-      color: var(--text-muted);
-      font-family: var(--font-mono);
-      letter-spacing: 0.6px;
-      font-weight: 600;
-    }
-
-    .status-group {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-left: 14px;
-    }
-
-    .status-pill {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-family: var(--font-mono);
-      font-weight: 600;
-      border: 1px solid var(--border-color);
-      background: #ffffff;
-      color: var(--text-main);
-    }
-
-    .status-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #94a3b8;
-    }
-    .status-dot.green { background: #10b981; }
-    .status-dot.blue  { background: #2563eb; }
-    .status-dot.purple{ background: #d946ef; }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .clock-pill {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 12px;
-      border-radius: 6px;
-      border: 1px solid var(--border-color);
-      background: #ffffff;
-      font-family: var(--font-mono);
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-main);
-    }
-
-    .btn-hdr {
-      background: #ffffff;
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      padding: 6px 14px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.15s ease;
-      text-decoration: none;
-    }
-    .btn-hdr:hover {
-      background: #f1f5f9;
-      border-color: #cbd5e1;
-    }
-    .btn-hdr.active {
-      background: var(--accent-blue);
-      border-color: var(--accent-blue);
-      color: #ffffff;
-    }
-
-    /* TOP KPI BAR */
-    .kpi-strip {
-      background: #ffffff;
-      border-bottom: 1px solid var(--border-color);
-      padding: 14px 24px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      align-items: center;
-    }
-
-    .kpi-col {
-      padding: 0 16px;
-      border-right: 1px solid var(--border-color);
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-    .kpi-col:last-child {
-      border-right: none;
-    }
-
-    .kpi-lbl {
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--text-muted);
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      font-family: var(--font-sans);
-    }
-
-    .kpi-val-row {
-      display: flex;
-      align-items: baseline;
-      gap: 8px;
-    }
-
-    .kpi-val {
-      font-family: var(--font-mono);
-      font-weight: 800;
-      font-size: 24px;
-      color: var(--text-main);
-      line-height: 1.1;
-    }
-
-    .kpi-val.red    { color: var(--accent-red); }
-    .kpi-val.amber  { color: var(--accent-amber); }
-
-    .kpi-sub {
-      font-size: 14px;
-      color: var(--text-dim);
-      font-family: var(--font-mono);
-      font-weight: 600;
-    }
-
-    .kpi-badge {
-      display: inline-block;
-      padding: 2px 7px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 700;
-      background: var(--accent-red-light);
-      color: var(--accent-red);
-      font-family: var(--font-sans);
-    }
-
-    /* WORKSPACE LAYOUT (2 COLUMNS) */
-    .workspace {
-      display: grid;
-      grid-template-columns: 55fr 45fr;
-      gap: 20px;
-      padding: 20px 24px;
-      flex: 1;
-    }
-
-    /* LEFT COLUMN: 48-NODE MATRIX */
-    .matrix-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .feeder-section {
-      background: #ffffff;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 14px 16px;
-    }
-
-    .feeder-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-
-    .feeder-title {
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      font-family: var(--font-mono);
-    }
-
-    .feeder-count {
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--text-dim);
-      font-family: var(--font-mono);
-      letter-spacing: 0.3px;
-    }
-
-    .nodes-grid {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 6px;
-    }
-
-    .node-card {
-      background: #ffffff;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      padding: 6px 8px;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      height: 52px;
-      transition: all 0.15s ease;
-      user-select: none;
-    }
-    .node-card:hover {
-      border-color: #93c5fd;
-      background: #f8fafc;
-      transform: translateY(-1px);
-    }
-    .node-card.selected {
-      border: 2px solid var(--accent-blue) !important;
-      background: var(--accent-blue-light) !important;
-      box-shadow: 0 0 0 1px var(--accent-blue);
-    }
-
-    .node-card-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .node-num {
-      font-size: 10px;
-      font-family: var(--font-mono);
-      color: var(--text-muted);
-      font-weight: 600;
-    }
-
-    .node-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent-green);
-    }
-    .node-dot.green { background: #10b981; }
-    .node-dot.amber { background: #f59e0b; }
-    .node-dot.red   { background: #ef4444; }
-
-    .node-kw {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text-main);
-    }
-
-    /* RIGHT COLUMN: INSPECTOR & CONTROLS */
-    .controls-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    /* 1. SELECTED NODE INSPECTOR */
-    .inspector-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-main);
-      margin-bottom: 6px;
-    }
-
-    .inspector-card {
-      background: #ffffff;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .node-head-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .node-id-wrap {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .node-num-badge {
-      background: var(--accent-blue-light);
-      color: var(--accent-blue);
-      font-family: var(--font-mono);
-      font-weight: 800;
-      font-size: 13px;
-      padding: 4px 8px;
-      border-radius: 6px;
-      border: 1px solid #bfdbfe;
-    }
-
-    .node-title-text {
-      font-size: 17px;
-      font-weight: 800;
-      color: var(--text-main);
-      letter-spacing: -0.2px;
-    }
-
-    .node-feeder-text {
-      font-size: 11px;
-      color: var(--text-muted);
-      font-family: var(--font-mono);
-    }
-
-    .risk-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 800;
-      font-family: var(--font-sans);
-      border: 1px solid transparent;
-    }
-    .risk-pill.CRITICAL {
-      background: var(--accent-red-badge);
-      color: var(--accent-red-text);
-      border-color: #fecdd3;
-    }
-    .risk-pill.HIGH {
-      background: var(--accent-amber-light);
-      color: var(--accent-amber);
-      border-color: #fde68a;
-    }
-    .risk-pill.NORMAL {
-      background: var(--accent-green-light);
-      color: #059669;
-      border-color: #a7f3d0;
-    }
-
-    .metrics-quad {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      padding-top: 4px;
-    }
-
-    .metric-cell {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .metric-cell-lbl {
-      font-size: 9px;
-      font-weight: 700;
-      color: var(--text-muted);
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      font-family: var(--font-sans);
-    }
-
-    .metric-cell-val {
-      font-family: var(--font-mono);
-      font-size: 17px;
-      font-weight: 800;
-      color: var(--text-main);
-    }
-    .metric-cell-val.red   { color: var(--accent-red); }
-    .metric-cell-val.amber { color: var(--accent-amber); font-size: 13px; text-transform: uppercase; }
-
-    /* 2. SCENARIO INJECTION CONTROL */
-    .injection-card {
-      background: #ffffff;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .injection-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .injection-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-main);
-    }
-
-    .restore-link {
-      font-size: 11px;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-weight: 600;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      transition: color 0.15s ease;
-    }
-    .restore-link:hover {
-      color: var(--accent-blue);
-    }
-
-    /* SEGMENTED TAB CONTROLLER */
-    .segmented-tabs {
-      background: #f1f5f9;
-      padding: 3px;
-      border-radius: 8px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 4px;
-    }
-
-    .tab-pill {
-      background: transparent;
-      border: none;
-      padding: 7px 10px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all 0.15s ease;
-      text-align: center;
-    }
-    .tab-pill:hover {
-      color: var(--text-main);
-    }
-    .tab-pill.active {
-      background: #ffffff;
-      color: var(--text-main);
-      font-weight: 700;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-    }
-
-    /* TAB CONTENTS */
-    .tab-pane {
-      display: none;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .tab-pane.active {
-      display: flex;
-    }
-
-    .slider-header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .slider-lbl {
-      font-size: 10px;
-      font-weight: 700;
-      color: #475569;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-    }
-
-    .slider-val-text {
-      font-size: 12px;
-      font-weight: 800;
-      color: var(--accent-red);
-      font-family: var(--font-mono);
-    }
-
-    .range-input {
-      width: 100%;
-      height: 5px;
-      background: #e2e8f0;
-      border-radius: 4px;
-      outline: none;
-      accent-color: var(--accent-blue);
-      cursor: pointer;
-      margin: 4px 0;
-    }
-
-    .slider-scale-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 9px;
-      color: var(--text-dim);
-      font-family: var(--font-sans);
-    }
-
-    .sensors-sec-title {
-      font-size: 10px;
-      font-weight: 800;
-      color: #475569;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-top: 4px;
-    }
-
-    .toggles-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
-    .toggle-card {
-      background: #ffffff;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 9px 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      user-select: none;
-      cursor: pointer;
-    }
-
-    .toggle-lbl {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-main);
-    }
-
-    /* iOS SWITCH STYLING */
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 32px;
-      height: 18px;
-      flex-shrink: 0;
-    }
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    .switch-slider {
-      position: absolute;
-      cursor: pointer;
-      inset: 0;
-      background-color: #cbd5e1;
-      border-radius: 18px;
-      transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .switch-slider:before {
-      position: absolute;
-      content: "";
-      height: 14px;
-      width: 14px;
-      left: 2px;
-      bottom: 2px;
-      background-color: white;
-      border-radius: 50%;
-      transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 1px 2px rgba(0,0,0,0.2);
-    }
-    .switch input:checked + .switch-slider {
-      background-color: var(--accent-blue);
-    }
-    .switch input:checked + .switch-slider:before {
-      transform: translateX(14px);
-    }
-
-    /* ACTION INJECT BUTTON */
-    .btn-inject {
-      background: var(--accent-blue);
-      color: #ffffff;
-      border: 1px solid var(--accent-blue);
-      border-radius: 6px;
-      padding: 8px 14px;
-      font-size: 11px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: all 0.15s ease;
-      margin-top: 4px;
-    }
-    .btn-inject:hover {
-      background: var(--accent-blue-hover);
-    }
-    .btn-inject.danger {
-      background: var(--accent-red);
-      border-color: var(--accent-red);
-    }
-    .btn-inject.danger:hover {
-      background: #dc2626;
-    }
-
-    /* ADAFRUIT HARDWARE STRIP (COMPACT) */
-    .aio-strip {
-      background: #fdf4ff;
-      border: 1px solid #f0abfc;
-      border-radius: 8px;
-      padding: 8px 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 11px;
-    }
-
-    /* BOTTOM MQTT EVENT LOG */
-    .log-panel {
-      background: #ffffff;
-      border-top: 1px solid var(--border-color);
-      padding: 12px 24px 16px 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .log-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .log-title-wrap {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .log-title {
-      font-size: 11px;
-      font-weight: 800;
-      color: var(--text-main);
-      font-family: var(--font-mono);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .log-count-badge {
-      background: #f1f5f9;
-      color: var(--text-muted);
-      border-radius: 12px;
-      padding: 1px 7px;
-      font-size: 10px;
-      font-family: var(--font-mono);
-      font-weight: 600;
-    }
-
-    .btn-clear-log {
-      background: transparent;
-      border: none;
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--text-muted);
-      font-family: var(--font-mono);
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .btn-clear-log:hover {
-      color: var(--text-main);
-    }
-
-    .terminal-box {
-      background: #f8fafc;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      padding: 10px 14px;
-      height: 95px;
-      overflow-y: auto;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      line-height: 1.5;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-
-    .log-line {
-      display: flex;
-      gap: 10px;
-      align-items: baseline;
-    }
-    .log-time { color: #64748b; flex-shrink: 0; }
-    .log-topic{ color: #2563eb; font-weight: 600; flex-shrink: 0; min-width: 140px; }
-    .log-msg  { color: var(--text-main); }
-    .log-msg.theft { color: var(--accent-red); font-weight: 600; }
-    .log-msg.fault { color: var(--accent-amber); font-weight: 600; }
-    .log-msg.normal{ color: #059669; }
-
-    /* TOAST */
-    #toast-msg {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      background: #0f172a;
-      color: #ffffff;
-      border-radius: 6px;
-      padding: 10px 16px;
-      font-size: 11px;
-      font-weight: 600;
-      display: none;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.2);
-      z-index: 1000;
-    }
+    body { background-color: #f8fafc; color: #0f172a; overflow: hidden; }
+    /* Custom Scrollbar for matrix and console */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    
+    .shadcn-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 6px; font-size: 13px; font-weight: 500; padding: 6px 12px; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; }
+    .shadcn-btn-primary { background: #0f172a; color: #ffffff; }
+    .shadcn-btn-primary:hover { background: #1e293b; }
+    .shadcn-btn-outline { background: transparent; border-color: #e2e8f0; color: #0f172a; }
+    .shadcn-btn-outline:hover { background: #f8fafc; border-color: #cbd5e1; }
+    .shadcn-btn-ghost { background: transparent; color: #64748b; }
+    .shadcn-btn-ghost:hover { background: #f1f5f9; color: #0f172a; }
+    .shadcn-btn-danger { background: rgba(220, 38, 38, 0.1); border-color: rgba(220, 38, 38, 0.3); color: #dc2626; }
+    .shadcn-btn-danger:hover { background: rgba(220, 38, 38, 0.15); }
+    
+    .segmented-control { display: flex; background: #f1f5f9; border: 1px solid #e2e8f0; padding: 3px; border-radius: 8px; }
+    .segmented-btn { flex: 1; text-align: center; padding: 6px; font-size: 12px; font-weight: 500; border-radius: 5px; color: #64748b; cursor: pointer; transition: all 0.2s; }
+    .segmented-btn.active { background: #ffffff; color: #0f172a; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    
+    .meter-cell { border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 8px; cursor: pointer; transition: all 0.2s; background: #ffffff; }
+    .meter-cell:hover { border-color: #cbd5e1; background: #f8fafc; }
+    .meter-cell.selected { border-color: #3b82f6; background: #eff6ff; box-shadow: 0 0 0 1px #3b82f6; }
+    
+    input[type="range"] { -webkit-appearance: none; width: 100%; height: 4px; background: #cbd5e1; border-radius: 2px; outline: none; }
+    input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; border-radius: 50%; background: #3b82f6; cursor: pointer; box-shadow: 0 0 0 2px #ffffff; }
+    
+    /* Checkbox toggle */
+    .toggle-checkbox:checked { right: 0; border-color: #3b82f6; }
+    .toggle-checkbox:checked + .toggle-label { background-color: #3b82f6; }
+    .toggle-checkbox:checked + .toggle-label:after { transform: translateX(100%); border-color: #fff; }
+    .toggle-label { width: 36px; height: 20px; background-color: #cbd5e1; border-radius: 9999px; position: relative; cursor: pointer; transition: background-color 0.2s; }
+    .toggle-label:after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; background-color: #fff; border-radius: 50%; transition: transform 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
   </style>
 </head>
-<body>
+<body class="h-screen w-screen flex flex-col">
 
-  <!-- TOP HEADER -->
-  <header>
-    <div class="brand-wrap">
-      <div class="brand-icon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-        </svg>
-      </div>
-      <div>
-        <div class="brand-title">GridNest Console</div>
-        <div class="brand-sub">V2.0 // AMI TELEMETRY</div>
-      </div>
-      <div class="status-group">
-        <div class="status-pill" id="badge-server">
-          <div class="status-dot green"></div>
-          <span>HTTP:8000</span>
+<div id="root" class="h-full w-full flex flex-col"></div>
+
+<script type="text/babel">
+  const { useState, useEffect, useRef, useMemo } = React;
+
+  // ICON SVGs
+  const Icons = {
+    Activity: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>,
+    Clock: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>,
+    Play: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>,
+    RefreshCw: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>,
+    ShieldAlert: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>,
+    Zap: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>,
+    Terminal: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>,
+    ChevronUp: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>,
+    ChevronDown: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+  };
+
+  // MOCK DATA GENERATOR
+  const generateMockMeters = () => {
+    const meters = [];
+    for(let i=1; i<=24; i++) {
+      const idStr = i.toString().padStart(3, '0');
+      meters.push({ id: `CONS_N_${idStr}`, zone: 'TX-101', load: (Math.random()*4 + 0.5).toFixed(2), baseline: (Math.random()*4 + 0.5).toFixed(2), risk: 0, cause: 'NORMAL' });
+    }
+    for(let i=1; i<=24; i++) {
+      const idStr = i.toString().padStart(3, '0');
+      meters.push({ id: `CONS_S_${idStr}`, zone: 'TX-102', load: (Math.random()*4 + 0.5).toFixed(2), baseline: (Math.random()*4 + 0.5).toFixed(2), risk: 0, cause: 'NORMAL' });
+    }
+    meters[2].risk = 94; meters[2].cause = 'THEFT_BYPASS'; meters[2].load = '0.85'; meters[2].baseline = '4.25';
+    meters[8].risk = 88; meters[8].cause = 'METER_TAMPER'; 
+    meters[14].risk = 65; meters[14].cause = 'STUCK_REGISTER'; meters[14].load = '0.35';
+    meters[30].risk = 45; meters[30].cause = 'EV_SURGE'; meters[30].load = '8.40'; meters[30].baseline = '1.20';
+    meters[40].risk = 72; meters[40].cause = 'COMM_LOSS';
+    return meters;
+  };
+
+  const App = () => {
+    const [meters, setMeters] = useState(generateMockMeters());
+    const [selectedMeterId, setSelectedMeterId] = useState('CONS_N_003');
+    const [clock, setClock] = useState("2026-10-05 06:15");
+    const [autoRun, setAutoRun] = useState(false);
+    const [consoleOpen, setConsoleOpen] = useState(true);
+    const [logs, setLogs] = useState([
+      { time: '06:15:00', topic: 'sys/init', msg: 'GridNest Industrial SCADA initialized.', type: 'info' }
+    ]);
+    
+    // Scenario Panel State
+    const [scenarioTab, setScenarioTab] = useState('theft');
+    const [shuntRatio, setShuntRatio] = useState(25);
+    const [tampers, setTampers] = useState({ mag: true, cover: false, rev: false, covert: false });
+
+    const selectedMeter = useMemo(() => meters.find(m => m.id === selectedMeterId) || meters[0], [meters, selectedMeterId]);
+
+    const addLog = (topic, msg, type='info') => {
+      const time = new Date().toTimeString().split(' ')[0];
+      setLogs(prev => [...prev.slice(-49), { time, topic, msg, type }]);
+    };
+
+    const handleInject = () => {
+      addLog(`grid/control/inject`, `Injected ${scenarioTab.toUpperCase()} on ${selectedMeterId}`, 'warn');
+      setMeters(prev => prev.map(m => {
+        if(m.id === selectedMeterId) {
+          return { ...m, risk: 95, cause: scenarioTab.toUpperCase(), load: scenarioTab === 'theft' ? (m.baseline * (shuntRatio/100)).toFixed(2) : m.load };
+        }
+        return m;
+      }));
+    };
+
+    const handleRestore = () => {
+      addLog(`grid/control/restore`, `Restored ${selectedMeterId} to baseline`, 'info');
+      setMeters(prev => prev.map(m => m.id === selectedMeterId ? { ...m, risk: 0, cause: 'NORMAL', load: m.baseline } : m));
+    };
+
+    const tx101Meters = meters.filter(m => m.zone === 'TX-101');
+    const tx102Meters = meters.filter(m => m.zone === 'TX-102');
+    const anomaliesCount = meters.filter(m => m.risk > 0).length;
+
+    const renderMeterGrid = (meterList, title) => (
+      <div className="flex flex-col gap-2">
+        <div className="text-[10px] font-bold text-slate-500 tracking-wider uppercase flex items-center justify-between">
+          <span>{title}</span>
+          <span>{meterList.length} Nodes</span>
         </div>
-        <div class="status-pill" id="badge-mqtt">
-          <div class="status-dot blue"></div>
-          <span id="txt-mqtt">MQTT:1883</span>
-        </div>
-        <div class="status-pill" id="badge-ws">
-          <div class="status-dot green"></div>
-          <span>WS:LIVE</span>
-        </div>
-        <div class="status-pill" id="badge-aio" onclick="triggerMockPacket()" style="cursor: pointer;" title="Adafruit IO Hardware Link">
-          <div class="status-dot purple" id="dot-aio"></div>
-          <span id="txt-aio">AIO:STANDBY</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- HEADER CONTROLS -->
-    <div class="header-actions">
-      <div class="clock-pill">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <polyline points="12 6 12 12 16 14"></polyline>
-        </svg>
-        <span id="kpi-clock">2026-10-05 06:15</span>
-      </div>
-      <button class="btn-hdr" onclick="stepSimulation()" title="Advance simulation by 15 minutes">
-        <span>Step +15m</span>
-      </button>
-      <button class="btn-hdr" id="btn-auto-run" onclick="toggleAutoRun()" title="Toggle automated continuous time progression">
-        <span id="txt-auto-run">▷ Auto-Run</span>
-      </button>
-      <button class="btn-hdr" onclick="restoreAllConsumers()" title="Restore all 48 meters to normal baseline">
-        <span>↻ Reset</span>
-      </button>
-      <a href="/" target="_blank" class="btn-hdr" style="color: var(--accent-blue); border-color: #bfdbfe;" title="Open 3D Digital Twin Viewer">
-        <span>🗺️ 3D Twin</span>
-      </a>
-    </div>
-  </header>
-
-  <!-- TOP KPI STRIP -->
-  <div class="kpi-strip">
-    <div class="kpi-col">
-      <span class="kpi-lbl">METERS ONLINE</span>
-      <div class="kpi-val-row">
-        <span class="kpi-val" id="kpi-meters-val">48</span>
-        <span class="kpi-sub">/48</span>
-      </div>
-    </div>
-    <div class="kpi-col">
-      <span class="kpi-lbl">ACTIVE ANOMALIES</span>
-      <div class="kpi-val-row">
-        <span class="kpi-val red" id="kpi-anomalies-val">6</span>
-        <span class="kpi-badge" id="kpi-anomalies-badge">Detected</span>
-      </div>
-    </div>
-    <div class="kpi-col">
-      <span class="kpi-lbl">ZONE 1 (TX-101) NTL</span>
-      <div class="kpi-val-row">
-        <span class="kpi-val amber" id="kpi-z1-ntl">15.46%</span>
-      </div>
-    </div>
-    <div class="kpi-col">
-      <span class="kpi-lbl">ZONE 2 (TX-102) NTL</span>
-      <div class="kpi-val-row">
-        <span class="kpi-val" id="kpi-z2-ntl">5.71%</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- MAIN WORKSPACE -->
-  <main class="workspace">
-
-    <!-- LEFT COLUMN: 48 NODE MATRIX -->
-    <div class="matrix-panel">
-
-      <!-- FEEDER TX-101 (NORTH) -->
-      <div class="feeder-section">
-        <div class="feeder-header">
-          <span class="feeder-title">FEEDER TX-101 (NORTH)</span>
-          <span class="feeder-count">24 NODES</span>
-        </div>
-        <div class="nodes-grid" id="grid-feeder-101">
-          <!-- Populated dynamically with 24 nodes -->
+        <div className="grid grid-cols-4 lg:grid-cols-6 gap-2">
+          {meterList.map(m => (
+            <div 
+              key={m.id} 
+              onClick={() => setSelectedMeterId(m.id)}
+              className={`meter-cell flex flex-col gap-1 ${selectedMeterId === m.id ? 'selected' : ''}`}
+            >
+              <div className="flex justify-between items-center">
+                <span className="text-[10px] font-mono text-slate-500">{m.id.split('_')[2]}</span>
+                <div className={`w-2 h-2 rounded-full ${m.risk > 80 ? 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]' : m.risk > 40 ? 'bg-amber-500' : 'bg-emerald-500'}`}></div>
+              </div>
+              <span className="text-xs font-mono font-medium text-slate-900">{m.load}kW</span>
+            </div>
+          ))}
         </div>
       </div>
+    );
 
-      <!-- FEEDER TX-102 (SOUTH) -->
-      <div class="feeder-section">
-        <div class="feeder-header">
-          <span class="feeder-title">FEEDER TX-102 (SOUTH)</span>
-          <span class="feeder-count">24 NODES</span>
-        </div>
-        <div class="nodes-grid" id="grid-feeder-102">
-          <!-- Populated dynamically with 24 nodes -->
-        </div>
-      </div>
-
-    </div>
-
-    <!-- RIGHT COLUMN: SELECTED NODE INSPECTOR & INJECTION CONTROLS -->
-    <div class="controls-panel">
-
-      <!-- 1. SELECTED NODE INSPECTOR -->
-      <div>
-        <div class="inspector-title">Selected Node Inspector</div>
-        <div class="inspector-card">
-          <div class="node-head-row">
-            <div class="node-id-wrap">
-              <div class="node-num-badge" id="insp-node-num">012</div>
-              <div>
-                <div class="node-title-text" id="insp-node-id">CONS_S_012</div>
-                <div class="node-feeder-text" id="insp-feeder-id">Feeder: TX-102</div>
+    return (
+      <div className="flex flex-col h-full bg-slate-50 text-slate-900">
+        
+        {/* HEADER NAVBAR */}
+        <header className="flex-none h-14 border-b border-slate-200 bg-white px-4 flex items-center justify-between select-none shadow-sm z-10">
+          <div className="flex items-center gap-4">
+            <div className="w-8 h-8 rounded bg-slate-100 border border-slate-200 flex items-center justify-center text-blue-600">
+              <Icons.Zap />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm font-bold text-slate-900 tracking-tight leading-tight">GridNest Console</span>
+              <span className="text-[9px] font-mono text-slate-500 uppercase tracking-widest">v2.0 // AMI Telemetry</span>
+            </div>
+            
+            <div className="h-4 w-px bg-slate-200 mx-2"></div>
+            
+            <div className="flex gap-3">
+              <div className="flex items-center gap-1.5 px-2 py-1 bg-slate-50 rounded-full border border-slate-200">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_5px_#10b981]"></div>
+                <span className="text-[10px] font-mono font-medium text-slate-600">HTTP:8000</span>
+              </div>
+              <div className="flex items-center gap-1.5 px-2 py-1 bg-slate-50 rounded-full border border-slate-200">
+                <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_5px_#3b82f6]"></div>
+                <span className="text-[10px] font-mono font-medium text-slate-600">MQTT:1883</span>
+              </div>
+              <div className="flex items-center gap-1.5 px-2 py-1 bg-slate-50 rounded-full border border-slate-200">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_5px_#10b981]"></div>
+                <span className="text-[10px] font-mono font-medium text-slate-600">WS:LIVE</span>
               </div>
             </div>
-            <div class="risk-pill CRITICAL" id="insp-risk-pill">CRITICAL RISK</div>
           </div>
 
-          <div class="metrics-quad">
-            <div class="metric-cell">
-              <span class="metric-cell-lbl">REPORTED LOAD</span>
-              <span class="metric-cell-val" id="insp-rep-load">1.68 kW</span>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded font-mono text-xs">
+              <Icons.Clock />
+              <span className="text-blue-600 font-semibold">{clock}</span>
             </div>
-            <div class="metric-cell">
-              <span class="metric-cell-lbl">TRUE BASELINE</span>
-              <span class="metric-cell-val" id="insp-base-load" style="color: var(--text-muted);">2.63 kW</span>
-            </div>
-            <div class="metric-cell">
-              <span class="metric-cell-lbl">ANOMALY SCORE</span>
-              <span class="metric-cell-val red" id="insp-score">95</span>
-            </div>
-            <div class="metric-cell">
-              <span class="metric-cell-lbl">PROBABLE CAUSE</span>
-              <span class="metric-cell-val amber" id="insp-cause">THEFT</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2. SCENARIO INJECTION CONTROL -->
-      <div class="injection-card">
-        <div class="injection-head">
-          <span class="injection-title">Scenario Injection Control</span>
-          <a class="restore-link" onclick="restoreSelectedConsumer()">
-            <span>↻</span> <span>Restore Node</span>
-          </a>
-        </div>
-
-        <!-- 4 SEGMENTED TABS -->
-        <div class="segmented-tabs">
-          <button class="tab-pill active" onclick="switchScenarioTab('theft')">Theft Bypass</button>
-          <button class="tab-pill" onclick="switchScenarioTab('fault')">Meter Fault</button>
-          <button class="tab-pill" onclick="switchScenarioTab('comm')">Comm Drop</button>
-          <button class="tab-pill" onclick="switchScenarioTab('surge')">Heavy Surge</button>
-        </div>
-
-        <!-- TAB 1: THEFT BYPASS -->
-        <div class="tab-pane active" id="pane-theft">
-          <div class="slider-header-row">
-            <span class="slider-lbl">SHUNT RATIO (REPORTED VS STOLEN)</span>
-            <span class="slider-val-text" id="lbl-shunt-ratio">64% Rep / 36% Stl</span>
-          </div>
-          <input type="range" class="range-input" id="range-shunt" min="5" max="85" value="64" oninput="onShuntSliderChange(this.value)">
-          <div class="slider-scale-row">
-            <span>0% (Full Bypass)</span>
-            <span>100% (No Bypass)</span>
-          </div>
-
-          <div class="sensors-sec-title">PHYSICAL TAMPER SENSORS</div>
-          <div class="toggles-grid">
-            <label class="toggle-card">
-              <span class="toggle-lbl">Magnetic Tamper Flag</span>
-              <span class="switch">
-                <input type="checkbox" id="tgl-mag" checked>
-                <span class="switch-slider"></span>
-              </span>
-            </label>
-            <label class="toggle-card">
-              <span class="toggle-lbl">Enclosure Open Switch</span>
-              <span class="switch">
-                <input type="checkbox" id="tgl-cover">
-                <span class="switch-slider"></span>
-              </span>
-            </label>
-            <label class="toggle-card">
-              <span class="toggle-lbl">Reverse Power Flow</span>
-              <span class="switch">
-                <input type="checkbox" id="tgl-rev">
-                <span class="switch-slider"></span>
-              </span>
-            </label>
-            <label class="toggle-card">
-              <span class="toggle-lbl">Covert (Mask Bits)</span>
-              <span class="switch">
-                <input type="checkbox" id="tgl-covert">
-                <span class="switch-slider"></span>
-              </span>
-            </label>
-          </div>
-
-          <button class="btn-inject danger" onclick="injectTheftScenario()">
-            <span>⚡ Inject Electricity Theft on <span id="btn-target-theft">CONS_S_012</span></span>
-          </button>
-        </div>
-
-        <!-- TAB 2: METER FAULT -->
-        <div class="tab-pane" id="pane-fault">
-          <div class="sensors-sec-title">HARDWARE TRANSDUCER DEFECT</div>
-          <div style="display: flex; flex-direction: column; gap: 8px;">
-            <label class="toggle-card">
-              <div>
-                <strong style="font-size: 11px;">Stuck ADC Register</strong>
-                <div style="font-size: 10px; color: var(--text-muted);">Flatline frozen at 0.35 kW</div>
-              </div>
-              <input type="radio" name="fault-type" value="stuck" checked style="accent-color: var(--accent-blue);">
-            </label>
-            <label class="toggle-card">
-              <div>
-                <strong style="font-size: 11px;">Zero Current Loop</strong>
-                <div style="font-size: 10px; color: var(--text-muted);">Nominal 230V but CT drops to 0.00A</div>
-              </div>
-              <input type="radio" name="fault-type" value="zero_reading" style="accent-color: var(--accent-blue);">
-            </label>
-            <label class="toggle-card">
-              <div>
-                <strong style="font-size: 11px;">High Frequency Spike</strong>
-                <div style="font-size: 10px; color: var(--text-muted);">Erratic unphysical spike (>600%)</div>
-              </div>
-              <input type="radio" name="fault-type" value="spike" style="accent-color: var(--accent-blue);">
-            </label>
-          </div>
-          <button class="btn-inject" style="background: #d97706; border-color: #d97706;" onclick="injectFaultScenario()">
-            <span>🛠️ Inject Meter Hardware Fault</span>
-          </button>
-        </div>
-
-        <!-- TAB 3: COMM DROP -->
-        <div class="tab-pane" id="pane-comm">
-          <div style="font-size: 12px; color: var(--text-muted); line-height: 1.5; padding: 6px 0;">
-            Simulates RF-Mesh / cellular packet drop. The meter ceases transmitting 15-minute scheduled frames.
-          </div>
-          <button class="btn-inject" style="background: #7c3aed; border-color: #7c3aed;" onclick="injectCommScenario()">
-            <span>📡 Inject AMI Communication Failure</span>
-          </button>
-        </div>
-
-        <!-- TAB 4: HEAVY SURGE -->
-        <div class="tab-pane" id="pane-surge">
-          <div class="slider-header-row">
-            <span class="slider-lbl">LEGITIMATE DEMAND SURGE</span>
-            <span class="slider-val-text" id="lbl-surge-val" style="color: #d97706;">+7.4 kW (EV Fast Charger)</span>
-          </div>
-          <input type="range" class="range-input" id="range-surge" min="30" max="150" value="74" oninput="onSurgeSliderChange(this.value)">
-          <button class="btn-inject" style="background: #059669; border-color: #059669;" onclick="injectSurgeScenario()">
-            <span>🚗 Inject Legitimate Demand Surge</span>
-          </button>
-        </div>
-
-        <!-- COMPACT ADAFRUIT IO HARDWARE STRIP -->
-        <div class="aio-strip">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <span style="font-size: 14px;">⚡</span>
-            <div>
-              <strong style="color: #86198f;">Physical ESP32 Link:</strong>
-              <span id="aio-status-label" style="color: #701a75;">TX_101 & CONS_N_004</span>
-            </div>
-          </div>
-          <div style="display: flex; gap: 6px;">
-            <button class="btn-hdr" id="btn-sim-auto-esp" onclick="toggleSimAutoEspStream()" style="padding: 3px 8px; font-size: 10px; border-color: #d946ef; color: #a21caf;">
-              <span id="txt-sim-auto-esp">▶️ Stream (1.5s)</span>
+            <button className="shadcn-btn shadcn-btn-outline" onClick={() => addLog('sys/clock', 'Advanced 15m')}>
+              Step +15m
             </button>
-            <button class="btn-hdr" onclick="triggerMockPacket()" style="padding: 3px 8px; font-size: 10px; border-color: #3b82f6; color: #2563eb;">
-              <span>⚡ 1-Shot</span>
+            <button className={`shadcn-btn ${autoRun ? 'shadcn-btn-danger' : 'shadcn-btn-outline'}`} onClick={() => setAutoRun(!autoRun)}>
+              <Icons.Play />
+              {autoRun ? 'Stop Auto' : 'Auto-Run'}
+            </button>
+            <button className="shadcn-btn shadcn-btn-ghost" onClick={() => setMeters(generateMockMeters())}>
+              <Icons.RefreshCw /> Reset
             </button>
           </div>
+        </header>
+
+        {/* TOP KPI STRIP */}
+        <div className="flex-none h-20 border-b border-slate-200 bg-white px-6 flex items-center gap-6">
+          <div className="flex flex-col gap-1 w-48">
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Meters Online</span>
+            <div className="flex items-end gap-2">
+              <span className="text-2xl font-mono font-bold text-slate-900">48<span className="text-slate-400 text-lg">/48</span></span>
+            </div>
+          </div>
+          <div className="h-10 w-px bg-slate-200"></div>
+          
+          <div className="flex flex-col gap-1 w-48">
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Active Anomalies</span>
+            <div className="flex items-center gap-2">
+              <span className="text-2xl font-mono font-bold text-rose-600">{anomaliesCount}</span>
+              <span className="text-xs font-medium text-rose-600 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">Detected</span>
+            </div>
+          </div>
+          <div className="h-10 w-px bg-slate-200"></div>
+
+          <div className="flex flex-col gap-1 w-48">
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Zone 1 (TX-101) NTL</span>
+            <span className="text-xl font-mono font-bold text-amber-600">15.46%</span>
+          </div>
+          <div className="h-10 w-px bg-slate-200"></div>
+
+          <div className="flex flex-col gap-1 w-48">
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Zone 2 (TX-102) NTL</span>
+            <span className="text-xl font-mono font-bold text-slate-700">5.71%</span>
+          </div>
+        </div>
+
+        {/* MAIN DASHBOARD (2-COLUMN GRID) */}
+        <main className="flex-1 overflow-hidden flex bg-slate-50">
+          
+          {/* LEFT: METER MATRIX */}
+          <div className="w-[40%] border-r border-slate-200 p-6 flex flex-col gap-6 overflow-y-auto bg-slate-50">
+            <div className="flex items-center gap-2 mb-2">
+              <Icons.Activity />
+              <h2 className="text-sm font-semibold tracking-tight text-slate-900">Meter Matrix & Topology</h2>
+            </div>
+            {renderMeterGrid(tx101Meters, 'Feeder TX-101 (North)')}
+            {renderMeterGrid(tx102Meters, 'Feeder TX-102 (South)')}
+          </div>
+
+          {/* RIGHT: INSPECTOR & INJECTION */}
+          <div className="w-[60%] p-6 flex flex-col gap-6 overflow-y-auto">
+            
+            {/* SECTION A: SELECTED METER INSPECTOR */}
+            <div className="flex flex-col gap-3">
+              <h2 className="text-sm font-semibold tracking-tight text-slate-900">Selected Node Inspector</h2>
+              
+              <div className="border border-slate-200 bg-white rounded-lg p-5 flex flex-col gap-4 shadow-sm">
+                <div className="flex justify-between items-start border-b border-slate-100 pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-md bg-slate-50 border border-slate-200 flex items-center justify-center font-mono font-bold text-blue-600">
+                      {selectedMeter.id.split('_')[2]}
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-lg font-bold text-slate-900">{selectedMeter.id}</span>
+                      <span className="text-xs font-mono text-slate-500">Feeder: {selectedMeter.zone}</span>
+                    </div>
+                  </div>
+                  {selectedMeter.risk > 50 ? (
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 bg-rose-50 border border-rose-200 rounded text-rose-600 text-xs font-bold tracking-wide shadow-sm">
+                      <Icons.ShieldAlert /> CRITICAL RISK
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-50 border border-slate-200 rounded text-slate-500 text-xs font-bold tracking-wide shadow-sm">
+                      NOMINAL
+                    </div>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-4 gap-4 pt-1">
+                  <div className="flex flex-col gap-1">
+                    <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Reported Load</span>
+                    <span className="text-lg font-mono font-semibold text-slate-900">{selectedMeter.load} <span className="text-xs text-slate-500">kW</span></span>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">True Baseline</span>
+                    <span className="text-lg font-mono font-semibold text-slate-400">{selectedMeter.baseline} <span className="text-xs text-slate-400">kW</span></span>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Anomaly Score</span>
+                    <span className={`text-lg font-mono font-semibold ${selectedMeter.risk > 80 ? 'text-rose-600' : 'text-slate-900'}`}>{selectedMeter.risk}</span>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Probable Cause</span>
+                    <span className={`text-xs font-bold mt-1.5 truncate ${selectedMeter.risk > 0 ? 'text-amber-600' : 'text-slate-400'}`}>
+                      {selectedMeter.cause.replace(/_/g, ' ')}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* SECTION B: SCENARIO INJECTION PANEL */}
+            <div className="flex flex-col gap-3 mt-4">
+              <div className="flex justify-between items-center">
+                <h2 className="text-sm font-semibold tracking-tight text-slate-900">Scenario Injection Control</h2>
+                <div className="flex gap-2">
+                  <button className="shadcn-btn shadcn-btn-ghost text-[10px] py-1 px-2 h-auto" onClick={handleRestore}>Restore Node</button>
+                </div>
+              </div>
+              
+              <div className="border border-slate-200 bg-white rounded-lg p-1 shadow-sm">
+                <div className="segmented-control">
+                  {['theft', 'fault', 'comm', 'surge'].map(tab => (
+                    <div 
+                      key={tab}
+                      className={`segmented-btn ${scenarioTab === tab ? 'active' : ''}`}
+                      onClick={() => setScenarioTab(tab)}
+                    >
+                      {tab === 'theft' ? 'Theft Bypass' : tab === 'fault' ? 'Meter Fault' : tab === 'comm' ? 'Comm Drop' : 'Heavy Surge'}
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="p-5 flex flex-col gap-6">
+                  {/* DYNAMIC SCENARIO CONTENT */}
+                  {scenarioTab === 'theft' && (
+                    <>
+                      <div className="flex flex-col gap-3">
+                        <div className="flex justify-between items-end">
+                          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Shunt Ratio (Reported vs Stolen)</span>
+                          <span className="text-sm font-mono font-semibold text-rose-600">{shuntRatio}% Rep / {100-shuntRatio}% Stl</span>
+                        </div>
+                        <input type="range" min="0" max="100" value={shuntRatio} onChange={e => setShuntRatio(parseInt(e.target.value))} />
+                        <div className="flex justify-between text-[10px] text-slate-400 font-mono mt-1">
+                          <span>0% (Full Bypass)</span>
+                          <span>100% (No Bypass)</span>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col gap-3">
+                        <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Physical Tamper Sensors</span>
+                        <div className="grid grid-cols-2 gap-3">
+                          {[
+                            {id:'mag', label:'Magnetic Tamper Flag'},
+                            {id:'cover', label:'Enclosure Open Switch'},
+                            {id:'rev', label:'Reverse Power Flow'},
+                            {id:'covert', label:'Covert (Mask Bits)'}
+                          ].map(t => (
+                            <label key={t.id} className="flex items-center justify-between p-2.5 border border-slate-200 rounded bg-slate-50 cursor-pointer hover:border-slate-300 transition-colors">
+                              <span className="text-xs font-medium text-slate-700">{t.label}</span>
+                              <div className="relative inline-block w-9 h-5">
+                                <input type="checkbox" className="sr-only toggle-checkbox" checked={tampers[t.id]} onChange={e => setTampers({...tampers, [t.id]: e.target.checked})} />
+                                <div className="toggle-label block w-9 h-5 rounded-full"></div>
+                              </div>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  {scenarioTab !== 'theft' && (
+                    <div className="h-32 flex items-center justify-center border border-dashed border-slate-200 rounded-lg text-slate-400 text-xs font-medium">
+                      [ {scenarioTab.toUpperCase()} specific parameters loaded ]
+                    </div>
+                  )}
+
+                  <div className="pt-4 border-t border-slate-100 flex justify-between items-center">
+                    <div className="flex gap-2">
+                      <span className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold mt-1">Presets:</span>
+                      <span className="text-[11px] font-semibold text-blue-600 cursor-pointer hover:underline mt-1" onClick={() => {setShuntRatio(20); setSelectedMeterId('CONS_N_003');}}>Covert Theft</span>
+                      <span className="text-slate-300 mt-1">|</span>
+                      <span className="text-[11px] font-semibold text-amber-600 cursor-pointer hover:underline mt-1" onClick={() => {setScenarioTab('fault'); setSelectedMeterId('CONS_N_015');}}>Stuck Register</span>
+                    </div>
+                    <button className="shadcn-btn shadcn-btn-primary" onClick={handleInject}>
+                      Inject Scenario payload
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </main>
+
+        {/* BOTTOM CONSOLE */}
+        <div className={`flex-none border-t border-slate-200 bg-white flex flex-col transition-all duration-300 ${consoleOpen ? 'h-48' : 'h-10'}`}>
+          <div className="h-10 px-4 flex items-center justify-between border-b border-slate-100 cursor-pointer bg-slate-50 hover:bg-slate-100 transition-colors" onClick={() => setConsoleOpen(!consoleOpen)}>
+            <div className="flex items-center gap-2 text-slate-700">
+              <Icons.Terminal />
+              <span className="text-xs font-bold tracking-wider">MQTT EVENT LOG</span>
+              <span className="ml-2 px-1.5 py-0.5 rounded bg-slate-200 text-[9px] font-mono text-slate-600 font-bold">{logs.length} Events</span>
+            </div>
+            <div className="flex items-center gap-3">
+              {consoleOpen && <button className="text-[10px] font-bold text-slate-400 hover:text-slate-600 uppercase" onClick={(e) => {e.stopPropagation(); setLogs([]);}}>Clear Log</button>}
+              <div className="text-slate-400">{consoleOpen ? <Icons.ChevronDown /> : <Icons.ChevronUp />}</div>
+            </div>
+          </div>
+          
+          {consoleOpen && (
+            <div className="flex-1 p-3 overflow-y-auto font-mono text-[11px] flex flex-col gap-1 bg-[#fdfdfd]">
+              {logs.map((log, idx) => (
+                <div key={idx} className="flex gap-3 leading-relaxed hover:bg-slate-50 px-2 py-0.5 rounded">
+                  <span className="text-slate-400 shrink-0 font-medium">[{log.time}]</span>
+                  <span className="text-blue-600 shrink-0 w-32 font-medium">{log.topic}</span>
+                  <span className={`font-medium ${log.type === 'warn' ? 'text-rose-600' : log.type === 'info' ? 'text-slate-700' : 'text-slate-500'}`}>
+                    {log.msg}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
       </div>
+    );
+  };
 
-    </div>
+  const root = ReactDOM.createRoot(document.getElementById('root'));
+  root.render(<App />);
+</script>
 
-  </main>
-
-  <!-- BOTTOM PANEL: MQTT EVENT LOG -->
-  <footer class="log-panel">
-    <div class="log-header">
-      <div class="log-title-wrap">
-        <span class="log-title">
-          <span>&gt;_</span> <span>MQTT EVENT LOG</span>
-        </span>
-        <span class="log-count-badge" id="terminal-count">2 Events</span>
-      </div>
-      <button class="btn-clear-log" onclick="clearTerminal()">
-        <span>CLEAR LOG</span>
-        <span>^</span>
-      </button>
-    </div>
-    <div class="terminal-box" id="terminal-log">
-      <!-- Terminal log entries -->
-    </div>
-  </footer>
-
-  <!-- TOAST ALERT -->
-  <div id="toast-msg">
-    <span id="toast-icon">⚡</span>
-    <span id="toast-text">Message</span>
-  </div>
-
-  <!-- SCRIPT -->
-  <script>
-    const apiBase = window.location.origin;
-    let twinSnapshot = null;
-    let selectedConsumerId = 'CONS_S_012'; // Default selected consumer from user design
-    let liveWs = null;
-    let autoRunTimer = null;
-    let logEventCount = 0;
-    let simAutoEspTimer = null;
-    let simEspStep = 0;
-
-    window.addEventListener('DOMContentLoaded', () => {
-      buildInitialNodeGrids();
-      fetchSnapshot();
-      initWebSocket();
-      setInterval(fetchSnapshot, 1500);
-      checkMqttBroker();
-      checkAioSimulatorStatus();
-
-      logToTerminal('normal', 'sys/init', 'GridNest Industrial SCADA initialized.');
-      logToTerminal('theft', 'grid/control/inject', 'Injected THEFT on CONS_S_012');
-    });
-
-    // 1. BUILD INITIAL NODE GRIDS
-    function buildInitialNodeGrids() {
-      const g101 = document.getElementById('grid-feeder-101');
-      const g102 = document.getElementById('grid-feeder-102');
-      g101.innerHTML = '';
-      g102.innerHTML = '';
-
-      for (let i = 1; i <= 24; i++) {
-        const numStr = String(i).padStart(3, '0');
-        const cIdN = `CONS_N_${numStr}`;
-        const cIdS = `CONS_S_${numStr}`;
-
-        g101.appendChild(createNodeElement(cIdN, numStr, '2.10kW', 'green'));
-        g102.appendChild(createNodeElement(cIdS, numStr, '1.68kW', 'green'));
-      }
-    }
-
-    function createNodeElement(cId, numStr, kwStr, dotClass) {
-      const card = document.createElement('div');
-      card.className = `node-card ${cId === selectedConsumerId ? 'selected' : ''}`;
-      card.id = `card-${cId}`;
-      card.onclick = () => selectConsumerNode(cId);
-
-      card.innerHTML = `
-        <div class="node-card-top">
-          <span class="node-num">${numStr}</span>
-          <span class="node-dot ${dotClass}" id="dot-${cId}"></span>
-        </div>
-        <div class="node-kw" id="kw-${cId}">${kwStr}</div>
-      `;
-      return card;
-    }
-
-    // 2. WEBSOCKET & BACKGROUND SYNC
-    function initWebSocket() {
-      const wsUrl = location.protocol === 'file:' 
-        ? 'ws://localhost:8000/ws/live'
-        : (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/ws/live';
-
-      try {
-        liveWs = new WebSocket(wsUrl);
-        liveWs.onopen = () => {
-          document.getElementById('badge-ws').style.color = '#10b981';
-        };
-        liveWs.onmessage = (evt) => {
-          try {
-            const data = JSON.parse(evt.data);
-            handleSnapshotUpdate(data);
-          } catch (e) {}
-        };
-        liveWs.onclose = () => {
-          setTimeout(initWebSocket, 2500);
-        };
-      } catch (e) {}
-    }
-
-    async function fetchSnapshot() {
-      try {
-        const res = await fetch(`${apiBase}/api/snapshot`);
-        if (res.ok) {
-          const snap = await res.json();
-          handleSnapshotUpdate(snap);
-        }
-      } catch (err) {}
-    }
-
-    async function checkMqttBroker() {
-      try {
-        const res = await fetch(`${apiBase}/api/iot/status`);
-        if (res.ok) {
-          const st = await res.json();
-          const txt = document.getElementById('txt-mqtt');
-          if (st.broker_running) {
-            txt.innerText = `MQTT:${st.mqtt_port || 1883}`;
-          }
-        }
-      } catch (e) {}
-    }
-
-    // 3. HANDLE SNAPSHOT UPDATE
-    function handleSnapshotUpdate(data) {
-      if (!data) return;
-      twinSnapshot = data;
-
-      // Update Header Clock
-      if (data.clock && data.clock.iso_time) {
-        document.getElementById('kpi-clock').innerText = data.clock.iso_time.replace('T', ' ').substring(0, 16);
-      }
-
-      // Update KPI Strip
-      if (data.grid_summary) {
-        document.getElementById('kpi-meters-val').innerText = data.grid_summary.total_consumers || 48;
-        document.getElementById('kpi-anomalies-val').innerText = data.grid_summary.anomalous_consumers_count || 0;
-      }
-
-      if (data.transformers) {
-        const tx1 = data.transformers['TX_101'];
-        const tx2 = data.transformers['TX_102'];
-        if (tx1 && tx1.accounting) {
-          document.getElementById('kpi-z1-ntl').innerText = `${tx1.accounting.unexplained_loss_pct}%`;
-        }
-        if (tx2 && tx2.accounting) {
-          document.getElementById('kpi-z2-ntl').innerText = `${tx2.accounting.unexplained_loss_pct}%`;
-        }
-      }
-
-      // Update Node Grid Cards
-      if (data.consumers) {
-        for (const [cId, c] of Object.entries(data.consumers)) {
-          const kwEl = document.getElementById(`kw-${cId}`);
-          const dotEl = document.getElementById(`dot-${cId}`);
-          if (!kwEl || !dotEl) continue;
-
-          const an = c.analysis || {};
-          const repKw = an.reported_kw !== undefined ? an.reported_kw : (c.telemetry && c.telemetry.reported ? c.telemetry.reported.active_power_kw : 1.5);
-          kwEl.innerText = `${Number(repKw).toFixed(2)}kW`;
-
-          const cause = an.probable_cause || 'NORMAL';
-          const score = an.anomaly_score || 0;
-          const risk = an.risk_level || 'NORMAL';
-
-          dotEl.className = 'node-dot';
-          if (risk === 'CRITICAL' || cause === 'THEFT_TAMPERING' || score >= 80) {
-            dotEl.classList.add('red');
-          } else if (risk === 'HIGH' || cause === 'METER_MALFUNCTION' || cause === 'LEGITIMATE_ABNORMAL' || score >= 50) {
-            dotEl.classList.add('amber');
-          } else {
-            dotEl.classList.add('green');
-          }
-        }
-      }
-
-      updateSelectedInspector();
-    }
-
-    // 4. NODE SELECTION
-    function selectConsumerNode(cId) {
-      selectedConsumerId = cId;
-      document.querySelectorAll('.node-card').forEach(el => el.classList.remove('selected'));
-      const activeCard = document.getElementById(`card-${cId}`);
-      if (activeCard) activeCard.classList.add('selected');
-
-      updateSelectedInspector();
-      showToast(`Selected Node: ${cId}`);
-    }
-
-    function updateSelectedInspector() {
-      if (!twinSnapshot || !twinSnapshot.consumers) return;
-      const c = twinSnapshot.consumers[selectedConsumerId];
-      if (!c) return;
-
-      const numStr = selectedConsumerId.split('_').pop() || '001';
-      document.getElementById('insp-node-num').innerText = numStr;
-      document.getElementById('insp-node-id').innerText = selectedConsumerId;
-      document.getElementById('insp-feeder-id').innerText = `Feeder: ${c.static.transformer_id}`;
-      document.getElementById('btn-target-theft').innerText = selectedConsumerId;
-
-      const an = c.analysis || {};
-      const risk = an.risk_level || 'NORMAL';
-      const cause = an.probable_cause || 'NORMAL';
-      const score = an.anomaly_score !== undefined ? Math.round(an.anomaly_score) : 0;
-      const repKw = an.reported_kw !== undefined ? an.reported_kw : 0.0;
-      const baseKw = an.baseline_mean_kw !== undefined ? an.baseline_mean_kw : 0.0;
-
-      const riskPill = document.getElementById('insp-risk-pill');
-      riskPill.className = `risk-pill ${risk}`;
-      riskPill.innerText = `${risk} RISK`;
-
-      document.getElementById('insp-rep-load').innerText = `${repKw.toFixed(2)} kW`;
-      document.getElementById('insp-base-load').innerText = `${baseKw.toFixed(2)} kW`;
-      document.getElementById('insp-score').innerText = score;
-      document.getElementById('insp-cause').innerText = cause.replace(/_/g, ' ');
-    }
-
-    // 5. TABS & SLIDERS
-    function switchScenarioTab(tabName) {
-      document.querySelectorAll('.tab-pill').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-
-      event.target.classList.add('active');
-      const pane = document.getElementById(`pane-${tabName}`);
-      if (pane) pane.classList.add('active');
-    }
-
-    function onShuntSliderChange(val) {
-      const stolen = 100 - parseInt(val);
-      document.getElementById('lbl-shunt-ratio').innerText = `${val}% Rep / ${stolen}% Stl`;
-    }
-
-    function onSurgeSliderChange(val) {
-      const kw = (parseInt(val) / 10.0).toFixed(1);
-      document.getElementById('lbl-surge-val').innerText = `+${kw} kW (EV Fast Charger)`;
-    }
-
-    // 6. SCENARIO INJECTIONS
-    async function injectTheftScenario() {
-      const shuntVal = parseInt(document.getElementById('range-shunt').value);
-      const shuntRatio = shuntVal / 100.0;
-      const magTamper = document.getElementById('tgl-mag').checked;
-      const coverOpen = document.getElementById('tgl-cover').checked;
-      const revCurrent = document.getElementById('tgl-rev').checked;
-      const isCovert = document.getElementById('tgl-covert').checked;
-
-      const payload = {
-        scenario: "THEFT_BYPASS",
-        params: {
-          mode: "partial_shunt",
-          scaling_factor: shuntRatio,
-          trigger_tamper_flag: !isCovert && magTamper,
-          magnetic_tamper: !isCovert && magTamper,
-          tamper_cover_opened: !isCovert && coverOpen,
-          reverse_current: !isCovert && revCurrent
-        }
-      };
-
-      try {
-        const res = await fetch(`${apiBase}/api/inject/${selectedConsumerId}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        if (res.ok) {
-          const resp = await res.json();
-          handleSnapshotUpdate(resp.snapshot);
-          logToTerminal('theft', 'grid/control/inject', `Injected THEFT on ${selectedConsumerId}`);
-          showToast(`⚡ THEFT Injected on ${selectedConsumerId} (${shuntVal}% reported)`);
-        }
-      } catch (err) {
-        showToast('Error: ' + err.message);
-      }
-    }
-
-    async function injectFaultScenario() {
-      const faultType = document.querySelector('input[name="fault-type"]:checked').value;
-      const payload = { scenario: "METER_MALFUNCTION", params: { malfunction_type: faultType } };
-      try {
-        const res = await fetch(`${apiBase}/api/inject/${selectedConsumerId}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        if (res.ok) {
-          const resp = await res.json();
-          handleSnapshotUpdate(resp.snapshot);
-          logToTerminal('fault', 'grid/control/inject', `Injected FAULT (${faultType}) on ${selectedConsumerId}`);
-          showToast(`🛠️ Fault Injected on ${selectedConsumerId}`);
-        }
-      } catch (err) {}
-    }
-
-    async function injectCommScenario() {
-      const payload = { scenario: "COMM_FAILURE", params: {} };
-      try {
-        const res = await fetch(`${apiBase}/api/inject/${selectedConsumerId}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        if (res.ok) {
-          const resp = await res.json();
-          handleSnapshotUpdate(resp.snapshot);
-          logToTerminal('fault', 'grid/control/inject', `Injected COMM_FAILURE on ${selectedConsumerId}`);
-          showToast(`📡 Comm Failure on ${selectedConsumerId}`);
-        }
-      } catch (err) {}
-    }
-
-    async function injectSurgeScenario() {
-      const addedKw = parseInt(document.getElementById('range-surge').value) / 10.0;
-      const payload = { scenario: "LEGITIMATE_SURGE", params: { additional_kw: addedKw } };
-      try {
-        const res = await fetch(`${apiBase}/api/inject/${selectedConsumerId}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        if (res.ok) {
-          const resp = await res.json();
-          handleSnapshotUpdate(resp.snapshot);
-          logToTerminal('normal', 'grid/control/inject', `Injected SURGE (+${addedKw}kW) on ${selectedConsumerId}`);
-          showToast(`🚗 Demand Surge (+${addedKw}kW) on ${selectedConsumerId}`);
-        }
-      } catch (err) {}
-    }
-
-    async function restoreSelectedConsumer() {
-      try {
-        const res = await fetch(`${apiBase}/api/inject/${selectedConsumerId}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ scenario: "NORMAL", params: {} })
-        });
-        if (res.ok) {
-          const resp = await res.json();
-          handleSnapshotUpdate(resp.snapshot);
-          logToTerminal('normal', 'grid/control/restore', `Restored ${selectedConsumerId} to nominal baseline.`);
-          showToast(`✅ Restored ${selectedConsumerId}`);
-        }
-      } catch (err) {}
-    }
-
-    async function restoreAllConsumers() {
-      try {
-        const res = await fetch(`${apiBase}/api/inject/restore_all`, { method: 'POST' });
-        if (res.ok) {
-          const resp = await res.json();
-          handleSnapshotUpdate(resp.snapshot);
-          logToTerminal('normal', 'sys/control', 'Reset All: Restored all 48 meters to normal baseline.');
-          showToast('✅ All 48 meters restored to normal baseline');
-        }
-      } catch (err) {}
-    }
-
-    async function stepSimulation() {
-      try {
-        const res = await fetch(`${apiBase}/api/step`, { method: 'POST' });
-        if (res.ok) {
-          const snap = await res.json();
-          handleSnapshotUpdate(snap);
-          logToTerminal('normal', 'clock/step', `Advanced +15m -> ${snap.clock ? snap.clock.iso_time.replace('T', ' ') : ''}`);
-        }
-      } catch (err) {}
-    }
-
-    function toggleAutoRun() {
-      const btn = document.getElementById('btn-auto-run');
-      const txt = document.getElementById('txt-auto-run');
-      if (autoRunTimer) {
-        clearInterval(autoRunTimer);
-        autoRunTimer = null;
-        btn.classList.remove('active');
-        txt.innerText = '▷ Auto-Run';
-        showToast('Auto-Run paused');
-      } else {
-        autoRunTimer = setInterval(stepSimulation, 2000);
-        btn.classList.add('active');
-        txt.innerText = '⏸ Pause';
-        showToast('Auto-Run running (2s step interval)...');
-      }
-    }
-
-    // 7. TERMINAL LOGGING
-    function logToTerminal(type, topic, message) {
-      logEventCount++;
-      document.getElementById('terminal-count').innerText = `${logEventCount} Events`;
-
-      const term = document.getElementById('terminal-log');
-      const line = document.createElement('div');
-      line.className = 'log-line';
-
-      const now = new Date().toTimeString().substring(0, 8);
-      let colorClass = 'normal';
-      if (type === 'theft') colorClass = 'theft';
-      else if (type === 'fault') colorClass = 'fault';
-
-      line.innerHTML = `
-        <span class="log-time">[${now}]</span>
-        <span class="log-topic">${topic}</span>
-        <span class="log-msg ${colorClass}">${message}</span>
-      `;
-      term.appendChild(line);
-      term.scrollTop = term.scrollHeight;
-
-      if (term.children.length > 150) {
-        term.removeChild(term.children[0]);
-      }
-    }
-
-    function clearTerminal() {
-      document.getElementById('terminal-log').innerHTML = '';
-      logEventCount = 0;
-      document.getElementById('terminal-count').innerText = '0 Events';
-    }
-
-    function showToast(msg) {
-      const toast = document.getElementById('toast-msg');
-      document.getElementById('toast-text').innerText = msg;
-      toast.style.display = 'flex';
-      setTimeout(() => { toast.style.display = 'none'; }, 2500);
-    }
-
-    // 8. ADAFRUIT IO HARDWARE BRIDGE SYNC
-    async function checkAioSimulatorStatus() {
-      try {
-        const res = await fetch(`${apiBase}/api/iot/adafruit/status`);
-        if (!res.ok) return;
-        const st = await res.json();
-        const dot = document.getElementById('dot-aio');
-        const txt = document.getElementById('txt-aio');
-        const lbl = document.getElementById('aio-status-label');
-
-        if (st.status === 'connected') {
-          if (dot) dot.style.background = '#10b981';
-          if (txt) txt.innerText = `AIO:LIVE (${st.packets_received})`;
-          if (lbl) lbl.innerText = `Connected (${st.target_transformer_id} / ${st.target_consumer_id})`;
-        } else {
-          if (dot) dot.style.background = '#d946ef';
-          if (txt) txt.innerText = 'AIO:STANDBY';
-        }
-      } catch (e) {}
-    }
-
-    function toggleSimAutoEspStream() {
-      const btnTxt = document.getElementById('txt-sim-auto-esp');
-      if (simAutoEspTimer) {
-        clearInterval(simAutoEspTimer);
-        simAutoEspTimer = null;
-        if (btnTxt) btnTxt.innerText = '▶️ Stream (1.5s)';
-        showToast('Virtual ESP32 streaming paused');
-      } else {
-        if (btnTxt) btnTxt.innerText = '⏸️ Stop Stream';
-        showToast('Virtual ESP32 streaming running...');
-        sendSimEspPacket();
-        simAutoEspTimer = setInterval(sendSimEspPacket, 1500);
-      }
-    }
-
-    async function sendSimEspPacket() {
-      simEspStep++;
-      const baseV = 230.0 + Math.sin(simEspStep * 0.4) * 2.5 + (Math.random() - 0.5) * 1.0;
-      const transI = 4200.0 + Math.sin(simEspStep * 0.3) * 150.0 + (Math.random() - 0.5) * 60.0;
-      const consI = 1250.0 + Math.sin(simEspStep * 0.3) * 45.0 + (Math.random() - 0.5) * 30.0;
-      const transW = baseV * (transI / 1000.0);
-      const consW = (baseV - 1.5) * (consI / 1000.0);
-      const lossW = Math.max(0.0, transW - consW);
-      const energyLossWh = (lossW * (1.5 / 3600.0));
-
-      const payload = {
-        transVoltage: parseFloat(baseV.toFixed(2)),
-        transCurrent: parseFloat(transI.toFixed(1)),
-        consVoltage: parseFloat((baseV - 1.5).toFixed(2)),
-        consCurrent: parseFloat(consI.toFixed(1)),
-        powerLoss_W: parseFloat(lossW.toFixed(2)),
-        energyLoss_Wh: parseFloat(energyLossWh.toFixed(4))
-      };
-
-      try {
-        const res = await fetch(`${apiBase}/api/iot/adafruit/mock-packet`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        if (res.ok) {
-          logToTerminal('theft', 'io.adafruit.com/smartgrid', `[ESP32 #${simEspStep}] TX: ${payload.transVoltage}V, ${payload.transCurrent}mA | CONS: ${payload.consVoltage}V, ${payload.consCurrent}mA | Loss: ${payload.powerLoss_W}W`);
-          checkAioSimulatorStatus();
-        }
-      } catch (e) {}
-    }
-
-    async function triggerMockPacket() {
-      const mockPayload = {
-        transVoltage: 231.2, transCurrent: 4200.0,
-        consVoltage: 228.4, consCurrent: 1250.0,
-        powerLoss_W: 686.0, energyLoss_Wh: 0.1425
-      };
-      try {
-        const res = await fetch(`${apiBase}/api/iot/adafruit/mock-packet`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(mockPayload)
-        });
-        if (res.ok) {
-          showToast('⚡ Mock ESP32 telemetry packet ingested into digital twin!');
-          logToTerminal('theft', 'io.adafruit.com/smartgrid', `[ESP32] TX: 231.2V, 4200mA | CONS: 228.4V, 1250mA | Loss: 686.0W`);
-          checkAioSimulatorStatus();
-        }
-      } catch (e) {}
-    }
-
-    setInterval(checkAioSimulatorStatus, 3500);
-  </script>
 </body>
 </html>
