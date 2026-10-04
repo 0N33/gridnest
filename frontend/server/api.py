@@ -85,8 +85,8 @@ def apply_iot_hardware_overlay(snapshot: dict) -> dict:
         return snapshot
 
     iot = latest_iot_telemetry
-    c_id = iot.get("target_consumer_id") or twin.physical_consumer_id or "CONS_S_001"
-    tx_id = iot.get("target_transformer_id") or twin.physical_transformer_id or "TX_102"
+    c_id = iot.get("target_consumer_id") or getattr(twin, "physical_consumer_id", None) or "CONS_N_004"
+    tx_id = iot.get("target_transformer_id") or getattr(twin, "physical_transformer_id", None) or "TX_101"
 
     consumers = snapshot.get("consumers", {})
     if c_id in consumers:
@@ -608,8 +608,8 @@ async def ingest_iot_telemetry(payload: IoTTelemetryPayload):
     if data.get("powerLoss_W") is None:
         data["powerLoss_W"] = round(max(0.0, (data.get("transPower_W") or 0.0) - (data.get("consPower_W") or 0.0)), 2)
     
-    target_c = data.get("target_consumer_id") or twin.physical_consumer_id or "CONS_S_001"
-    target_tx = data.get("target_transformer_id") or twin.physical_transformer_id or "TX_102"
+    target_c = data.get("target_consumer_id") or getattr(twin, "physical_consumer_id", None) or "CONS_N_004"
+    target_tx = data.get("target_transformer_id") or getattr(twin, "physical_transformer_id", None) or "TX_101"
     data["target_consumer_id"] = target_c
     data["target_transformer_id"] = target_tx
 
@@ -635,11 +635,16 @@ async def ingest_iot_telemetry(payload: IoTTelemetryPayload):
     await broadcast_to_clients(snapshot)
 
     loss_val = data.get("powerLoss_W", 0.0)
+    tp_val = data.get("transPower_W") or 0.0
+    cp_val = data.get("consPower_W") or 0.0
+    loss_pct_val = (loss_val / max(0.01, tp_val)) * 100.0 if tp_val > 0 else 0.0
+    is_theft = (loss_val > 0.25 and loss_pct_val > 8.0) or (tp_val > cp_val + 0.30 and loss_pct_val > 8.0)
     return JSONResponse({
         "status": "success",
         "message": f"IoT telemetry ingested for {target_tx} and {target_c}",
         "powerLoss_W": loss_val,
-        "is_theft": loss_val > 0.25,
+        "loss_pct": round(loss_pct_val, 2),
+        "is_theft": is_theft,
         "timestamp": last_iot_timestamp,
     })
 
