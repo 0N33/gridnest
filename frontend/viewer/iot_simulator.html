@@ -597,6 +597,10 @@
         <div class="status-dot"></div>
         <span id="txt-mqtt">MQTT: 1883</span>
       </div>
+      <div class="status-pill" id="badge-aio" onclick="triggerMockPacket()" style="cursor: pointer; background: rgba(217, 70, 239, 0.12); border-color: rgba(217, 70, 239, 0.4); color: #f0abfc;" title="Physical ESP32 link on io.adafruit.com (Click to test packet)">
+        <div class="status-dot" id="dot-aio" style="background: #d946ef; box-shadow: 0 0 8px #d946ef;"></div>
+        <span id="txt-aio">AIO: STANDBY</span>
+      </div>
       <div class="status-pill online" id="badge-ws">
         <div class="status-dot"></div>
         <span>WS: LIVE</span>
@@ -850,6 +854,39 @@
 
       <!-- RIGHT COLUMN: QUICK PRESETS & LIVE TELEMETRY CONSOLE -->
       <div style="display: flex; flex-direction: column; gap: 20px;">
+
+        <!-- PHYSICAL IOT HARDWARE STATUS CARD (ADAFRUIT IO) -->
+        <div class="panel" style="border-color: rgba(217, 70, 239, 0.4); background: linear-gradient(180deg, rgba(217, 70, 239, 0.05) 0%, rgba(17, 24, 39, 0.6) 100%);">
+          <div class="panel-header" style="border-color: rgba(217, 70, 239, 0.3);">
+            <div class="panel-title" style="color: #f0abfc;">
+              <span>⚡ Physical Hardware Link (Adafruit IO)</span>
+            </div>
+            <span class="badge" id="sim-aio-badge" style="background: rgba(217, 70, 239, 0.2); color: #f0abfc; border: 1px solid rgba(217, 70, 239, 0.4); font-size: 10px;">STANDBY</span>
+          </div>
+          <div class="panel-body" style="gap: 10px;">
+            <div style="font-size: 11px; color: var(--text-muted); line-height: 1.4;">
+              Subscribed to <code>io.adafruit.com:1883</code>. Telemetry received from physical ESP32 drives the assigned Transformer and Smart Meter nodes in real-time.
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 11px;">
+              <div style="background: rgba(15, 23, 42, 0.6); padding: 8px; border-radius: 6px; border: 1px solid var(--border-color);">
+                <span style="color: var(--accent-cyan); font-size: 9px; font-weight: 700; display: block;">PHYSICAL TX NODE</span>
+                <strong id="sim-aio-tx-id">TX_101</strong>
+                <div style="font-size: 9px; color: var(--text-dim); margin-top: 2px;">GPIO 35 (V) / GPIO 34 (I)</div>
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.6); padding: 8px; border-radius: 6px; border: 1px solid var(--border-color);">
+                <span style="color: #f0abfc; font-size: 9px; font-weight: 700; display: block;">PHYSICAL METER NODE</span>
+                <strong id="sim-aio-cons-id">CONS_N_004</strong>
+                <div style="font-size: 9px; color: var(--text-dim); margin-top: 2px;">GPIO 33 (V) / GPIO 32 (I)</div>
+              </div>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center; justify-content: space-between; padding-top: 4px;">
+              <span style="font-size: 10px; font-family: 'JetBrains Mono'; color: var(--text-dim);" id="sim-aio-pkts">Packets: 0</span>
+              <button class="btn" onclick="triggerMockPacket()" style="padding: 4px 10px; font-size: 11px; background: rgba(217, 70, 239, 0.15); border: 1px solid #d946ef; color: #f0abfc; font-weight: 700; cursor: pointer;">
+                <span>⚡ Test Mock Packet</span>
+              </button>
+            </div>
+          </div>
+        </div>
 
         <!-- QUICK PRESETS PANEL -->
         <div class="panel">
@@ -1386,6 +1423,79 @@
         toast.style.display = 'none';
       }, 3000);
     }
+
+    // 12. ADAFRUIT IO HARDWARE BRIDGE SYNC
+    async function checkAioSimulatorStatus() {
+      try {
+        const res = await fetch('/api/iot/adafruit/status');
+        if (!res.ok) return;
+        const st = await res.json();
+        
+        const pill = document.getElementById('badge-aio');
+        const txt = document.getElementById('txt-aio');
+        const dot = document.getElementById('dot-aio');
+        const bBadge = document.getElementById('sim-aio-badge');
+        const bTx = document.getElementById('sim-aio-tx-id');
+        const bCons = document.getElementById('sim-aio-cons-id');
+        const bPkts = document.getElementById('sim-aio-pkts');
+
+        if (bTx && st.target_transformer_id) bTx.innerText = st.target_transformer_id;
+        if (bCons && st.target_consumer_id) bCons.innerText = st.target_consumer_id;
+        if (bPkts) bPkts.innerText = `Packets: ${st.packets_received}`;
+
+        if (st.status === 'connected') {
+          if (dot) dot.style.background = '#10b981';
+          if (txt) txt.innerText = `AIO: LIVE (${st.packets_received})`;
+          if (bBadge) {
+            bBadge.innerText = 'ONLINE';
+            bBadge.style.color = '#86efac';
+            bBadge.style.borderColor = 'rgba(34, 197, 94, 0.4)';
+            bBadge.style.background = 'rgba(34, 197, 94, 0.15)';
+          }
+        } else if (st.status === 'connecting') {
+          if (dot) dot.style.background = '#f59e0b';
+          if (txt) txt.innerText = 'AIO: CONNECTING';
+          if (bBadge) { bBadge.innerText = 'CONNECTING'; bBadge.style.color = '#fde68a'; }
+        } else {
+          if (dot) dot.style.background = '#d946ef';
+          if (txt) txt.innerText = 'AIO: STANDBY';
+          if (bBadge) { bBadge.innerText = 'STANDBY'; bBadge.style.color = '#f0abfc'; }
+        }
+      } catch (e) {}
+    }
+
+    async function triggerMockPacket() {
+      const mockPayload = {
+        transVoltage: 231.2,
+        transCurrent: 4200.0,
+        consVoltage: 228.4,
+        consCurrent: 1250.0,
+        powerLoss_W: 686.0,
+        energyLoss_Wh: 0.1425
+      };
+
+      try {
+        const res = await fetch('/api/iot/adafruit/mock-packet', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(mockPayload)
+        });
+        if (res.ok) {
+          const ret = await res.json();
+          showToast('⚡ Mock ESP32 telemetry packet ingested into digital twin!');
+          logToTerminal('theft', 'io.adafruit.com/smartgrid', `[ESP32] TX: 231.2V, 4200mA | CONS: 228.4V, 1250mA | Loss: 686.0W`);
+          checkAioSimulatorStatus();
+        } else {
+          showToast('Failed to send mock packet');
+        }
+      } catch (e) {
+        showToast('Network error sending mock packet: ' + e.message);
+      }
+    }
+
+    // Auto-poll Adafruit IO status
+    setInterval(checkAioSimulatorStatus, 3500);
+    setTimeout(checkAioSimulatorStatus, 500);
   </script>
 </body>
 </html>

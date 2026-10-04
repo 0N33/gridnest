@@ -59,6 +59,17 @@ class SmartGridDigitalTwin:
         # Toggle for USP "Reveal Ground Truth"
         self.reveal_ground_truth: bool = True
 
+        # Physical IoT Hardware (Adafruit IO ESP32) target node mappings
+        self.physical_transformer_id: str = "TX_101"
+        self.physical_consumer_id: str = "CONS_N_004"
+        self.adafruit_status: Dict[str, Any] = {
+            "enabled": False,
+            "connected": False,
+            "broker": "io.adafruit.com",
+            "physical_transformer_id": "TX_101",
+            "physical_consumer_id": "CONS_N_004",
+        }
+
     def initialize(self, setup_scenarios: bool = True):
         """Builds grid topology, pre-calculates diurnal baselines, and sets up initial anomalies."""
         # 1. Procedural 3D GIS Grid
@@ -228,16 +239,24 @@ class SmartGridDigitalTwin:
             dual_rec = self.latest_dual_records.get(c_id)
             anomaly_res = self.latest_anomaly_results.get(c_id)
 
+            is_phys = (c_id == self.physical_consumer_id)
             consumers_payload[c_id] = {
                 "static": consumer.to_dict(),
                 "telemetry": dual_rec.to_dict() if dual_rec else None,
                 "analysis": anomaly_res.to_dict() if anomaly_res else None,
+                "is_physical_iot": is_phys,
+                "hardware_source": "Adafruit IO ESP32 (GPIO 33/32)" if is_phys else "Virtual AMI Simulator",
+                "hardware_pins": "GPIO 33 (V) / GPIO 32 (I)" if is_phys else None,
             }
 
         transformers_payload = {}
         for tx_id, tx_node in self.topology.transformers.items():
             report = self.latest_transformer_reports.get(tx_id)
             tx_data = tx_node.to_dict()
+            is_tx_phys = (tx_id == self.physical_transformer_id)
+            tx_data["is_physical_iot"] = is_tx_phys
+            tx_data["hardware_source"] = "Adafruit IO ESP32 (GPIO 35/34)" if is_tx_phys else "Virtual Feeder Substation"
+            tx_data["hardware_pins"] = "GPIO 35 (V) / GPIO 34 (I)" if is_tx_phys else None
             if report:
                 sec_curr = round((report.transformer_input_kw * 1000.0) / (1.732 * 415.0 * 0.95), 1)
                 tx_data["accounting"] = report.to_dict()
@@ -316,6 +335,11 @@ class SmartGridDigitalTwin:
             "consumers": consumers_payload,
             "inspection_queue": [t.to_dict() for t in self.latest_inspection_targets],
             "drone_flight": self.latest_drone_flight.to_dict() if self.latest_drone_flight else None,
+            "physical_iot": {
+                "transformer_id": self.physical_transformer_id,
+                "consumer_id": self.physical_consumer_id,
+                "status": self.adafruit_status,
+            },
         }
 
     def generate_investigation_report(self, consumer_id: str) -> Optional[InvestigationReport]:

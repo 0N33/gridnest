@@ -703,6 +703,10 @@
         <span style="width: 6px; height: 6px; border-radius: 50%; background: #3b82f6; display: inline-block;"></span>
         <span id="mqtt-status-text">MQTT: 1883</span>
       </div>
+      <div id="aio-status-chip" onclick="openAioModal()" style="display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; background: #fdf4ff; border: 1px solid #f0abfc; color: #a21caf; cursor: pointer; font-family: 'JetBrains Mono', monospace;" title="Click to Configure Adafruit IO Physical ESP32 Link">
+        <span id="aio-status-dot" style="width: 6px; height: 6px; border-radius: 50%; background: #d946ef; display: inline-block;"></span>
+        <span id="aio-status-text">Adafruit IO: Standby</span>
+      </div>
       <a href="/simulator" target="_blank" class="btn" style="background: rgba(37, 99, 235, 0.12); border: 1px solid rgba(59, 130, 246, 0.4); color: var(--accent-blue); text-decoration: none; font-weight: 700; padding: 5px 10px; font-size: 11px; display: inline-flex; align-items: center; gap: 5px;" title="Open Virtual IoT Sensor & AMI Simulator UI">
         <span>🎮</span> <span>IoT Simulator</span>
       </a>
@@ -786,6 +790,34 @@
              ==================================================================== -->
         <div id="view-consumer" style="display: flex; flex-direction: column; gap: 12px;">
           
+          <!-- PHYSICAL HARDWARE / ADAFRUIT IO BANNER -->
+          <div id="panel-hardware-iot-banner" style="display: none; background: linear-gradient(135deg, #fdf4ff 0%, #fae8ff 100%); border: 1.5px solid #d946ef; border-radius: 8px; padding: 10px 12px; box-shadow: 0 2px 8px rgba(217, 70, 239, 0.15);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="font-size: 14px;">⚡</span>
+                <span style="font-size: 11px; font-weight: 800; color: #86198f; letter-spacing: 0.3px;">LIVE PHYSICAL ESP32 (ADAFRUIT IO)</span>
+              </div>
+              <span class="badge" id="aio-consumer-badge" style="background: #f0abfc; color: #701a75; font-size: 9px; font-weight: 800; padding: 2px 6px;">BENCH HARDWARE</span>
+            </div>
+            <div style="font-size: 10px; color: #581c87; line-height: 1.4; margin-bottom: 6px;">
+              Physical meter telemetry stream routed from bench circuit via <code>io.adafruit.com</code>.
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 10px;">
+              <div style="background: rgba(255,255,255,0.8); padding: 4px 6px; border-radius: 4px; border: 1px solid #f5d0fe;">
+                <span style="color: #701a75; font-size: 8px; display: block; font-weight: 700;">VOLTAGE (GPIO 33)</span>
+                <span id="aio-cons-volt" style="font-weight: 700; color: #86198f;">230.1 V (Cal: 0.9012)</span>
+              </div>
+              <div style="background: rgba(255,255,255,0.8); padding: 4px 6px; border-radius: 4px; border: 1px solid #f5d0fe;">
+                <span style="color: #701a75; font-size: 8px; display: block; font-weight: 700;">CURRENT (GPIO 32)</span>
+                <span id="aio-cons-curr" style="font-weight: 700; color: #86198f;">1150 mA (Slope: -10.96)</span>
+              </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 9px; color: #86198f; font-family: 'JetBrains Mono', monospace;">
+              <span>Accum: <strong id="aio-cons-wh">0.0000 Wh</strong></span>
+              <button class="btn" onclick="openAioModal()" style="padding: 2px 6px; font-size: 9px; background: #fae8ff; border: 1px solid #d946ef; color: #701a75; cursor: pointer;">⚙️ Feed Config</button>
+            </div>
+          </div>
+
           <!-- RISK BANNER -->
           <div class="risk-banner card" id="panel-banner-bg" style="background: #fef2f2; border-color: #fca5a5;">
             <div class="risk-score-circle" id="panel-score-circle" style="border-color: var(--accent-red); color: var(--accent-red);">
@@ -1003,6 +1035,34 @@
              ==================================================================== -->
         <div id="view-transformer" style="display: none; flex-direction: column; gap: 10px;">
           
+          <!-- PHYSICAL HARDWARE / ADAFRUIT IO BANNER FOR TRANSFORMER -->
+          <div id="tx-hardware-iot-banner" style="display: none; background: linear-gradient(135deg, #fdf4ff 0%, #fae8ff 100%); border: 1.5px solid #d946ef; border-radius: 8px; padding: 10px 12px; box-shadow: 0 2px 8px rgba(217, 70, 239, 0.15);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="font-size: 14px;">⚡</span>
+                <span style="font-size: 11px; font-weight: 800; color: #86198f; letter-spacing: 0.3px;">LIVE PHYSICAL ESP32 (ADAFRUIT IO)</span>
+              </div>
+              <span class="badge" id="aio-tx-badge" style="background: #f0abfc; color: #701a75; font-size: 9px; font-weight: 800; padding: 2px 6px;">BENCH TRANSFORMER</span>
+            </div>
+            <div style="font-size: 10px; color: #581c87; line-height: 1.4; margin-bottom: 6px;">
+              Physical substation telemetry stream routed from bench CT/PT via <code>io.adafruit.com</code>.
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 10px;">
+              <div style="background: rgba(255,255,255,0.8); padding: 4px 6px; border-radius: 4px; border: 1px solid #f5d0fe;">
+                <span style="color: #701a75; font-size: 8px; display: block; font-weight: 700;">VOLTAGE (GPIO 35)</span>
+                <span id="aio-tx-volt" style="font-weight: 700; color: #86198f;">231.2 V (Cal: 0.9307)</span>
+              </div>
+              <div style="background: rgba(255,255,255,0.8); padding: 4px 6px; border-radius: 4px; border: 1px solid #f5d0fe;">
+                <span style="color: #701a75; font-size: 8px; display: block; font-weight: 700;">CURRENT (GPIO 34)</span>
+                <span id="aio-tx-curr" style="font-weight: 700; color: #86198f;">4200 mA (Slope: -10.76)</span>
+              </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 9px; color: #86198f; font-family: 'JetBrains Mono', monospace;">
+              <span>Accum: <strong id="aio-tx-wh">0.0000 Wh</strong></span>
+              <button class="btn" onclick="openAioModal()" style="padding: 2px 6px; font-size: 9px; background: #fae8ff; border: 1px solid #d946ef; color: #701a75; cursor: pointer;">⚙️ Feed Config</button>
+            </div>
+          </div>
+
           <!-- TRANSFORMER SWITCHER CHIPS -->
           <div style="display: flex; gap: 6px;">
             <button class="btn" id="btn-tx-101" style="flex: 1; justify-content: center;" onclick="selectTransformer('TX_101'); zoomToTransformer('TX_101');">
@@ -1205,6 +1265,119 @@
       </div>
       <div class="modal-body" id="modal-benchmark-body" style="padding: 18px; overflow-y: auto; font-size: 12px; line-height: 1.6; color: var(--text-main); font-family: 'Inter', sans-serif;">
         Loading benchmark metrics from disk...
+      </div>
+  </div>
+  </div>
+
+  <!-- MODAL: ADAFRUIT IO PHYSICAL ESP32 LINK CONFIGURATION -->
+  <div id="aio-modal" style="display:none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(8px); z-index: 120; align-items: center; justify-content: center; padding: 24px;">
+    <div class="modal-box" style="background: var(--bg-card); border: 1px solid var(--border-main); border-radius: 12px; width: 100%; max-width: 760px; max-height: 88vh; display: flex; flex-direction: column; box-shadow: var(--shadow-lg); overflow: hidden;">
+      <div class="modal-header" style="padding: 14px 18px; border-bottom: 1px solid var(--border-main); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, rgba(217, 70, 239, 0.08) 0%, rgba(59, 130, 246, 0.08) 100%);">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 32px; height: 32px; border-radius: 8px; background: #fdf4ff; border: 1px solid #d946ef; display: flex; align-items: center; justify-content: center; font-size: 16px;">⚡</div>
+          <div>
+            <div style="font-weight: 800; font-size: 14px; color: var(--text-main);">Adafruit IO MQTT Bridge & ESP32 Hardware Link</div>
+            <div style="font-size: 11px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace;">Physical Telemetry for 1 Transformer + 1 Consumer Smart Meter</div>
+          </div>
+        </div>
+        <button class="btn" onclick="closeAioModal()" style="cursor: pointer;">✕ Close</button>
+      </div>
+
+      <div class="modal-body" style="padding: 18px 22px; overflow-y: auto; font-size: 12px; line-height: 1.5; color: var(--text-main); display: flex; flex-direction: column; gap: 16px;">
+        
+        <!-- INTRO CALLOUT -->
+        <div style="padding: 10px 14px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; font-size: 11px; color: #1e3a8a;">
+          <strong>Hardware Integration Architecture:</strong> Your physical ESP32 samples analog voltages and currents from bench CT/PT sensors on 4 GPIO pins, calculates instantaneous power and accumulated Watt-hours, and publishes to Adafruit IO. GridNest subscribes to this feed, flags the selected Transformer and Consumer as <strong>Physical IoT</strong>, while continuing virtual simulation for the remaining 29 consumers.
+        </div>
+
+        <!-- FORM: CREDENTIALS & MAPPING -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div>
+            <label style="display: block; font-size: 11px; font-weight: 700; margin-bottom: 4px; color: var(--text-main);">Adafruit IO Username</label>
+            <input type="text" id="aio-input-user" placeholder="e.g. adafruit_username" style="width: 100%; padding: 7px 10px; border-radius: 6px; border: 1px solid var(--border-main); background: var(--bg-cell); color: var(--text-main); font-family: 'JetBrains Mono', monospace; font-size: 11px;">
+          </div>
+          <div>
+            <label style="display: block; font-size: 11px; font-weight: 700; margin-bottom: 4px; color: var(--text-main);">Adafruit IO Active Key (AIO Key)</label>
+            <input type="password" id="aio-input-key" placeholder="aio_xxxxxxxxxxxxxxxxxxxxxxxx" style="width: 100%; padding: 7px 10px; border-radius: 6px; border: 1px solid var(--border-main); background: var(--bg-cell); color: var(--text-main); font-family: 'JetBrains Mono', monospace; font-size: 11px;">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div>
+            <label style="display: block; font-size: 11px; font-weight: 700; margin-bottom: 4px; color: var(--text-main);">Feed Name / Subscribed Topic</label>
+            <input type="text" id="aio-input-feed" value="smartgrid" placeholder="smartgrid" style="width: 100%; padding: 7px 10px; border-radius: 6px; border: 1px solid var(--border-main); background: var(--bg-cell); color: var(--text-main); font-family: 'JetBrains Mono', monospace; font-size: 11px;">
+            <div style="font-size: 9px; color: var(--text-muted); margin-top: 3px; font-family: 'JetBrains Mono';">Subscribed to: {username}/feeds/{feed}</div>
+          </div>
+          <div>
+            <label style="display: block; font-size: 11px; font-weight: 700; margin-bottom: 4px; color: var(--text-main);">Broker Host & Port</label>
+            <input type="text" disabled value="io.adafruit.com : 1883 (Standard MQTT)" style="width: 100%; padding: 7px 10px; border-radius: 6px; border: 1px solid var(--border-main); background: var(--bg-cell); color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 11px;">
+          </div>
+        </div>
+
+        <!-- TARGET NODE ASSIGNMENT -->
+        <div style="padding: 12px 14px; background: var(--bg-cell); border: 1px solid var(--border-main); border-radius: 8px;">
+          <div style="font-weight: 700; font-size: 11px; margin-bottom: 8px; color: var(--text-main);">Digital Twin Node Pinning</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div>
+              <label style="display: block; font-size: 10px; font-weight: 600; color: var(--text-muted); margin-bottom: 3px;">Assigned Transformer</label>
+              <select id="aio-select-tx" style="width: 100%; padding: 6px 8px; border-radius: 6px; border: 1px solid var(--border-main); background: var(--bg-card); color: var(--text-main); font-family: 'JetBrains Mono'; font-size: 11px;">
+                <option value="TX_101" selected>TX_101 (Zone 1 West Commercial - GPIO 35/34)</option>
+                <option value="TX_102">TX_102 (Zone 2 East Residential - GPIO 35/34)</option>
+              </select>
+            </div>
+            <div>
+              <label style="display: block; font-size: 10px; font-weight: 600; color: var(--text-muted); margin-bottom: 3px;">Assigned Consumer Meter</label>
+              <select id="aio-select-cons" style="width: 100%; padding: 6px 8px; border-radius: 6px; border: 1px solid var(--border-main); background: var(--bg-card); color: var(--text-main); font-family: 'JetBrains Mono'; font-size: 11px;">
+                <option value="CONS_N_004" selected>CONS_N_004 (Residential 3-Phase - GPIO 33/32)</option>
+                <option value="CONS_N_009">CONS_N_009 (Commercial Bakery - GPIO 33/32)</option>
+                <option value="CONS_N_003">CONS_N_003 (Residential 1-Phase - GPIO 33/32)</option>
+                <option value="CONS_S_003">CONS_S_003 (Residential EV - GPIO 33/32)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- HARDWARE CALIBRATION REFERENCE -->
+        <div style="padding: 12px 14px; background: var(--bg-cell); border: 1px solid var(--border-main); border-radius: 8px;">
+          <div style="font-weight: 700; font-size: 11px; margin-bottom: 6px; color: var(--text-main);">ESP32 Pinout & Analog Calibration Table</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 10px;">
+            <div style="background: var(--bg-card); padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-subtle);">
+              <div style="font-weight: 800; color: #2563eb; margin-bottom: 4px;">Transformer Sensor (TX)</div>
+              <div>• Voltage Pin: <strong>GPIO 35</strong> (Cal: 0.9307)</div>
+              <div>• Current Pin: <strong>GPIO 34</strong> (Slope: -10.758, Intercept: 10558.05)</div>
+              <div>• Sampling: 20-sample ADC avg @ 115200 baud</div>
+            </div>
+            <div style="background: var(--bg-card); padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-subtle);">
+              <div style="font-weight: 800; color: #7c3aed; margin-bottom: 4px;">Consumer Smart Meter (CONS)</div>
+              <div>• Voltage Pin: <strong>GPIO 33</strong> (Cal: 0.9012)</div>
+              <div>• Current Pin: <strong>GPIO 32</strong> (Slope: -10.961, Intercept: 10833.39)</div>
+              <div>• Ingestion: Watt-hours accumulated via Δt</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LIVE TELEMETRY PREVIEW & ACTIONS -->
+        <div style="padding: 12px 14px; background: #0b0f19; border: 1px solid #1e293b; border-radius: 8px; color: #f8fafc; font-family: 'JetBrains Mono', monospace;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span id="aio-modal-status-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #d946ef; display: inline-block;"></span>
+              <span style="font-size: 11px; font-weight: 700;" id="aio-modal-status-text">Status: Standby</span>
+            </div>
+            <span style="font-size: 10px; color: #94a3b8;" id="aio-modal-packet-count">Packets: 0</span>
+          </div>
+          <pre id="aio-modal-preview" style="font-size: 10px; line-height: 1.4; color: #38bdf8; margin: 0; max-height: 100px; overflow-y: auto;">Awaiting incoming MQTT telemetry packets...</pre>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div style="display: flex; gap: 10px; justify-content: flex-end; align-items: center; margin-top: 4px;">
+          <button class="btn" onclick="testAioMockPacket()" style="padding: 7px 14px; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-weight: 700; cursor: pointer;" title="Send sample ESP32 telemetry packet to test ingestion pipeline">
+            <span>⚡ Test Mock ESP32 Packet</span>
+          </button>
+          <button class="btn primary" onclick="saveAioConfig()" style="padding: 7px 18px; font-weight: 700; cursor: pointer;">
+            <span>💾 Save & Connect Broker</span>
+          </button>
+        </div>
+
       </div>
     </div>
   </div>
@@ -1440,6 +1613,8 @@
       initWebSocket();
       setInterval(fetchTwinState, 1500); // Continuous live sync (guarantees updates even if WS is closed)
       setInterval(checkMqttStatus, 5000);
+      setInterval(checkAioStatus, 3000);
+      checkAioStatus();
       animate();
     }
 
@@ -1495,7 +1670,7 @@
           }
 
           // Remove old pins attached to this mesh
-          const pinsToRemove = mesh.children.filter(ch => ch.userData && ch.userData.isScorePin);
+          const pinsToRemove = mesh.children.filter(ch => ch.userData && (ch.userData.isScorePin || ch.userData.isHwPin));
           pinsToRemove.forEach(p => mesh.remove(p));
 
           const isAnomalous = (
@@ -1511,6 +1686,9 @@
             const pinBadge = createAnomalyScorePin(scoreVal, risk, cause, isLight, cId);
             pinBadge.userData.isScorePin = true;
             mesh.add(pinBadge);
+          } else if (cData.is_physical_iot) {
+            const hwPin = createPhysicalHardwarePin(cId);
+            mesh.add(hwPin);
           }
         }
         return;
@@ -1631,6 +1809,9 @@
           const pinBadge = createAnomalyScorePin(scoreVal, risk, cause, isLight, cId);
           pinBadge.userData.isScorePin = true;
           mesh.add(pinBadge);
+        } else if (cData.is_physical_iot) {
+          const hwPin = createPhysicalHardwarePin(cId);
+          mesh.add(hwPin);
         }
 
         scene.add(mesh);
@@ -1758,6 +1939,61 @@
       scorePinMeshes.push(sprite);
 
       return pinGroup;
+    }
+
+    // =========================================================================
+    // 3D FLOATING PHYSICAL ESP32 HARDWARE BEACON BADGE
+    // Placed above rooftop weatherhead for the bench circuit consumer smart meter
+    // =========================================================================
+    function createPhysicalHardwarePin(consumerId) {
+      const hwGroup = new THREE.Group();
+      hwGroup.userData = { type: 'consumer', consumerId: consumerId, isHwPin: true };
+      
+      // Magenta/cyan beacon antenna
+      const mastGeo = new THREE.CylinderGeometry(0.25, 0.35, 12, 8);
+      const mastMat = new THREE.MeshStandardMaterial({ color: 0xd946ef, metalness: 0.7, roughness: 0.3 });
+      const mast = new THREE.Mesh(mastGeo, mastMat);
+      mast.position.set(0, 8, 0);
+      hwGroup.add(mast);
+
+      // Flashing beacon LED sphere
+      const ledGeo = new THREE.SphereGeometry(0.85, 12, 12);
+      const ledMat = new THREE.MeshBasicMaterial({ color: 0xf43f5e });
+      const led = new THREE.Mesh(ledGeo, ledMat);
+      led.position.set(0, 14.2, 0);
+      hwGroup.add(led);
+
+      // Billboard sprite
+      const canvas = document.createElement('canvas');
+      canvas.width = 384;
+      canvas.height = 96;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, 384, 96);
+
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(4, 4, 376, 88, 14);
+      else ctx.rect(4, 4, 376, 88);
+      ctx.fill();
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = '#d946ef';
+      ctx.stroke();
+
+      ctx.fillStyle = '#f0abfc';
+      ctx.font = 'bold 32px "JetBrains Mono", monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('⚡ LIVE ESP32 IOT', 192, 48);
+
+      const texture = new THREE.CanvasTexture(canvas);
+      const spriteMat = new THREE.SpriteMaterial({ map: texture, depthTest: false });
+      const sprite = new THREE.Sprite(spriteMat);
+      sprite.scale.set(16, 4, 1);
+      sprite.position.set(0, 18, 0);
+      sprite.userData = { type: 'consumer', consumerId: consumerId, isHwPin: true };
+      hwGroup.add(sprite);
+
+      return hwGroup;
     }
 
     // Creates realistic road corridors with asphalt, lane lines, and sidewalks
@@ -2037,6 +2273,35 @@
         ring.rotation.x = Math.PI / 2;
         ring.position.y = 0.3;
         txGroup.add(ring);
+
+        // Physical Hardware Badge for ESP32 Transformer Node
+        const isTxPhys = (data && data.transformers && data.transformers[t.id] && data.transformers[t.id].is_physical_iot);
+        if (isTxPhys) {
+          const hwRingGeo = new THREE.RingGeometry(11.5, 13.5, 32);
+          const hwRingMat = new THREE.MeshBasicMaterial({ color: 0xd946ef, side: THREE.DoubleSide });
+          const hwRing = new THREE.Mesh(hwRingGeo, hwRingMat);
+          hwRing.rotation.x = Math.PI / 2;
+          hwRing.position.y = 0.32;
+          txGroup.add(hwRing);
+
+          const canvas = document.createElement('canvas');
+          canvas.width = 384; canvas.height = 96;
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+          if (ctx.roundRect) ctx.roundRect(4, 4, 376, 88, 14); else ctx.rect(4, 4, 376, 88);
+          ctx.fill();
+          ctx.lineWidth = 4; ctx.strokeStyle = '#d946ef'; ctx.stroke();
+          ctx.fillStyle = '#f0abfc';
+          ctx.font = 'bold 30px "JetBrains Mono", monospace';
+          ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+          ctx.fillText('⚡ LIVE ESP32 TX', 192, 48);
+          const sprTex = new THREE.CanvasTexture(canvas);
+          const sprMat = new THREE.SpriteMaterial({ map: sprTex, depthTest: false });
+          const txSpr = new THREE.Sprite(sprMat);
+          txSpr.scale.set(16, 4, 1);
+          txSpr.position.set(0, 15, 0);
+          txGroup.add(txSpr);
+        }
 
         txGroup.position.set(t.x, 0, t.z);
         txGroup.userData = { type: 'transformer', id: t.id };
@@ -2660,6 +2925,22 @@
         document.getElementById('tx-oil-temp').innerText = `${iot.oil_temperature_c || (isWest ? 61.2 : 56.4)} °C`;
         document.getElementById('tx-phase-unbal').innerText = `${iot.phase_unbalance_pct || (isWest ? 3.8 : 1.9)}%`;
         document.getElementById('tx-thd').innerText = `${iot.thd_voltage_pct || (isWest ? 2.1 : 1.8)}%`;
+
+        // Hardware / Adafruit IO Physical Status Banner
+        const txHwBanner = document.getElementById('tx-hardware-iot-banner');
+        if (txHwBanner) {
+          if (tx.is_physical_iot) {
+            txHwBanner.style.display = 'block';
+            if (twinSnapshot && twinSnapshot.physical_iot && twinSnapshot.physical_iot.status && twinSnapshot.physical_iot.status.last_readings) {
+              const r = twinSnapshot.physical_iot.status.last_readings;
+              document.getElementById('aio-tx-volt').innerText = `${r.transVoltage ? r.transVoltage.toFixed(1) : (iot.secondary_voltage_v || 231.2)} V (Cal: 0.9307)`;
+              document.getElementById('aio-tx-curr').innerText = `${r.transCurrent_mA ? r.transCurrent_mA.toFixed(0) : 4200} mA (Slope: -10.76)`;
+              document.getElementById('aio-tx-wh').innerText = `${r.transEnergy_Wh ? r.transEnergy_Wh.toFixed(4) : '0.0000'} Wh`;
+            }
+          } else {
+            txHwBanner.style.display = 'none';
+          }
+        }
       }
     }
 
@@ -2761,6 +3042,22 @@
       document.getElementById('panel-category').innerText = staticInfo.category;
       document.getElementById('panel-contract').innerText = `${staticInfo.contracted_load_kw} kW`;
       document.getElementById('panel-zone').innerText = `${staticInfo.connected_pole_id || 'POLE'} (${staticInfo.transformer_id})`;
+
+      // Hardware / Adafruit IO Physical Status Banner
+      const consHwBanner = document.getElementById('panel-hardware-iot-banner');
+      if (consHwBanner) {
+        if (cData.is_physical_iot) {
+          consHwBanner.style.display = 'block';
+          if (twinSnapshot && twinSnapshot.physical_iot && twinSnapshot.physical_iot.status && twinSnapshot.physical_iot.status.last_readings) {
+            const r = twinSnapshot.physical_iot.status.last_readings;
+            document.getElementById('aio-cons-volt').innerText = `${r.consVoltage ? r.consVoltage.toFixed(1) : 230.1} V (Cal: 0.9012)`;
+            document.getElementById('aio-cons-curr').innerText = `${r.consCurrent_mA ? r.consCurrent_mA.toFixed(0) : 1150} mA (Slope: -10.96)`;
+            document.getElementById('aio-cons-wh').innerText = `${r.consEnergy_Wh ? r.consEnergy_Wh.toFixed(4) : '0.0000'} Wh`;
+          }
+        } else {
+          consHwBanner.style.display = 'none';
+        }
+      }
 
       if (analysis) {
         const score = Math.round(analysis.anomaly_score);
@@ -2978,6 +3275,163 @@
           }
         }
       } catch (e) {}
+    }
+
+    // =========================================================================
+    // ADAFRUIT IO PHYSICAL ESP32 MQTT BRIDGE INTEGRATION
+    // =========================================================================
+    async function checkAioStatus() {
+      try {
+        const res = await fetch(`${getApiBase()}/api/iot/adafruit/status`);
+        if (!res.ok) return;
+        const st = await res.json();
+        
+        // Header chip
+        const chip = document.getElementById('aio-status-chip');
+        const txt = document.getElementById('aio-status-text');
+        const dot = document.getElementById('aio-status-dot');
+        
+        if (txt && chip && dot) {
+          if (st.status === 'connected') {
+            dot.style.background = '#10b981';
+            chip.style.background = '#f0fdf4';
+            chip.style.borderColor = '#86efac';
+            chip.style.color = '#15803d';
+            txt.innerText = `Adafruit IO: Live (${st.packets_received} pkts)`;
+          } else if (st.status === 'connecting') {
+            dot.style.background = '#f59e0b';
+            chip.style.background = '#fffbeb';
+            chip.style.borderColor = '#fde68a';
+            chip.style.color = '#b45309';
+            txt.innerText = `Adafruit IO: Connecting...`;
+          } else if (st.status === 'error') {
+            dot.style.background = '#ef4444';
+            chip.style.background = '#fef2f2';
+            chip.style.borderColor = '#fecaca';
+            chip.style.color = '#b91c1c';
+            txt.innerText = `Adafruit IO: Disconnected`;
+          } else {
+            dot.style.background = '#d946ef';
+            chip.style.background = '#fdf4ff';
+            chip.style.borderColor = '#f0abfc';
+            chip.style.color = '#a21caf';
+            txt.innerText = `Adafruit IO: Standby`;
+          }
+        }
+
+        // Modal live status
+        const mDot = document.getElementById('aio-modal-status-dot');
+        const mTxt = document.getElementById('aio-modal-status-text');
+        const mCnt = document.getElementById('aio-modal-packet-count');
+        const mPreview = document.getElementById('aio-modal-preview');
+        if (mTxt && mDot && mCnt) {
+          mTxt.innerText = `Status: ${st.status.toUpperCase()}`;
+          mDot.style.background = st.status === 'connected' ? '#10b981' : (st.status === 'connecting' ? '#f59e0b' : '#d946ef');
+          mCnt.innerText = `Packets: ${st.packets_received}`;
+        }
+        if (mPreview && st.last_readings && Object.keys(st.last_readings).length > 0) {
+          mPreview.innerText = JSON.stringify(st.last_readings, null, 2);
+        }
+      } catch (e) {}
+    }
+
+    async function openAioModal() {
+      const modal = document.getElementById('aio-modal');
+      if (!modal) return;
+      modal.style.display = 'flex';
+      
+      try {
+        const res = await fetch(`${getApiBase()}/api/iot/adafruit/status`);
+        if (res.ok) {
+          const st = await res.json();
+          if (st.feed_topic) {
+            const parts = st.feed_topic.split('/');
+            if (parts.length >= 3) {
+              const uInput = document.getElementById('aio-input-user');
+              const fInput = document.getElementById('aio-input-feed');
+              if (uInput && !uInput.value) uInput.value = parts[0];
+              if (fInput) fInput.value = parts[2];
+            }
+          }
+          if (st.target_transformer_id) {
+            const txSel = document.getElementById('aio-select-tx');
+            if (txSel) txSel.value = st.target_transformer_id;
+          }
+          if (st.target_consumer_id) {
+            const consSel = document.getElementById('aio-select-cons');
+            if (consSel) consSel.value = st.target_consumer_id;
+          }
+        }
+      } catch (e) {}
+      checkAioStatus();
+    }
+
+    function closeAioModal() {
+      const modal = document.getElementById('aio-modal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    async function saveAioConfig() {
+      const username = (document.getElementById('aio-input-user').value || '').trim();
+      const aio_key = (document.getElementById('aio-input-key').value || '').trim();
+      const feed_name = (document.getElementById('aio-input-feed').value || 'smartgrid').trim();
+      const target_transformer_id = document.getElementById('aio-select-tx').value;
+      const target_consumer_id = document.getElementById('aio-select-cons').value;
+
+      try {
+        const res = await fetch(`${getApiBase()}/api/iot/adafruit/config`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username,
+            aio_key,
+            feed_name,
+            target_transformer_id,
+            target_consumer_id,
+            enabled: true
+          })
+        });
+        if (res.ok) {
+          const dat = await res.json();
+          alert(`Adafruit IO Configuration Saved!\n\nStatus: ${dat.status}\nFeed: ${dat.feed_topic}\nPhysical TX: ${target_transformer_id}\nPhysical Smart Meter: ${target_consumer_id}`);
+          checkAioStatus();
+          fetchTwinState();
+        } else {
+          alert('Failed to update Adafruit IO configuration');
+        }
+      } catch (err) {
+        alert('Network error connecting to backend API: ' + err.message);
+      }
+    }
+
+    async function testAioMockPacket() {
+      const mockPayload = {
+        transVoltage: 231.2,
+        transCurrent: 4200.0,
+        consVoltage: 228.4,
+        consCurrent: 1250.0,
+        powerLoss_W: 686.0,
+        energyLoss_Wh: 0.1425
+      };
+
+      try {
+        const res = await fetch(`${getApiBase()}/api/iot/adafruit/mock-packet`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(mockPayload)
+        });
+        if (res.ok) {
+          const ret = await res.json();
+          const mPreview = document.getElementById('aio-modal-preview');
+          if (mPreview) mPreview.innerText = JSON.stringify(ret.simulated_readings, null, 2);
+          checkAioStatus();
+          fetchTwinState();
+        } else {
+          alert('Failed to send mock packet');
+        }
+      } catch (e) {
+        alert('Network error sending mock packet: ' + e.message);
+      }
     }
 
     async function fetchTwinState() {

@@ -17,6 +17,7 @@ from models.telemetry import ScenarioType
 from export.geojson_exporter import GeoJSONTwinExporter
 from iot.mqtt_broker import MicroMQTTBroker
 from iot.mqtt_bridge import SmartGridMQTTBridge
+from iot.adafruit_bridge import AdafruitIOBridge
 
 app = FastAPI(
     title="Smart Grid Digital Twin API",
@@ -40,9 +41,20 @@ exporter = GeoJSONTwinExporter(twin)
 # Connected WebSocket clients
 connected_clients: list[WebSocket] = []
 
-# In-process Micro MQTT 3.1.1 Broker & Bridge
+# In-process Micro MQTT 3.1.1 Broker & Bridge (Virtual Network)
 mqtt_broker = MicroMQTTBroker(host="0.0.0.0", port=1883)
 mqtt_bridge: Optional[SmartGridMQTTBridge] = None
+
+# Adafruit IO Physical ESP32 Bridge
+adafruit_bridge = AdafruitIOBridge(
+    twin=twin,
+    username=os.environ.get("ADAFRUIT_IO_USERNAME", ""),
+    key=os.environ.get("ADAFRUIT_IO_KEY", ""),
+    feed=os.environ.get("ADAFRUIT_IO_FEED", "smartgrid"),
+    physical_transformer_id=twin.physical_transformer_id,
+    physical_consumer_id=twin.physical_consumer_id,
+    broadcast_callback=None,  # Set in startup_event
+)
 
 
 @app.on_event("startup")
@@ -59,10 +71,17 @@ async def startup_event():
     else:
         print("[!] MicroMQTTBroker running in internal event bus mode")
 
+    # Start Adafruit IO client in background loop
+    loop = asyncio.get_running_loop()
+    adafruit_bridge.broadcast_callback = broadcast_to_clients
+    adafruit_bridge.start(loop=loop)
+    twin.adafruit_status = adafruit_bridge.get_status()
+
 
 @app.on_event("shutdown")
 async def shutdown_event():
     await mqtt_broker.stop()
+    adafruit_bridge.stop()
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -228,6 +247,59 @@ async def publish_iot_message(topic: str = Query(...), payload: str = Query(...)
     """Allows testing MQTT publishing via HTTP interface."""
     await mqtt_broker.publish_local(topic, payload)
     return JSONResponse({"status": "published", "topic": topic})
+
+
+@app.get("/api/iot/adafruit/status")
+async def get_adafruit_status():
+    """Returns the live status of the Adafruit IO MQTT connection and latest readings."""
+    status = adafruit_bridge.get_status()
+    twin.adafruit_status = status
+    return JSONResponse(status)
+
+
+@app.post("/api/iot/adafruit/config")
+async def update_adafruit_config(request: Request):
+    """Allows updating Adafruit IO credentials and target hardware node mappings dynamically."""
+    body = await request.json()
+    username = body.get("username", "")
+    key = body.get("key", "")
+    feed = body.get("feed", "smartgrid")
+    phys_tx = body.get("physical_transformer_id", twin.physical_transformer_id)
+    phys_cons = body.get("physical_consumer_id", twin.physical_consumer_id)
+
+    twin.physical_transformer_id = phys_tx
+    twin.physical_consumer_id = phys_cons
+    adafruit_bridge.update_credentials(
+        username=username,
+        key=key,
+        feed=feed,
+        physical_tx_id=phys_tx,
+        physical_cons_id=phys_cons,
+    )
+    status = adafruit_bridge.get_status()
+    twin.adafruit_status = status
+    return JSONResponse({"status": "updated", "adafruit": status})
+
+
+@app.post("/api/iot/adafruit/mock-packet")
+async def inject_mock_adafruit_packet(request: Request):
+    """
+    Simulates an incoming hardware packet from physical ESP32 to test the Adafruit pipeline.
+    Expected JSON body with transVoltage, transCurrent, transPower, consVoltage, consCurrent, consPower.
+    """
+    body = await request.json()
+    if isinstance(body, dict):
+        payload_str = json.dumps(body)
+    else:
+        payload_str = str(body)
+
+    adafruit_bridge.process_raw_payload(payload_str, topic=f"{adafruit_bridge.username}/feeds/{adafruit_bridge.feed}")
+    return JSONResponse({
+        "status": "ingested",
+        "readings": adafruit_bridge.latest_readings,
+        "physical_transformer": adafruit_bridge.physical_transformer_id,
+        "physical_consumer": adafruit_bridge.physical_consumer_id,
+    })
 
 
 @app.get("/api/geojson/buildings")
