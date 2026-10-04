@@ -111,6 +111,80 @@
     const [shuntRatio, setShuntRatio] = useState(25);
     const [tampers, setTampers] = useState({ mag: true, cover: false, rev: false, covert: false });
 
+    // Physical Hardware Connection State (ESP32 / Adafruit IO)
+    const [hardwareConnected, setHardwareConnected] = useState(true);
+    const [hwData, setHwData] = useState({
+      transVoltage: 230.0,
+      transCurrent_mA: 1200.0,
+      transPower_W: 276.0,
+      consVoltage: 229.5,
+      consCurrent_mA: 1195.0,
+      consPower_W: 274.25,
+      powerLoss_W: 1.75,
+      loss_pct: 0.63,
+      is_theft: false,
+    });
+
+    // Sync with Live Digital Twin API
+    useEffect(() => {
+      const pollTwin = async () => {
+        try {
+          const res = await fetch('/api/snapshot');
+          if (res.ok) {
+            const data = await res.json();
+            if (data.clock && data.clock.iso_time) {
+              setClock(data.clock.iso_time.replace('T', ' ').substring(0, 16));
+            }
+            if (data.physical_iot && data.physical_iot.status) {
+              const st = data.physical_iot.status;
+              const isConn = !!(st.connected || st.enabled || (st.packets_received && st.packets_received > 0));
+              setHardwareConnected(isConn);
+              if (st.last_readings) {
+                const r = st.last_readings;
+                const tv = r.transVoltage || 230.0;
+                const tc = r.transCurrent_mA || 1200.0;
+                const tp = r.transPower_W || parseFloat((tv * tc / 1000.0).toFixed(2));
+                const cv = r.consVoltage || 229.5;
+                const cc = r.consCurrent_mA || 1195.0;
+                const cp = r.consPower_W || parseFloat((cv * cc / 1000.0).toFixed(2));
+                const pl = r.powerLoss_W !== undefined ? r.powerLoss_W : parseFloat(Math.max(0, tp - cp).toFixed(2));
+                const lp = r.loss_pct !== undefined ? r.loss_pct : parseFloat((tp > 0 ? (pl / tp * 100.0) : 0.0).toFixed(2));
+                const ith = (pl > 0.25 && lp > 8.0) || (tp > cp + 0.30 && lp > 8.0);
+                setHwData({
+                  transVoltage: tv,
+                  transCurrent_mA: tc,
+                  transPower_W: tp,
+                  consVoltage: cv,
+                  consCurrent_mA: cc,
+                  consPower_W: cp,
+                  powerLoss_W: pl,
+                  loss_pct: lp,
+                  is_theft: ith,
+                });
+
+                // Update CONS_N_004 in meter grid
+                setMeters(prev => prev.map(m => {
+                  if (m.id === 'CONS_N_004') {
+                    return {
+                      ...m,
+                      load: (cp / 1000.0).toFixed(2),
+                      baseline: (tp / 1000.0).toFixed(2),
+                      risk: ith ? 92 : 0,
+                      cause: ith ? 'PHYSICAL_SHUNT_TAP' : 'NORMAL'
+                    };
+                  }
+                  return m;
+                }));
+              }
+            }
+          }
+        } catch (e) {}
+      };
+      pollTwin();
+      const interval = setInterval(pollTwin, 2000);
+      return () => clearInterval(interval);
+    }, []);
+
     const selectedMeter = useMemo(() => meters.find(m => m.id === selectedMeterId) || meters[0], [meters, selectedMeterId]);
 
     const addLog = (topic, msg, type='info') => {
@@ -119,6 +193,10 @@
     };
 
     const handleInject = () => {
+      if (selectedMeterId === 'CONS_N_004' && hardwareConnected) {
+        addLog(`grid/control/blocked`, `Cannot inject virtual scenario on CONS_N_004: Hardware wired`, 'warn');
+        return;
+      }
       addLog(`grid/control/inject`, `Injected ${scenarioTab.toUpperCase()} on ${selectedMeterId}`, 'warn');
       setMeters(prev => prev.map(m => {
         if(m.id === selectedMeterId) {
@@ -144,19 +222,25 @@
           <span>{meterList.length} Nodes</span>
         </div>
         <div className="grid grid-cols-4 lg:grid-cols-6 gap-2">
-          {meterList.map(m => (
-            <div 
-              key={m.id} 
-              onClick={() => setSelectedMeterId(m.id)}
-              className={`meter-cell flex flex-col gap-1 ${selectedMeterId === m.id ? 'selected' : ''}`}
-            >
-              <div className="flex justify-between items-center">
-                <span className="text-[10px] font-mono text-slate-500">{m.id.split('_')[2]}</span>
-                <div className={`w-2 h-2 rounded-full ${m.risk > 80 ? 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]' : m.risk > 40 ? 'bg-amber-500' : 'bg-emerald-500'}`}></div>
+          {meterList.map(m => {
+            const isHw = m.id === 'CONS_N_004' && hardwareConnected;
+            return (
+              <div 
+                key={m.id} 
+                onClick={() => setSelectedMeterId(m.id)}
+                className={`meter-cell flex flex-col gap-1 ${selectedMeterId === m.id ? 'selected' : ''} ${isHw ? 'border-fuchsia-300 bg-fuchsia-50/40 shadow-sm' : ''}`}
+                title={isHw ? 'CONS_N_004 (Bench Hardware Node - Virtual Simulator Bypassed)' : m.id}
+              >
+                <div className="flex justify-between items-center">
+                  <span className={`text-[10px] font-mono font-bold ${isHw ? 'text-fuchsia-700' : 'text-slate-500'}`}>
+                    {m.id.split('_')[2]} {isHw ? '⚡' : ''}
+                  </span>
+                  <div className={`w-2 h-2 rounded-full ${isHw && !hwData.is_theft ? 'bg-fuchsia-500 shadow-[0_0_8px_rgba(217,70,239,0.6)]' : m.risk > 80 ? 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]' : m.risk > 40 ? 'bg-amber-500' : 'bg-emerald-500'}`}></div>
+                </div>
+                <span className="text-xs font-mono font-medium text-slate-900">{m.load}kW</span>
               </div>
-              <span className="text-xs font-mono font-medium text-slate-900">{m.load}kW</span>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     );
@@ -273,7 +357,11 @@
                       <span className="text-xs font-mono text-slate-500">Feeder: {selectedMeter.zone}</span>
                     </div>
                   </div>
-                  {selectedMeter.risk > 50 ? (
+                  {selectedMeter.id === 'CONS_N_004' && hardwareConnected ? (
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 bg-fuchsia-50 border border-fuchsia-200 rounded text-fuchsia-700 text-xs font-bold tracking-wide shadow-sm">
+                      ⚡ PHYSICAL HARDWARE (ESP32)
+                    </div>
+                  ) : selectedMeter.risk > 50 ? (
                     <div className="flex items-center gap-1.5 px-2.5 py-1 bg-rose-50 border border-rose-200 rounded text-rose-600 text-xs font-bold tracking-wide shadow-sm">
                       <Icons.ShieldAlert /> CRITICAL RISK
                     </div>
@@ -310,82 +398,138 @@
             {/* SECTION B: SCENARIO INJECTION PANEL */}
             <div className="flex flex-col gap-3 mt-4">
               <div className="flex justify-between items-center">
-                <h2 className="text-sm font-semibold tracking-tight text-slate-900">Scenario Injection Control</h2>
+                <h2 className="text-sm font-semibold tracking-tight text-slate-900">
+                  {selectedMeterId === 'CONS_N_004' && hardwareConnected ? 'Physical Hardware Channel' : 'Scenario Injection Control'}
+                </h2>
                 <div className="flex gap-2">
-                  <button className="shadcn-btn shadcn-btn-ghost text-[10px] py-1 px-2 h-auto" onClick={handleRestore}>Restore Node</button>
+                  {selectedMeterId !== 'CONS_N_004' && (
+                    <button className="shadcn-btn shadcn-btn-ghost text-[10px] py-1 px-2 h-auto" onClick={handleRestore}>Restore Node</button>
+                  )}
                 </div>
               </div>
               
-              <div className="border border-slate-200 bg-white rounded-lg p-1 shadow-sm">
-                <div className="segmented-control">
-                  {['theft', 'fault', 'comm', 'surge'].map(tab => (
-                    <div 
-                      key={tab}
-                      className={`segmented-btn ${scenarioTab === tab ? 'active' : ''}`}
-                      onClick={() => setScenarioTab(tab)}
-                    >
-                      {tab === 'theft' ? 'Theft Bypass' : tab === 'fault' ? 'Meter Fault' : tab === 'comm' ? 'Comm Drop' : 'Heavy Surge'}
+              {selectedMeterId === 'CONS_N_004' && hardwareConnected ? (
+                <div className="border border-fuchsia-200 bg-gradient-to-br from-fuchsia-50/60 to-purple-50/60 rounded-lg p-5 flex flex-col gap-4 shadow-sm">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-base text-fuchsia-600 font-bold">⚡</span>
+                      <span className="text-sm font-bold text-slate-900">Virtual Simulation Removed (Physical Hardware Exclusive)</span>
                     </div>
-                  ))}
-                </div>
-                
-                <div className="p-5 flex flex-col gap-6">
-                  {/* DYNAMIC SCENARIO CONTENT */}
-                  {scenarioTab === 'theft' && (
-                    <>
-                      <div className="flex flex-col gap-3">
-                        <div className="flex justify-between items-end">
-                          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Shunt Ratio (Reported vs Stolen)</span>
-                          <span className="text-sm font-mono font-semibold text-rose-600">{shuntRatio}% Rep / {100-shuntRatio}% Stl</span>
-                        </div>
-                        <input type="range" min="0" max="100" value={shuntRatio} onChange={e => setShuntRatio(parseInt(e.target.value))} />
-                        <div className="flex justify-between text-[10px] text-slate-400 font-mono mt-1">
-                          <span>0% (Full Bypass)</span>
-                          <span>100% (No Bypass)</span>
-                        </div>
-                      </div>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-fuchsia-100 text-fuchsia-800 font-bold">
+                      ESP32 BENCH
+                    </span>
+                  </div>
 
-                      <div className="flex flex-col gap-3">
-                        <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Physical Tamper Sensors</span>
-                        <div className="grid grid-cols-2 gap-3">
-                          {[
-                            {id:'mag', label:'Magnetic Tamper Flag'},
-                            {id:'cover', label:'Enclosure Open Switch'},
-                            {id:'rev', label:'Reverse Power Flow'},
-                            {id:'covert', label:'Covert (Mask Bits)'}
-                          ].map(t => (
-                            <label key={t.id} className="flex items-center justify-between p-2.5 border border-slate-200 rounded bg-slate-50 cursor-pointer hover:border-slate-300 transition-colors">
-                              <span className="text-xs font-medium text-slate-700">{t.label}</span>
-                              <div className="relative inline-block w-9 h-5">
-                                <input type="checkbox" className="sr-only toggle-checkbox" checked={tampers[t.id]} onChange={e => setTampers({...tampers, [t.id]: e.target.checked})} />
-                                <div className="toggle-label block w-9 h-5 rounded-full"></div>
-                              </div>
-                            </label>
-                          ))}
-                        </div>
-                      </div>
-                    </>
-                  )}
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    Virtual IoT scenario injection is <strong>disabled for Building 4 (CONS_N_004) and Transformer (TX-101)</strong> because they are actively receiving live physical sensor telemetry from the ESP32 bench CT/PT setup (GPIO 35/34 for TX, GPIO 33/32 for CONS).
+                  </p>
 
-                  {scenarioTab !== 'theft' && (
-                    <div className="h-32 flex items-center justify-center border border-dashed border-slate-200 rounded-lg text-slate-400 text-xs font-medium">
-                      [ {scenarioTab.toUpperCase()} specific parameters loaded ]
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 bg-white p-3.5 rounded-lg border border-slate-200 font-mono text-xs">
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-[9px] text-slate-400 uppercase font-sans font-semibold">Substation Drop (GPIO 35/34)</span>
+                      <span className="font-bold text-slate-900">{hwData.transVoltage}V / {hwData.transCurrent_mA}mA</span>
+                      <span className="text-[10px] text-blue-600 font-semibold">{hwData.transPower_W}W</span>
                     </div>
-                  )}
-
-                  <div className="pt-4 border-t border-slate-100 flex justify-between items-center">
-                    <div className="flex gap-2">
-                      <span className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold mt-1">Presets:</span>
-                      <span className="text-[11px] font-semibold text-blue-600 cursor-pointer hover:underline mt-1" onClick={() => {setShuntRatio(20); setSelectedMeterId('CONS_N_003');}}>Covert Theft</span>
-                      <span className="text-slate-300 mt-1">|</span>
-                      <span className="text-[11px] font-semibold text-amber-600 cursor-pointer hover:underline mt-1" onClick={() => {setScenarioTab('fault'); setSelectedMeterId('CONS_N_015');}}>Stuck Register</span>
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-[9px] text-slate-400 uppercase font-sans font-semibold">Meter Load (GPIO 33/32)</span>
+                      <span className="font-bold text-slate-900">{hwData.consVoltage}V / {hwData.consCurrent_mA}mA</span>
+                      <span className="text-[10px] text-emerald-600 font-semibold">{hwData.consPower_W}W</span>
                     </div>
-                    <button className="shadcn-btn shadcn-btn-primary" onClick={handleInject}>
-                      Inject Scenario payload
-                    </button>
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-[9px] text-slate-400 uppercase font-sans font-semibold">Measured Line Loss</span>
+                      <span className={`font-bold ${hwData.powerLoss_W > 0.25 && hwData.loss_pct > 8.0 ? 'text-red-600' : 'text-slate-900'}`}>
+                        {hwData.powerLoss_W}W
+                      </span>
+                      <span className="text-[10px] text-slate-500">Loss: {hwData.loss_pct || 0}%</span>
+                    </div>
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-[9px] text-slate-400 uppercase font-sans font-semibold">Conservation Law</span>
+                      <span className={`font-bold text-[11px] ${hwData.powerLoss_W > 0.25 && hwData.loss_pct > 8.0 ? 'text-red-600' : 'text-emerald-600'}`}>
+                        {hwData.powerLoss_W > 0.25 && hwData.loss_pct > 8.0 ? '🚨 THEFT / LINE TAP' : '✅ BALANCED'}
+                      </span>
+                      <span className="text-[9px] text-slate-400">Tolerance: ±8%</span>
+                    </div>
+                  </div>
+
+                  <div className="text-[11px] text-slate-500 bg-white/70 p-2.5 rounded border border-slate-200/60 leading-normal flex items-start gap-2">
+                    <span>💡</span>
+                    <span>
+                      <strong>Physical Testing Instructions:</strong> To trigger power theft on this node, physically connect a bypass resistor or shunt wire on your hardware breadboard. To restore balance, remove the shunt wire.
+                    </span>
                   </div>
                 </div>
-              </div>
+              ) : (
+                <div className="border border-slate-200 bg-white rounded-lg p-1 shadow-sm">
+                  <div className="segmented-control">
+                    {['theft', 'fault', 'comm', 'surge'].map(tab => (
+                      <div 
+                        key={tab}
+                        className={`segmented-btn ${scenarioTab === tab ? 'active' : ''}`}
+                        onClick={() => setScenarioTab(tab)}
+                      >
+                        {tab === 'theft' ? 'Theft Bypass' : tab === 'fault' ? 'Meter Fault' : tab === 'comm' ? 'Comm Drop' : 'Heavy Surge'}
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div className="p-5 flex flex-col gap-6">
+                    {/* DYNAMIC SCENARIO CONTENT */}
+                    {scenarioTab === 'theft' && (
+                      <>
+                        <div className="flex flex-col gap-3">
+                          <div className="flex justify-between items-end">
+                            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Shunt Ratio (Reported vs Stolen)</span>
+                            <span className="text-sm font-mono font-semibold text-rose-600">{shuntRatio}% Rep / {100-shuntRatio}% Stl</span>
+                          </div>
+                          <input type="range" min="0" max="100" value={shuntRatio} onChange={e => setShuntRatio(parseInt(e.target.value))} />
+                          <div className="flex justify-between text-[10px] text-slate-400 font-mono mt-1">
+                            <span>0% (Full Bypass)</span>
+                            <span>100% (No Bypass)</span>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col gap-3">
+                          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Physical Tamper Sensors</span>
+                          <div className="grid grid-cols-2 gap-3">
+                            {[
+                              {id:'mag', label:'Magnetic Tamper Flag'},
+                              {id:'cover', label:'Enclosure Open Switch'},
+                              {id:'rev', label:'Reverse Power Flow'},
+                              {id:'covert', label:'Covert (Mask Bits)'}
+                            ].map(t => (
+                              <label key={t.id} className="flex items-center justify-between p-2.5 border border-slate-200 rounded bg-slate-50 cursor-pointer hover:border-slate-300 transition-colors">
+                                <span className="text-xs font-medium text-slate-700">{t.label}</span>
+                                <div className="relative inline-block w-9 h-5">
+                                  <input type="checkbox" className="sr-only toggle-checkbox" checked={tampers[t.id]} onChange={e => setTampers({...tampers, [t.id]: e.target.checked})} />
+                                  <div className="toggle-label block w-9 h-5 rounded-full"></div>
+                                </div>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                      </>
+                    )}
+
+                    {scenarioTab !== 'theft' && (
+                      <div className="h-32 flex items-center justify-center border border-dashed border-slate-200 rounded-lg text-slate-400 text-xs font-medium">
+                        [ {scenarioTab.toUpperCase()} specific parameters loaded ]
+                      </div>
+                    )}
+
+                    <div className="pt-4 border-t border-slate-100 flex justify-between items-center">
+                      <div className="flex gap-2">
+                        <span className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold mt-1">Presets:</span>
+                        <span className="text-[11px] font-semibold text-blue-600 cursor-pointer hover:underline mt-1" onClick={() => {setShuntRatio(20); setSelectedMeterId('CONS_N_003');}}>Covert Theft</span>
+                        <span className="text-slate-300 mt-1">|</span>
+                        <span className="text-[11px] font-semibold text-amber-600 cursor-pointer hover:underline mt-1" onClick={() => {setScenarioTab('fault'); setSelectedMeterId('CONS_N_015');}}>Stuck Register</span>
+                      </div>
+                      <button className="shadcn-btn shadcn-btn-primary" onClick={handleInject}>
+                        Inject Scenario payload
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
           </div>
