@@ -380,16 +380,24 @@ class AdafruitIOBridge:
 
     def get_status(self) -> Dict[str, Any]:
         """Returns live bridge status, connection state, and latest hardware telemetry."""
+        status_str = "connected" if self.is_connected else ("connecting" if (self.username and self.key) else "standby")
+        topic = f"{self.username}/feeds/{self.feed}" if self.username else f"{self.feed}"
         return {
             "enabled": bool(self.username and self.key),
             "connected": self.is_connected,
+            "status": status_str,
             "broker": "io.adafruit.com",
             "port": 1883,
             "username": self.username if self.username else "NOT_CONFIGURED",
             "feed": self.feed,
+            "feed_topic": topic,
+            "topic": topic,
             "physical_transformer_id": self.physical_transformer_id,
             "physical_consumer_id": self.physical_consumer_id,
+            "target_transformer_id": self.physical_transformer_id,
+            "target_consumer_id": self.physical_consumer_id,
             "packets_received": self.packets_received,
             "last_packet_time": self.last_packet_time or "Never",
             "latest_readings": self.latest_readings,
+            "last_readings": self.latest_readings,
         }

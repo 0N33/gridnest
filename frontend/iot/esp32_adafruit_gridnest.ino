@@ -189,8 +189,8 @@ void loop() {
   Serial.printf("Consumer    -> %5.1fV | %6.1fmA | %6.1fW | %7.4fWh\n", consVoltage, consCurrent, consPower_W, consEnergy_Wh);
   Serial.printf("SYSTEM LOSS -> Power Loss: %.2f W | Cumulative Energy Loss: %.4f Wh\n\n", powerLoss_W, energyLoss_Wh);
 
-  // 7. Publish to Adafruit IO every 1500ms
-  if (currentTime - lastMQTTSend >= 1500) {
+  // 7. Publish to Adafruit IO every 2500ms (Safe for Adafruit IO Free tier limit: 30 requests/min)
+  if (currentTime - lastMQTTSend >= 2500) {
     lastMQTTSend = currentTime;
 
     // Construct JSON Payload for GridNest Digital Twin

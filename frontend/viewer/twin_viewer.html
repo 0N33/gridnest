@@ -3386,17 +3386,22 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            username,
-            aio_key,
-            feed_name,
-            target_transformer_id,
-            target_consumer_id,
+            username: username,
+            key: aio_key,
+            aio_key: aio_key,
+            feed: feed_name,
+            feed_name: feed_name,
+            physical_transformer_id: target_transformer_id,
+            target_transformer_id: target_transformer_id,
+            physical_consumer_id: target_consumer_id,
+            target_consumer_id: target_consumer_id,
             enabled: true
           })
         });
         if (res.ok) {
           const dat = await res.json();
-          alert(`Adafruit IO Configuration Saved!\n\nStatus: ${dat.status}\nFeed: ${dat.feed_topic}\nPhysical TX: ${target_transformer_id}\nPhysical Smart Meter: ${target_consumer_id}`);
+          const displayFeed = dat.feed_topic || (dat.adafruit && dat.adafruit.feed_topic) || `${username}/feeds/${feed_name}`;
+          alert(`Adafruit IO Configuration Saved!\n\nStatus: ${dat.status}\nFeed: ${displayFeed}\nPhysical TX: ${target_transformer_id}\nPhysical Smart Meter: ${target_consumer_id}`);
           checkAioStatus();
           fetchTwinState();
         } else {

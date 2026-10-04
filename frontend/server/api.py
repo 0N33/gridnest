@@ -261,11 +261,11 @@ async def get_adafruit_status():
 async def update_adafruit_config(request: Request):
     """Allows updating Adafruit IO credentials and target hardware node mappings dynamically."""
     body = await request.json()
-    username = body.get("username", "")
-    key = body.get("key", "")
-    feed = body.get("feed", "smartgrid")
-    phys_tx = body.get("physical_transformer_id", twin.physical_transformer_id)
-    phys_cons = body.get("physical_consumer_id", twin.physical_consumer_id)
+    username = (body.get("username") or "").strip()
+    key = (body.get("key") or body.get("aio_key") or "").strip()
+    feed = (body.get("feed") or body.get("feed_name") or "smartgrid").strip()
+    phys_tx = body.get("physical_transformer_id") or body.get("target_transformer_id") or twin.physical_transformer_id
+    phys_cons = body.get("physical_consumer_id") or body.get("target_consumer_id") or twin.physical_consumer_id
 
     twin.physical_transformer_id = phys_tx
     twin.physical_consumer_id = phys_cons
@@ -278,7 +278,16 @@ async def update_adafruit_config(request: Request):
     )
     status = adafruit_bridge.get_status()
     twin.adafruit_status = status
-    return JSONResponse({"status": "updated", "adafruit": status})
+    feed_topic = f"{username}/feeds/{feed}" if username else feed
+    return JSONResponse({
+        "status": "updated",
+        "feed": feed,
+        "feed_topic": feed_topic,
+        "username": username,
+        "physical_transformer_id": phys_tx,
+        "physical_consumer_id": phys_cons,
+        "adafruit": status
+    })
 
 
 @app.post("/api/iot/adafruit/mock-packet")
