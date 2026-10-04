@@ -54,6 +54,7 @@ class AdafruitIOBridge:
         self.packets_received = 0
         self.latest_readings: Dict[str, Any] = {}
         self.event_loop: Optional[asyncio.AbstractEventLoop] = None
+        self.on_telemetry_packet = None
 
     def start(self, loop: Optional[asyncio.AbstractEventLoop] = None):
         """Starts the background MQTT connection to Adafruit IO if credentials exist."""
@@ -293,14 +294,18 @@ class AdafruitIOBridge:
 
         # Update Flagged Consumer in Digital Twin
         cid = self.physical_consumer_id
+        # Clear any synthetic scenario from injector so it doesn't fight hardware
+        self.twin.injector.clear_scenario(cid)
+
         consumer = self.twin.topology.consumers.get(cid)
         if consumer:
             cons_kw = max(0.0, cons_p_w / 1000.0)
             cons_curr_a = max(0.0, cons_c_ma / 1000.0)
             cons_kwh = max(0.0, cons_e_wh / 1000.0)
 
-            # Check if there is a severe physical current discrepancy (tamper/shunt)
-            is_theft_divergence = (trans_p_w > 10.0 and cons_p_w < trans_p_w * 0.65)
+            # Check if there is physical current discrepancy (conservation of energy check)
+            loss_pct = (power_loss_w / max(0.01, trans_p_w)) * 100.0 if trans_p_w > 0 else 0.0
+            is_theft_divergence = (power_loss_w > 0.25 and loss_pct > 8.0) or (trans_p_w > cons_p_w + 0.30 and loss_pct > 8.0)
 
             flags = MeterStatusFlags(
                 reverse_current=False,
@@ -332,12 +337,15 @@ class AdafruitIOBridge:
                 existing_dual.ground_truth.active_power_kw = round(trans_p_w / 1000.0, 4)
                 existing_dual.ground_truth.voltage_v = trans_v
                 existing_dual.ground_truth.current_a = round(trans_c_ma / 1000.0, 4)
+                existing_dual.active_scenario = ScenarioType.THEFT_BYPASS if is_theft_divergence else ScenarioType.NORMAL
+                existing_dual.unreported_stolen_kw = round(power_loss_w / 1000.0, 4) if is_theft_divergence else 0.0
+                existing_dual.line_loss_kw = round(power_loss_w / 1000.0, 4)
             else:
                 self.twin.latest_dual_records[cid] = DualStateRecord(
                     timestamp=reading.timestamp,
                     consumer_id=cid,
                     meter_id=consumer.meter_id,
-                    active_scenario=ScenarioType.THEFT_SHUNT if is_theft_divergence else ScenarioType.NORMAL,
+                    active_scenario=ScenarioType.THEFT_BYPASS if is_theft_divergence else ScenarioType.NORMAL,
                     ground_truth=reading,
                     reported=reading,
                     line_loss_kw=round(power_loss_w / 1000.0, 4),
@@ -350,6 +358,26 @@ class AdafruitIOBridge:
             tx_input_kw = max(0.0, trans_p_w / 1000.0)
             tx_report.transformer_input_kw = tx_input_kw
             tx_report.cumulative_energy_input_kwh += (trans_e_wh / 1000.0)
+
+        # Notify telemetry callback if registered (e.g. fast API overlay)
+        if self.on_telemetry_packet:
+            try:
+                self.on_telemetry_packet({
+                    "transVoltage": trans_v,
+                    "transCurrent": trans_c_ma,
+                    "transPower_W": trans_p_w,
+                    "transEnergy_Wh": trans_e_wh,
+                    "consVoltage": cons_v,
+                    "consCurrent": cons_c_ma,
+                    "consPower_W": cons_p_w,
+                    "consEnergy_Wh": cons_e_wh,
+                    "powerLoss_W": power_loss_w,
+                    "energyLoss_Wh": energy_loss_wh,
+                    "target_consumer_id": cid,
+                    "target_transformer_id": tx_id,
+                })
+            except Exception as e:
+                logger.debug(f"[Adafruit IO] Error in telemetry callback: {e}")
 
         # Re-evaluate multi-signal anomaly detection with fresh hardware telemetry
         records_list = list(self.twin.latest_dual_records.values())
