@@ -1239,16 +1239,21 @@
 
   <!-- MODAL: EXPLAINABLE INVESTIGATION REPORT -->
   <div id="report-modal">
-    <div class="modal-box">
-      <div class="modal-header">
+    <div class="modal-box" style="max-width: 820px; background: #ffffff; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1); border: 1px solid #cbd5e1; overflow: hidden; display: flex; flex-direction: column;">
+      <div class="modal-header" style="background: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center;">
         <div>
-          <div style="font-weight: 800; font-size: 14px; color: var(--text-main);" id="modal-report-title">Formal Investigation Report</div>
-          <div style="font-size: 11px; color: var(--text-muted); font-family: 'JetBrains Mono';" id="modal-report-subtitle">Evidentiary Summary & Tamper Analysis</div>
+          <div style="font-weight: 800; font-size: 14px; color: #0f172a;" id="modal-report-title">Formal Investigation Audit Report</div>
+          <div style="font-size: 11px; color: #64748b; font-family: 'JetBrains Mono';" id="modal-report-subtitle">Evidentiary Summary & Tamper Analysis</div>
         </div>
-        <button class="btn" onclick="closeReportModal()">✕ Close</button>
+        <button class="btn" onclick="closeReportModal()" style="border: 1px solid #cbd5e1; background: #ffffff; color: #0f172a; border-radius: 6px; padding: 6px 12px; cursor: pointer; font-size: 12px; font-weight: 600;">✕ Close</button>
       </div>
-      <div class="modal-body" id="modal-report-body">
+      <div class="modal-body" id="modal-report-body" style="padding: 24px 30px; background: #ffffff; color: #0f172a; font-family: 'Inter', -apple-system, sans-serif; font-size: 13px; line-height: 1.6; max-height: 70vh; overflow-y: auto;">
         Loading auditable investigation report...
+      </div>
+      <div style="padding: 12px 24px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; align-items: center;">
+        <button class="btn primary" onclick="printReportModal()" style="background: #2563eb; color: #ffffff; border: 1px solid #2563eb; padding: 8px 18px; border-radius: 6px; font-weight: 700; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 1px 3px rgba(37,99,235,0.3);">
+          <span>🖨️</span> <span>Print PDF</span>
+        </button>
       </div>
     </div>
   </div>
@@ -3697,7 +3702,7 @@
         const res = await fetch(`/api/report/${selectedConsumerId}`);
         if (res.ok) {
           const report = await res.json();
-          document.getElementById('modal-report-body').innerText = report.markdown;
+          renderInvestigationDocument(selectedConsumerId, report);
         } else {
           showFallbackReport(selectedConsumerId);
         }
@@ -3706,44 +3711,95 @@
       }
     }
 
-    function showFallbackReport(cId) {
+    function renderInvestigationDocument(cId, report) {
       const cData = twinSnapshot && twinSnapshot.consumers ? twinSnapshot.consumers[cId] : null;
       const an = cData ? cData.analysis : null;
-      document.getElementById('modal-report-body').innerText = 
-`# SMART GRID CYBER-PHYSICAL THEFT INVESTIGATION REPORT
-================================================================================
-CASE FILE: AGY-INV-${cId}-2026-10
-TARGET CONSUMER ID: ${cId}
-SMATER METER ID: MTR_${cId.substring(5)}
-TRANSFORMER ZONE: Zone 1 North (TX-101) - STATUS: CRITICAL LEAKAGE (DONE FOR!)
-DETECTED ANOMALY SCORE: ${an ? an.anomaly_score : 98.5} / 100 [CRITICAL RISK]
-PROBABLE CAUSE: ${an ? an.probable_cause : 'THEFT_TAMPERING (METER SHUNT BYPASS)'}
-CONFIDENCE LEVEL: ${an ? an.confidence_pct : 94.2}%
+      const cat = (cData && cData.static) ? cData.static.category : 'Commercial';
+      const score = an ? an.anomaly_score : 98.5;
+      const risk = an ? an.risk_level : 'CRITICAL';
+      const cause = an ? (an.probable_cause || 'THEFT_TAMPERING') : 'THEFT_TAMPERING';
+      const conf = an ? (an.confidence_pct || 94.2) : 94.2;
+      const factors = (an && an.contributing_factors && an.contributing_factors.length > 0)
+        ? an.contributing_factors
+        : [
+          'Sustained flat zero consumption recorded for consecutive periods',
+          'Peer community maintains active consumption while target meter is stalled',
+          'Suspected meter bypass, tampered disconnect switch, or vacant premises'
+        ];
+      const action = an ? (an.recommended_action || 'Send verification team to inspect physical seal and verify site occupancy.') : 'Send verification team to inspect physical seal and verify site occupancy.';
+      const isoTime = twinSnapshot && twinSnapshot.clock ? twinSnapshot.clock.iso_time : '2026-10-05T06:30:00';
 
---------------------------------------------------------------------------------
-1. EXECUTIVE SUMMARY & EVIDENCE CHAIN
---------------------------------------------------------------------------------
-- Telemetry reported sudden persistent reduction (-74.9% below baseline).
-- Distribution Transformer TX-101 energy reconciliation recorded 19.69 kWh missing power.
-  Inputted power (118.41 kWh) did not add up to customer meters (95.37 kWh).
-- Peer comparison indicates consumer load dropped to 25.2% of neighboring street buildings.
-- Hardware Diagnostic Register indicates mechanical enclosure tamper switch activation.
+      const listHtml = factors.map(f => `<li style="margin-bottom: 4px;">- ${f.replace(/^-\s*/, '')}</li>`).join('');
 
---------------------------------------------------------------------------------
-2. CYBER-PHYSICAL RECONCILIATION AUDIT
---------------------------------------------------------------------------------
-- Reported Meter Load:    0.89 kW
-- Diurnal Baseline Load:  3.56 kW
-- Physical Ground Truth:  3.58 kW
-- Stolen / Unmetered:     2.69 kW (Power Diverted via Neutral Shunt)
+      document.getElementById('modal-report-body').innerHTML = `
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b;">
+          <div style="font-size: 20px; font-weight: 800; color: #1e3a8a; margin-bottom: 3px;">
+            Smart Grid Anomaly Investigation Report: <span style="color: #1e3a8a;">${cId}</span>
+          </div>
+          <div style="font-size: 11px; color: #64748b; font-family: 'JetBrains Mono', monospace; margin-bottom: 22px;">
+            Report ID: RPT-${cId} | Generated At: ${isoTime}
+          </div>
 
---------------------------------------------------------------------------------
-3. RECOMMENDED ENFORCEMENT ACTION
---------------------------------------------------------------------------------
-- Priority Field Inspection Rank: #1
-- Issue formal utility warrant for physical inspection of meter enclosure.
-- Dispatch anti-theft field inspection squad to test for meter bypass jumper.
-================================================================================`;
+          <div style="font-size: 14px; font-weight: 800; color: #0f172a; margin-bottom: 10px; border-bottom: 1px solid #f1f5f9; padding-bottom: 4px;">
+            Executive Summary
+          </div>
+          <div style="margin-bottom: 20px; font-size: 13px; display: flex; flex-direction: column; gap: 5px;">
+            <div><strong>- Consumer ID:</strong> <span style="color: #ef4444; font-weight: 700;">${cId}</span></div>
+            <div><strong>- Category:</strong> <span style="color: #ef4444; font-weight: 700;">${cat}</span></div>
+            <div><strong>- Anomaly Score:</strong> <span style="color: #ef4444; font-weight: 800;">${Number(score).toFixed(2)} / 100 (${risk})</span></div>
+            <div><strong>- Probable Cause:</strong> <span style="font-weight: 700;">${cause}</span></div>
+            <div><strong>- Confidence:</strong> <span style="color: #ef4444; font-weight: 700;">${Number(conf).toFixed(1)}%</span></div>
+          </div>
+
+          <div style="font-size: 14px; font-weight: 800; color: #0f172a; margin-bottom: 10px; border-bottom: 1px solid #f1f5f9; padding-bottom: 4px;">
+            Machine Learning Evidence Chain
+          </div>
+          <ul style="list-style: none; padding-left: 0; margin-bottom: 22px; font-size: 13px; color: #334155; display: flex; flex-direction: column; gap: 5px;">
+            ${listHtml}
+          </ul>
+
+          <div style="font-size: 14px; font-weight: 800; color: #0f172a; margin-bottom: 10px; border-bottom: 1px solid #f1f5f9; padding-bottom: 4px;">
+            Recommended Action
+          </div>
+          <div style="font-size: 13px; font-weight: 800; color: #0f172a; line-height: 1.5;">
+            ${action}
+          </div>
+        </div>
+      `;
+    }
+
+    function showFallbackReport(cId) {
+      renderInvestigationDocument(cId, null);
+    }
+
+    function printReportModal() {
+      const content = document.getElementById('modal-report-body').innerHTML;
+      const printWindow = window.open('', '_blank');
+      if (!printWindow) {
+        window.print();
+        return;
+      }
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>Smart Grid Audit Report - ${selectedConsumerId}</title>
+            <style>
+              @page { size: auto; margin: 20mm; }
+              body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 24px; color: #0f172a; }
+            </style>
+          </head>
+          <body>
+            ${content}
+            <script>
+              window.onload = function() {
+                setTimeout(function() { window.print(); window.close(); }, 250);
+              };
+            <\/script>
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
     }
 
     function closeReportModal() {
